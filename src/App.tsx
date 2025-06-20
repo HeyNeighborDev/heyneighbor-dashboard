@@ -400,7 +400,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'investigating': return <Eye className="w-4 h-4" />;
       case 'scheduled': return <Clock className="w-4 h-4" />;
@@ -465,7 +465,7 @@ const ManagementDashboard = () => {
     return filtered;
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
