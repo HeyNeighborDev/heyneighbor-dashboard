@@ -415,7 +415,7 @@ const ManagementDashboard = () => {
   ];
 
   // Helper functions
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
@@ -424,7 +424,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'investigating': return <Eye className="w-4 h-4" />;
       case 'scheduled': return <Clock className="w-4 h-4" />;
@@ -435,7 +435,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getTypeIcon = (type) => {
+  const getTypeIcon = (type: string) => {
     switch (type) {
       case 'safety': return <Shield className="w-4 h-4" />;
       case 'maintenance': return <Settings className="w-4 h-4" />;
@@ -444,7 +444,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getTypeColor = (type) => {
+  const getTypeColor = (type: string) => {
     switch (type) {
       case 'safety': return 'bg-red-100 text-red-800';
       case 'maintenance': return 'bg-blue-100 text-blue-800';
@@ -489,7 +489,7 @@ const ManagementDashboard = () => {
     return filtered;
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
@@ -507,12 +507,12 @@ const ManagementDashboard = () => {
     return { total, active, pending, occupancyRate };
   };
 
-  const handleViewProfile = (resident) => {
+  const handleViewProfile = (resident: any) => {
     setSelectedResident(resident);
     setShowResidentProfile(true);
   };
 
-  const handleSendMessage = (resident) => {
+  const handleSendMessage = (resident: any) => {
     setSelectedResident(resident);
     setShowMessageModal(true);
     setMessageContent('');
@@ -555,7 +555,7 @@ const ManagementDashboard = () => {
     return { total, open, highPriority, resolved };
   };
 
-  const getIncidentTypeColor = (type) => {
+  const getIncidentTypeColor = (type: string) => {
     switch (type) {
       case 'theft': return 'bg-red-100 text-red-800';
       case 'security': return 'bg-orange-100 text-orange-800';
@@ -566,7 +566,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getIncidentStatusIcon = (status) => {
+  const getIncidentStatusIcon = (status: string) => {
     switch (status) {
       case 'investigating': return <Eye className="w-4 h-4" />;
       case 'scheduled': return <Clock className="w-4 h-4" />;
@@ -577,12 +577,12 @@ const ManagementDashboard = () => {
     }
   };
 
-  const handleViewIncident = (incident) => {
+  const handleViewIncident = (incident: any) => {
     setSelectedIncident(incident);
     setShowIncidentModal(true);
   };
 
-  const handleStatClick = (filterType) => {
+  const handleStatClick = (filterType: string) => {
     setSafetyFilter(filterType);
   };
 
@@ -601,12 +601,12 @@ const ManagementDashboard = () => {
     }
   };
 
-  const handleViewEvidence = (evidence) => {
+  const handleViewEvidence = (evidence: any) => {
     setSelectedEvidence(evidence);
     setShowEvidenceModal(true);
   };
 
-  const handleMessageResident = (residentName) => {
+  const handleMessageResident = (residentName: string) => {
     // Find resident and open message modal
     const resident = residentsData.find(r => r.name === residentName);
     if (resident) {
@@ -710,7 +710,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getAssignedTeam = (type) => {
+  const getAssignedTeam = (type: string) => {
     switch (type) {
       case 'theft': return 'Security Team';
       case 'security': return 'Security Team';
