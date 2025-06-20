@@ -14,3 +14,5 @@ Property management dashboard for Bell Alpharetta built with React and TypeScrip
 ```bash
 npm install
 npm start
+## Live Demo
+Deployed on Vercel for live access.
