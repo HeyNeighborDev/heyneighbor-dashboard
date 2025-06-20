@@ -99,6 +99,28 @@ const ManagementDashboard = () => {
     location: '',
     description: ''
   });
+  
+  // Communications states
+  const [commFilter, setCommFilter] = useState('center');
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [showCreateTemplateModal, setShowCreateTemplateModal] = useState(false);
+  const [showDirectMessageModal, setShowDirectMessageModal] = useState(false);
+  const [showConversationModal, setShowConversationModal] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState<any>(null);
+  const [selectedConversation, setSelectedConversation] = useState<any>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+  const [newTemplate, setNewTemplate] = useState({
+    name: '',
+    description: '',
+    category: 'general',
+    subject: '',
+    content: ''
+  });
+  const [directMessageData, setDirectMessageData] = useState({
+    recipientId: '',
+    subject: '',
+    message: ''
+  });
 
   // Dynamic greeting system
   useEffect(() => {
@@ -437,6 +459,274 @@ const ManagementDashboard = () => {
     }
   ];
 
+  // Communications mock data
+  const communicationsData = [
+    {
+      id: 1,
+      type: 'announcement',
+      title: 'Pool Maintenance Scheduled for Tomorrow',
+      preview: 'The community pool will be closed from 8 AM to 4 PM for quarterly maintenance and cleaning.',
+      recipients: 'All Residents (342)',
+      deliveryMethod: 'Email + SMS',
+      openRate: 96.5,
+      sentBy: 'Property Manager',
+      sentDate: '2024-06-20 09:00 AM',
+      status: 'delivered',
+      content: 'Dear Residents, We wanted to inform you that our community pool will be temporarily closed tomorrow, June 21st, from 8:00 AM to 4:00 PM for our quarterly maintenance and cleaning. This includes chemical balancing, filter cleaning, and safety equipment inspection. We apologize for any inconvenience and appreciate your understanding. The pool will reopen at 5:00 PM with fresh, clean water ready for your enjoyment. Thank you for your patience!',
+      attachments: []
+    },
+    {
+      id: 2,
+      type: 'alert',
+      title: 'Security Update - Package Theft Prevention',
+      preview: 'Important security measures being implemented to prevent package theft in Building A lobby.',
+      recipients: 'Building A Residents (114)',
+      deliveryMethod: 'Email + In-App + SMS',
+      openRate: 98.2,
+      sentBy: 'Security Team',
+      sentDate: '2024-06-19 02:30 PM',
+      status: 'delivered',
+      content: 'Following recent package theft incidents, we are implementing enhanced security measures including additional cameras and requiring package pickup verification. Please bring ID when collecting packages.',
+      attachments: ['security_guidelines.pdf']
+    },
+    {
+      id: 3,
+      type: 'event',
+      title: 'Community Yoga Class Registration Open',
+      preview: 'Join us for morning yoga classes starting next Monday. Limited spots available!',
+      recipients: 'Active Residents (298)',
+      deliveryMethod: 'Email + In-App',
+      openRate: 87.3,
+      sentBy: 'Recreation Team',
+      sentDate: '2024-06-18 11:15 AM',
+      status: 'delivered',
+      content: 'We are excited to announce new morning yoga classes starting Monday, June 24th at 7:00 AM in the community center. Classes will run Monday, Wednesday, and Friday. Registration is required as space is limited to 20 participants.',
+      attachments: ['yoga_schedule.pdf']
+    },
+    {
+      id: 4,
+      type: 'maintenance',
+      title: 'Elevator Inspection Results - All Clear',
+      preview: 'Monthly elevator safety inspections completed successfully across all buildings.',
+      recipients: 'All Residents (342)',
+      deliveryMethod: 'Email',
+      openRate: 78.9,
+      sentBy: 'Maintenance Team',
+      sentDate: '2024-06-17 04:45 PM',
+      status: 'delivered',
+      content: 'All elevators have passed their monthly safety inspections. No issues were found and all systems are operating normally. Next inspection is scheduled for July 17th.',
+      attachments: ['inspection_report.pdf']
+    },
+    {
+      id: 5,
+      type: 'emergency',
+      title: 'Water Service Interruption - Building C',
+      preview: 'Emergency water line repair will affect Building C residents from 10 AM to 2 PM today.',
+      recipients: 'Building C Residents (128)',
+      deliveryMethod: 'Email + SMS + Phone',
+      openRate: 100,
+      sentBy: 'Emergency Services',
+      sentDate: '2024-06-16 08:00 AM',
+      status: 'delivered',
+      content: 'Due to an emergency water line break, water service to Building C will be interrupted today from 10:00 AM to approximately 2:00 PM. Our maintenance team is working to resolve this as quickly as possible.',
+      attachments: []
+    }
+  ];
+
+  const announcementsData = [
+    {
+      id: 1,
+      title: 'Summer Community BBQ Event',
+      content: 'Join us for our annual summer BBQ on July 4th at the community pavilion. Free food, games, and activities for the whole family!',
+      date: 'June 20, 2024',
+      priority: 'medium',
+      recipients: 342,
+      engagement: 89.5,
+      type: 'event'
+    },
+    {
+      id: 2,
+      title: 'New Recycling Guidelines',
+      content: 'Updated recycling guidelines are now in effect. Please review the new sorting requirements to help keep our community green.',
+      date: 'June 18, 2024',
+      priority: 'low',
+      recipients: 342,
+      engagement: 72.3,
+      type: 'policy'
+    },
+    {
+      id: 3,
+      title: 'Emergency Contact Information Update',
+      content: 'Please update your emergency contact information in the resident portal by June 30th. This is required for all residents.',
+      date: 'June 15, 2024',
+      priority: 'high',
+      recipients: 342,
+      engagement: 94.7,
+      type: 'administrative'
+    }
+  ];
+
+  const templatesData = [
+    {
+      id: 1,
+      name: 'Maintenance Notification',
+      description: 'Standard template for scheduled maintenance announcements',
+      category: 'maintenance',
+      usageCount: 24,
+      subject: 'Scheduled Maintenance - [LOCATION]',
+      content: 'Dear Residents,\n\nWe wanted to inform you of scheduled maintenance that will take place:\n\nDate: [DATE]\nTime: [TIME]\nLocation: [LOCATION]\nWork: [DESCRIPTION]\n\nWe apologize for any inconvenience and appreciate your patience.\n\nBest regards,\nProperty Management'
+    },
+    {
+      id: 2,
+      name: 'Event Invitation',
+      description: 'Template for community event announcements and invitations',
+      category: 'events',
+      usageCount: 18,
+      subject: 'You\'re Invited - [EVENT_NAME]',
+      content: 'Dear Residents,\n\nYou\'re invited to join us for [EVENT_NAME]!\n\nDate: [DATE]\nTime: [TIME]\nLocation: [LOCATION]\n\n[EVENT_DESCRIPTION]\n\nRSVP by [RSVP_DATE] to secure your spot.\n\nLooking forward to seeing you there!\n\nCommunity Team'
+    },
+    {
+      id: 3,
+      name: 'Payment Reminder',
+      description: 'Friendly reminder template for rent and fee payments',
+      category: 'billing',
+      usageCount: 31,
+      subject: 'Friendly Payment Reminder',
+      content: 'Dear [RESIDENT_NAME],\n\nThis is a friendly reminder that your [PAYMENT_TYPE] payment of $[AMOUNT] is due on [DUE_DATE].\n\nYou can make your payment through:\n• Online portal\n• Mobile app\n• Office payment box\n\nThank you for being a valued resident!\n\nAccounting Department'
+    },
+    {
+      id: 4,
+      name: 'Welcome New Resident',
+      description: 'Welcome message for new residents with important information',
+      category: 'onboarding',
+      usageCount: 12,
+      subject: 'Welcome to Our Community!',
+      content: 'Dear [RESIDENT_NAME],\n\nWelcome to our community! We\'re thrilled to have you as our newest resident.\n\nHere\'s important information to get you started:\n• Resident portal: [PORTAL_LINK]\n• Emergency contacts: [EMERGENCY_INFO]\n• Community amenities: [AMENITIES_INFO]\n\nIf you have any questions, please don\'t hesitate to reach out.\n\nWelcome home!\n\nProperty Management'
+    },
+    {
+      id: 5,
+      name: 'Safety Alert',
+      description: 'Template for urgent safety notifications and alerts',
+      category: 'safety',
+      usageCount: 8,
+      subject: 'URGENT - Safety Alert',
+      content: 'Dear Residents,\n\nWe are issuing this safety alert regarding [SAFETY_ISSUE].\n\nImmediate Actions Required:\n• [ACTION_1]\n• [ACTION_2]\n• [ACTION_3]\n\nFor your safety, please follow these guidelines until further notice.\n\nIf you have any concerns, contact us immediately at [EMERGENCY_CONTACT].\n\nSafety Team'
+    },
+    {
+      id: 6,
+      name: 'Policy Update',
+      description: 'Template for announcing policy changes and updates',
+      category: 'administrative',
+      usageCount: 15,
+      subject: 'Important Policy Update',
+      content: 'Dear Residents,\n\nWe are writing to inform you of an important update to our [POLICY_NAME].\n\nEffective [EFFECTIVE_DATE], the following changes will be in place:\n\n[POLICY_CHANGES]\n\nThese changes are designed to [REASON_FOR_CHANGE].\n\nIf you have questions, please contact the office.\n\nManagement Team'
+    }
+  ];
+
+  const directMessagesData = [
+    {
+      id: 1,
+      resident: {
+        name: 'Jessica Martinez',
+        unit: 'A-301',
+        building: 'Building A',
+        avatar: 'JM'
+      },
+      lastMessage: 'Thank you for resolving the heating issue so quickly!',
+      lastActivity: '2 hours ago',
+      unreadCount: 0,
+      status: 'resolved',
+      messageCount: 8
+    },
+    {
+      id: 2,
+      resident: {
+        name: 'Michael Chen',
+        unit: 'B-205',
+        building: 'Building B',
+        avatar: 'MC'
+      },
+      lastMessage: 'When can I expect the maintenance team for the kitchen faucet?',
+      lastActivity: '5 hours ago',
+      unreadCount: 2,
+      status: 'pending',
+      messageCount: 4
+    },
+    {
+      id: 3,
+      resident: {
+        name: 'Sarah Johnson',
+        unit: 'C-102',
+        building: 'Building C',
+        avatar: 'SJ'
+      },
+      lastMessage: 'The new security cameras are working great!',
+      lastActivity: '1 day ago',
+      unreadCount: 0,
+      status: 'closed',
+      messageCount: 3
+    },
+    {
+      id: 4,
+      resident: {
+        name: 'Robert Wilson',
+        unit: 'A-105',
+        building: 'Building A',
+        avatar: 'RW'
+      },
+      lastMessage: 'I have questions about the move-in process',
+      lastActivity: '2 days ago',
+      unreadCount: 1,
+      status: 'active',
+      messageCount: 12
+    }
+  ];
+
+  const deliveryReportsData = [
+    {
+      id: 1,
+      messageTitle: 'Pool Maintenance Scheduled for Tomorrow',
+      sentDate: 'June 20, 2024 at 9:00 AM',
+      stats: {
+        sent: 342,
+        delivered: 340,
+        opened: 328,
+        clicked: 89
+      },
+      openRate: 96.5,
+      clickRate: 26.2,
+      deliveryRate: 99.4
+    },
+    {
+      id: 2,
+      messageTitle: 'Security Update - Package Theft Prevention',
+      sentDate: 'June 19, 2024 at 2:30 PM',
+      stats: {
+        sent: 114,
+        delivered: 114,
+        opened: 112,
+        clicked: 45
+      },
+      openRate: 98.2,
+      clickRate: 40.2,
+      deliveryRate: 100
+    },
+    {
+      id: 3,
+      messageTitle: 'Community Yoga Class Registration Open',
+      sentDate: 'June 18, 2024 at 11:15 AM',
+      stats: {
+        sent: 298,
+        delivered: 296,
+        opened: 260,
+        clicked: 127
+      },
+      openRate: 87.3,
+      clickRate: 42.6,
+      deliveryRate: 99.3
+    }
+  ];
+
   // Helper functions
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -744,6 +1034,119 @@ const ManagementDashboard = () => {
     }
   };
 
+  // Communications helper functions
+  const getCommTypeColor = (type: string) => {
+    switch (type) {
+      case 'announcement': return 'bg-blue-100 text-blue-800';
+      case 'alert': return 'bg-red-100 text-red-800';
+      case 'event': return 'bg-green-100 text-green-800';
+      case 'maintenance': return 'bg-orange-100 text-orange-800';
+      case 'emergency': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getCommStatusColor = (status: string) => {
+    switch (status) {
+      case 'delivered': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'failed': return 'bg-red-100 text-red-800';
+      case 'scheduled': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getTemplateTypeColor = (category: string) => {
+    switch (category) {
+      case 'maintenance': return 'bg-orange-100 text-orange-800';
+      case 'events': return 'bg-green-100 text-green-800';
+      case 'billing': return 'bg-blue-100 text-blue-800';
+      case 'onboarding': return 'bg-purple-100 text-purple-800';
+      case 'safety': return 'bg-red-100 text-red-800';
+      case 'administrative': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getConversationStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'resolved': return 'bg-blue-100 text-blue-800';
+      case 'closed': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  // Communications handlers
+  const handleViewMessage = (message: any) => {
+    setSelectedMessage(message);
+    setShowTemplateModal(true);
+  };
+
+  const handleUseTemplate = (template: any) => {
+    setSelectedTemplate(template);
+    setBroadcastData({
+      ...broadcastData,
+      title: template.subject,
+      message: template.content
+    });
+    setShowBroadcastModal(true);
+  };
+
+  const handleEditTemplate = (template: any) => {
+    setSelectedTemplate(template);
+    setNewTemplate({
+      name: template.name,
+      description: template.description,
+      category: template.category,
+      subject: template.subject,
+      content: template.content
+    });
+    setShowCreateTemplateModal(true);
+  };
+
+  const handleOpenConversation = (conversation: any) => {
+    setSelectedConversation(conversation);
+    setShowConversationModal(true);
+  };
+
+  const handleCreateTemplate = () => {
+    if (newTemplate.name.trim() && newTemplate.content.trim()) {
+      const templateData = {
+        ...newTemplate,
+        id: Date.now(),
+        usageCount: 0
+      };
+      
+      console.log('Creating template:', templateData);
+      
+      setNewTemplate({
+        name: '',
+        description: '',
+        category: 'general',
+        subject: '',
+        content: ''
+      });
+      
+      setShowCreateTemplateModal(false);
+    }
+  };
+
+  const handleSendDirectMessage = () => {
+    if (directMessageData.recipientId && directMessageData.message.trim()) {
+      console.log('Sending direct message:', directMessageData);
+      
+      setDirectMessageData({
+        recipientId: '',
+        subject: '',
+        message: ''
+      });
+      
+      setShowDirectMessageModal(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
@@ -858,6 +1261,7 @@ const ManagementDashboard = () => {
                  currentPage === 'activity' ? 'Complete activity feed and incident tracking' :
                  currentPage === 'residents' ? 'Manage residents and community members' :
                  currentPage === 'safety' ? 'Monitor incidents and safety reports' :
+                 currentPage === 'communications' ? 'Manage community communications and messaging' :
                  'Complete activity feed and incident tracking'}
               </p>
             </div>
@@ -1471,22 +1875,389 @@ const ManagementDashboard = () => {
                 ))}
               </div>
 
-              {/* Empty State */}
-              {getFilteredResidents().length === 0 && (
-                <div className="text-center py-12">
-                  <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No residents found</h3>
-                  <p className="text-gray-600">No residents match the selected filters.</p>
+          {/* Communications Page */}
+          {currentPage === 'communications' && (
+            <>
+              {/* Communications Stats */}
+              <div className="flex flex-wrap gap-3 mb-6">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Total Messages</p>
+                      <p className="text-2xl font-bold text-gray-900">847</p>
+                    </div>
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <MessageSquare className="w-6 h-6 text-blue-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Open Rate</p>
+                      <p className="text-2xl font-bold text-green-600">94.2%</p>
+                    </div>
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                      <Eye className="w-6 h-6 text-green-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Active Templates</p>
+                      <p className="text-2xl font-bold text-purple-600">12</p>
+                    </div>
+                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-purple-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Pending Messages</p>
+                      <p className="text-2xl font-bold text-orange-600">3</p>
+                    </div>
+                    <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-6 h-6 text-orange-600" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Communications Tabs */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+                <div className="p-4 border-b border-gray-200">
+                  <div className="flex flex-wrap gap-2">
+                    <button 
+                      onClick={() => setCommFilter('center')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        commFilter === 'center' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Message Center
+                    </button>
+                    <button 
+                      onClick={() => setCommFilter('announcements')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        commFilter === 'announcements' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Announcements
+                    </button>
+                    <button 
+                      onClick={() => setCommFilter('templates')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        commFilter === 'templates' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Templates
+                    </button>
+                    <button 
+                      onClick={() => setCommFilter('direct')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        commFilter === 'direct' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Direct Messages
+                    </button>
+                    <button 
+                      onClick={() => setCommFilter('reports')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        commFilter === 'reports' ? 'bg-pink-100 text-pink-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Delivery Reports
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Message Center */}
+              {commFilter === 'center' && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">All Communications</h3>
+                    <div className="flex gap-3">
+                      <button 
+                        onClick={() => setShowBroadcastModal(true)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                      >
+                        <Send className="w-4 h-4" />
+                        <span>New Message</span>
+                      </button>
+                      <button 
+                        onClick={() => setShowTemplateModal(true)}
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>Use Template</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {communicationsData.map((comm: any) => (
+                      <div key={comm.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-3 mb-2">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCommTypeColor(comm.type)}`}>
+                                {comm.type}
+                              </span>
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCommStatusColor(comm.status)}`}>
+                                {comm.status}
+                              </span>
+                              <span className="text-gray-500 text-sm">{comm.sentDate}</span>
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">{comm.title}</h3>
+                            <p className="text-gray-600 text-sm mb-3">{comm.preview}</p>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                              <div>
+                                <span className="text-gray-500">Recipients:</span>
+                                <span className="ml-2 text-gray-900">{comm.recipients}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">Delivery:</span>
+                                <span className="ml-2 text-gray-900">{comm.deliveryMethod}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">Open Rate:</span>
+                                <span className="ml-2 text-gray-900">{comm.openRate}%</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500">Sent by:</span>
+                                <span className="ml-2 text-gray-900">{comm.sentBy}</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center space-x-3 ml-4">
+                            <button 
+                              onClick={() => handleViewMessage(comm)}
+                              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                            >
+                              View Details
+                            </button>
+                            <button className="text-gray-400 hover:text-gray-600">
+                              <MoreHorizontal className="w-5 h-5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Announcements History */}
+              {commFilter === 'announcements' && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">Community Announcements</h3>
+                    <button 
+                      onClick={() => setShowBroadcastModal(true)}
+                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                    >
+                      <Bell className="w-4 h-4" />
+                      <span>New Announcement</span>
+                    </button>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {announcementsData.map((announcement: any) => (
+                      <div key={announcement.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-3">
+                              <Bell className="w-5 h-5 text-green-600" />
+                              <h3 className="text-lg font-semibold text-gray-900">{announcement.title}</h3>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(announcement.priority)}`}>
+                                {announcement.priority}
+                              </span>
+                            </div>
+                            <p className="text-gray-600 mb-4">{announcement.content}</p>
+                            <div className="flex items-center text-sm text-gray-500 space-x-4">
+                              <span>📅 {announcement.date}</span>
+                              <span>👥 {announcement.recipients} recipients</span>
+                              <span>📊 {announcement.engagement}% engagement</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                              View Analytics
+                            </button>
+                            <button className="text-gray-400 hover:text-gray-600">
+                              <MoreHorizontal className="w-5 h-5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Message Templates */}
+              {commFilter === 'templates' && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">Message Templates</h3>
+                    <button 
+                      onClick={() => setShowCreateTemplateModal(true)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Create Template</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {templatesData.map((template: any) => (
+                      <div key={template.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">{template.name}</h3>
+                            <p className="text-gray-600 text-sm mb-3">{template.description}</p>
+                            <div className="flex items-center space-x-2 text-sm text-gray-500">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTemplateTypeColor(template.category)}`}>
+                                {template.category}
+                              </span>
+                              <span>Used {template.usageCount} times</span>
+                            </div>
+                          </div>
+                          <button className="text-gray-400 hover:text-gray-600">
+                            <MoreHorizontal className="w-5 h-5" />
+                          </button>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button 
+                            onClick={() => handleUseTemplate(template)}
+                            className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                          >
+                            Use Template
+                          </button>
+                          <button 
+                            onClick={() => handleEditTemplate(template)}
+                            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Direct Messages */}
+              {commFilter === 'direct' && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">Direct Message Conversations</h3>
+                    <button 
+                      onClick={() => setShowDirectMessageModal(true)}
+                      className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>New Conversation</span>
+                    </button>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {directMessagesData.map((conversation: any) => (
+                      <div key={conversation.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                           onClick={() => handleOpenConversation(conversation)}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                              <span className="text-blue-600 font-semibold">{conversation.resident.avatar}</span>
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900">{conversation.resident.name}</h3>
+                              <p className="text-gray-600 text-sm">{conversation.resident.unit} • {conversation.resident.building}</p>
+                              <p className="text-gray-500 text-sm mt-1">{conversation.lastMessage}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex items-center space-x-2 mb-2">
+                              {conversation.unreadCount > 0 && (
+                                <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                                  {conversation.unreadCount}
+                                </span>
+                              )}
+                              <span className="text-sm text-gray-500">{conversation.lastActivity}</span>
+                            </div>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getConversationStatusColor(conversation.status)}`}>
+                              {conversation.status}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Delivery Reports */}
+              {commFilter === 'reports' && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900">Delivery & Engagement Reports</h3>
+                  
+                  <div className="grid gap-6">
+                    {deliveryReportsData.map((report: any) => (
+                      <div key={report.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div className="flex items-start justify-between mb-6">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">{report.messageTitle}</h3>
+                            <p className="text-gray-600 text-sm">Sent on {report.sentDate}</p>
+                          </div>
+                          <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                            Download Report
+                          </button>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                          <div className="text-center p-4 bg-blue-50 rounded-lg">
+                            <p className="text-2xl font-bold text-blue-600">{report.stats.sent}</p>
+                            <p className="text-sm text-gray-600">Sent</p>
+                          </div>
+                          <div className="text-center p-4 bg-green-50 rounded-lg">
+                            <p className="text-2xl font-bold text-green-600">{report.stats.delivered}</p>
+                            <p className="text-sm text-gray-600">Delivered</p>
+                          </div>
+                          <div className="text-center p-4 bg-purple-50 rounded-lg">
+                            <p className="text-2xl font-bold text-purple-600">{report.stats.opened}</p>
+                            <p className="text-sm text-gray-600">Opened</p>
+                          </div>
+                          <div className="text-center p-4 bg-orange-50 rounded-lg">
+                            <p className="text-2xl font-bold text-orange-600">{report.stats.clicked}</p>
+                            <p className="text-sm text-gray-600">Clicked</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Open Rate: <span className="font-semibold text-gray-900">{report.openRate}%</span></span>
+                          <span className="text-gray-600">Click Rate: <span className="font-semibold text-gray-900">{report.clickRate}%</span></span>
+                          <span className="text-gray-600">Delivery Rate: <span className="font-semibold text-gray-900">{report.deliveryRate}%</span></span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </>
           )}
 
           {/* Other Pages Placeholder */}
-          {(currentPage === 'communications' || currentPage === 'events' || currentPage === 'analytics' || currentPage === 'settings') && (
+          {(currentPage === 'events' || currentPage === 'analytics' || currentPage === 'settings') && (
             <div className="text-center py-12">
               <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-                {currentPage === 'communications' && <MessageSquare className="w-8 h-8 text-gray-400" />}
                 {currentPage === 'events' && <Calendar className="w-8 h-8 text-gray-400" />}
                 {currentPage === 'analytics' && <BarChart3 className="w-8 h-8 text-gray-400" />}
                 {currentPage === 'settings' && <Settings className="w-8 h-8 text-gray-400" />}
@@ -1497,975 +2268,3 @@ const ManagementDashboard = () => {
               <p className="text-gray-600">This section is under development.</p>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Add Resident Modal */}
-      {showAddResident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Add New Resident</h3>
-                <button 
-                  onClick={() => setShowAddResident(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                  <input
-                    type="text"
-                    value={newResident.name}
-                    onChange={(e) => setNewResident({...newResident, name: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter resident's full name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Unit Number</label>
-                  <input
-                    type="text"
-                    value={newResident.unit}
-                    onChange={(e) => setNewResident({...newResident, unit: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., A-301"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
-                  <select
-                    value={newResident.building}
-                    onChange={(e) => setNewResident({...newResident, building: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="Building A">Building A</option>
-                    <option value="Building B">Building B</option>
-                    <option value="Building C">Building C</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={newResident.email}
-                    onChange={(e) => setNewResident({...newResident, email: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="resident@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    value={newResident.phone}
-                    onChange={(e) => setNewResident({...newResident, phone: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="(555) 123-4567"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Move-in Date</label>
-                  <input
-                    type="date"
-                    value={newResident.moveInDate}
-                    onChange={(e) => setNewResident({...newResident, moveInDate: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Lease End Date</label>
-                  <input
-                    type="date"
-                    value={newResident.leaseEndDate}
-                    onChange={(e) => setNewResident({...newResident, leaseEndDate: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Emergency Contact</label>
-                  <input
-                    type="text"
-                    value={newResident.emergencyContact}
-                    onChange={(e) => setNewResident({...newResident, emergencyContact: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Name - Phone Number"
-                  />
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                <textarea
-                  value={newResident.notes}
-                  onChange={(e) => setNewResident({...newResident, notes: e.target.value})}
-                  rows={3}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Any additional notes about the resident..."
-                />
-              </div>
-              <div className="flex space-x-3 mt-6">
-                <button 
-                  onClick={() => setShowAddResident(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleAddResident}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Resident
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Report Incident Modal */}
-      {showReportModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Report New Incident</h3>
-                <button 
-                  onClick={() => setShowReportModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Incident Title</label>
-                  <input
-                    type="text"
-                    value={newIncident.title}
-                    onChange={(e) => setNewIncident({...newIncident, title: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Brief description of the incident"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                  <select
-                    value={newIncident.type}
-                    onChange={(e) => setNewIncident({...newIncident, type: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="maintenance">Maintenance</option>
-                    <option value="theft">Theft</option>
-                    <option value="security">Security</option>
-                    <option value="accident">Accident</option>
-                    <option value="system">System</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-                  <select
-                    value={newIncident.priority}
-                    onChange={(e) => setNewIncident({...newIncident, priority: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                  </select>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                  <input
-                    type="text"
-                    value={newIncident.location}
-                    onChange={(e) => setNewIncident({...newIncident, location: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Where did this incident occur?"
-                  />
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea
-                  value={newIncident.description}
-                  onChange={(e) => setNewIncident({...newIncident, description: e.target.value})}
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Provide detailed information about the incident..."
-                />
-              </div>
-              <div className="flex space-x-3 mt-6">
-                <button 
-                  onClick={() => setShowReportModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleSubmitIncident}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Report Incident
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Message Modal */}
-      {showMessageModal && selectedResident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Send Message to {selectedResident.name}
-                </h3>
-                <button 
-                  onClick={() => setShowMessageModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <textarea
-                value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
-                placeholder="Type your message here..."
-                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-              <div className="flex space-x-3 mt-4">
-                <button 
-                  onClick={() => setShowMessageModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleSendMessageSubmit}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Send Message
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Resident Profile Modal */}
-      {showResidentProfile && selectedResident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 font-semibold text-xl">{selectedResident.avatar}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{selectedResident.name}</h3>
-                    <p className="text-gray-600">{selectedResident.unit} • {selectedResident.building}</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowResidentProfile(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Contact Information</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center text-sm">
-                      <Mail className="w-4 h-4 mr-2 text-gray-400" />
-                      <span className="text-gray-900">{selectedResident.email}</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                      <span className="text-gray-900">{selectedResident.phone}</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Lease Information</h4>
-                  <div className="space-y-1 text-sm">
-                    <p><span className="text-gray-500">Move-in:</span> {new Date(selectedResident.moveInDate).toLocaleDateString()}</p>
-                    <p><span className="text-gray-500">Lease End:</span> {new Date(selectedResident.leaseEndDate).toLocaleDateString()}</p>
-                    <p><span className="text-gray-500">Last Activity:</span> {selectedResident.lastActivity}</p>
-                  </div>
-                </div>
-              </div>
-              
-              {selectedResident.interests && selectedResident.interests.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Interests</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedResident.interests.map((interest: string, index: number) => (
-                      <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                        {interest}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {selectedResident.groups && selectedResident.groups.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Community Groups</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedResident.groups.map((group: string, index: number) => (
-                      <span key={index} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                        {group}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {selectedResident.notes && (
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Notes</h4>
-                  <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedResident.notes}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Incident Detail Modal */}
-      {showIncidentModal && selectedIncident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">{selectedIncident.title}</h3>
-                  <p className="text-gray-600 mt-1">Incident ID: {selectedIncident.incidentId}</p>
-                </div>
-                <button 
-                  onClick={() => setShowIncidentModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Main Content */}
-                <div className="lg:col-span-2 space-y-6">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-2">Description</h4>
-                    <p className="text-gray-700">{selectedIncident.description}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Updates Timeline</h4>
-                    <div className="space-y-3">
-                      {selectedIncident.updates.map((update: any, index: number) => (
-                        <div key={index} className="flex space-x-3">
-                          <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-900">{update.update}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {new Date(update.date).toLocaleString()} by {update.by}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {selectedIncident.evidence && selectedIncident.evidence.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Evidence</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        {selectedIncident.evidence.map((evidence: any, index: number) => (
-                          <button
-                            key={index}
-                            onClick={() => handleViewEvidence(evidence)}
-                            className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                          >
-                            {evidence.type === 'video' && <Video className="w-5 h-5 text-blue-600" />}
-                            {evidence.type === 'image' && <Camera className="w-5 h-5 text-green-600" />}
-                            {evidence.type === 'document' && <FileText className="w-5 h-5 text-orange-600" />}
-                            <span className="text-sm text-gray-900">{evidence.name}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Sidebar */}
-                <div className="space-y-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Incident Details</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Type:</span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getIncidentTypeColor(selectedIncident.type)}`}>
-                          {selectedIncident.type}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Priority:</span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getPriorityColor(selectedIncident.priority)}`}>
-                          {selectedIncident.priority}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Status:</span>
-                        <span className="text-gray-900 capitalize">{selectedIncident.status}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Location:</span>
-                        <span className="text-gray-900">{selectedIncident.location}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Reported by:</span>
-                        <span className="text-gray-900">{selectedIncident.reportedBy}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Assigned to:</span>
-                        <span className="text-gray-900">{selectedIncident.assignedTo}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <button 
-                      onClick={() => setShowAddUpdate(true)}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>Add Update</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => handleMessageResident(selectedIncident.reportedBy)}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Message Reporter</span>
-                    </button>
-                    
-                    <button 
-                      onClick={handleEscalate}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <AlertTriangle className="w-4 h-4" />
-                      <span>Escalate</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Update Modal */}
-      {showAddUpdate && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Add Update</h3>
-                <button 
-                  onClick={() => setShowAddUpdate(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <textarea
-                value={updateText}
-                onChange={(e) => setUpdateText(e.target.value)}
-                placeholder="Enter update details..."
-                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-              <div className="flex space-x-3 mt-4">
-                <button 
-                  onClick={() => setShowAddUpdate(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleAddUpdate}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Update
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Escalate Modal */}
-      {showEscalateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Escalate Incident</h3>
-                <button 
-                  onClick={() => setShowEscalateModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Escalate to</label>
-                <select
-                  value={escalationLevel}
-                  onChange={(e) => setEscalationLevel(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="supervisor">Supervisor</option>
-                  <option value="management">Management</option>
-                  <option value="corporate">Corporate</option>
-                  <option value="legal">Legal Department</option>
-                </select>
-              </div>
-              <textarea
-                value={escalationReason}
-                onChange={(e) => setEscalationReason(e.target.value)}
-                placeholder="Reason for escalation..."
-                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-              <div className="flex space-x-3 mt-4">
-                <button 
-                  onClick={() => setShowEscalateModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleEscalateSubmit}
-                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Escalate
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Broadcast Modal */}
-      {showBroadcastModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Send Community Notification</h3>
-                <button 
-                  onClick={() => setShowBroadcastModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6 space-y-6">
-              {/* Message Content */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Notification Title</label>
-                <input
-                  type="text"
-                  value={broadcastData.title}
-                  onChange={(e) => setBroadcastData({...broadcastData, title: e.target.value})}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter notification title"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                <textarea
-                  value={broadcastData.message}
-                  onChange={(e) => setBroadcastData({...broadcastData, message: e.target.value})}
-                  placeholder="Type your notification message here..."
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                />
-              </div>
-
-              {/* Recipients */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Send To</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="recipients"
-                      value="all"
-                      checked={broadcastData.recipients === 'all'}
-                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">All Residents</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="recipients"
-                      value="building"
-                      checked={broadcastData.recipients === 'building'}
-                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">Specific Buildings</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="recipients"
-                      value="active"
-                      checked={broadcastData.recipients === 'active'}
-                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">Active Residents Only</span>
-                  </label>
-                </div>
-                
-                {broadcastData.recipients === 'building' && (
-                  <div className="mt-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Select Buildings</label>
-                    <div className="flex gap-2">
-                      {['Building A', 'Building B', 'Building C'].map((building: string) => (
-                        <label key={building} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={broadcastData.buildings.includes(building)}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setBroadcastData({
-                                  ...broadcastData, 
-                                  buildings: [...broadcastData.buildings, building]
-                                });
-                              } else {
-                                setBroadcastData({
-                                  ...broadcastData, 
-                                  buildings: broadcastData.buildings.filter(b => b !== building)
-                                });
-                              }
-                            }}
-                            className="mr-2"
-                          />
-                          <span className="text-sm">{building}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Delivery Methods */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Methods</label>
-                <div className="flex gap-4">
-                  {[
-                    { value: 'email', label: 'Email', icon: Mail },
-                    { value: 'sms', label: 'SMS/Text', icon: MessageSquare },
-                    { value: 'app', label: 'In-App', icon: Bell },
-                    { value: 'phone', label: 'Phone Call', icon: Phone }
-                  ].map(({value, label, icon: Icon}) => (
-                    <label key={value} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={broadcastData.deliveryMethods.includes(value)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setBroadcastData({
-                              ...broadcastData, 
-                              deliveryMethods: [...broadcastData.deliveryMethods, value]
-                            });
-                          } else {
-                            setBroadcastData({
-                              ...broadcastData, 
-                              deliveryMethods: broadcastData.deliveryMethods.filter(m => m !== value)
-                            });
-                          }
-                        }}
-                        className="mr-2"
-                      />
-                      <Icon className="w-4 h-4 mr-1" />
-                      <span className="text-sm">{label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Priority */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Priority Level</label>
-                <select
-                  value={broadcastData.priority}
-                  onChange={(e) => setBroadcastData({...broadcastData, priority: e.target.value})}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="emergency">Emergency</option>
-                </select>
-              </div>
-
-              {/* Scheduling */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">When to Send</label>
-                <div className="space-y-3">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="scheduleType"
-                      value="now"
-                      checked={broadcastData.scheduleType === 'now'}
-                      onChange={(e) => setBroadcastData({...broadcastData, scheduleType: e.target.value})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">Send Now</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="scheduleType"
-                      value="later"
-                      checked={broadcastData.scheduleType === 'later'}
-                      onChange={(e) => setBroadcastData({...broadcastData, scheduleType: e.target.value})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">Schedule for Later</span>
-                  </label>
-                  
-                  {broadcastData.scheduleType === 'later' && (
-                    <div className="grid grid-cols-2 gap-3 ml-6">
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1">Date</label>
-                        <input
-                          type="date"
-                          value={broadcastData.scheduledDate}
-                          onChange={(e) => setBroadcastData({...broadcastData, scheduledDate: e.target.value})}
-                          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1">Time</label>
-                        <input
-                          type="time"
-                          value={broadcastData.scheduledTime}
-                          onChange={(e) => setBroadcastData({...broadcastData, scheduledTime: e.target.value})}
-                          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Image Attachment */}
-              <div>
-                <label className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    checked={broadcastData.attachImage}
-                    onChange={(e) => setBroadcastData({...broadcastData, attachImage: e.target.checked})}
-                    className="mr-2"
-                  />
-                  <span className="text-sm font-medium text-gray-700">Attach Image</span>
-                </label>
-                
-                {broadcastData.attachImage && (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setBroadcastData({...broadcastData, imageFile: e.target.files?.[0] || null})}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <label htmlFor="image-upload" className="cursor-pointer">
-                      <Camera className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                      <p className="text-sm text-gray-600">Click to upload image</p>
-                      {broadcastData.imageFile && (
-                        <p className="text-xs text-blue-600 mt-1">{broadcastData.imageFile.name}</p>
-                      )}
-                    </label>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex space-x-3 pt-4 border-t">
-                <button 
-                  onClick={() => {
-                    setShowBroadcastModal(false);
-                    setBroadcastData({
-                      title: '',
-                      message: '',
-                      recipients: 'all',
-                      buildings: [],
-                      deliveryMethods: ['email'],
-                      priority: 'normal',
-                      scheduleType: 'now',
-                      scheduledDate: '',
-                      scheduledTime: '',
-                      attachImage: false,
-                      imageFile: null
-                    });
-                  }}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={() => {
-                    console.log('Broadcasting notification:', broadcastData);
-                    setBroadcastData({
-                      title: '',
-                      message: '',
-                      recipients: 'all',
-                      buildings: [],
-                      deliveryMethods: ['email'],
-                      priority: 'normal',
-                      scheduleType: 'now',
-                      scheduledDate: '',
-                      scheduledTime: '',
-                      attachImage: false,
-                      imageFile: null
-                    });
-                    setShowBroadcastModal(false);
-                  }}
-                  className={`flex-1 px-4 py-3 rounded-lg font-medium transition-colors text-white ${
-                    broadcastData.priority === 'emergency' 
-                      ? 'bg-red-600 hover:bg-red-700' 
-                      : broadcastData.priority === 'urgent'
-                      ? 'bg-orange-600 hover:bg-orange-700'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
-                >
-                  {broadcastData.scheduleType === 'now' ? 'Send Notification' : 'Schedule Notification'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Create Event Modal */}
-      {showCreateEventModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Create Community Event</h3>
-                <button 
-                  onClick={() => setShowCreateEventModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Event Title</label>
-                  <input
-                    type="text"
-                    value={eventData.title}
-                    onChange={(e) => setEventData({...eventData, title: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter event title"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                  <input
-                    type="date"
-                    value={eventData.date}
-                    onChange={(e) => setEventData({...eventData, date: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                  <input
-                    type="time"
-                    value={eventData.time}
-                    onChange={(e) => setEventData({...eventData, time: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                  <input
-                    type="text"
-                    value={eventData.location}
-                    onChange={(e) => setEventData({...eventData, location: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Where will this event take place?"
-                  />
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea
-                  value={eventData.description}
-                  onChange={(e) => setEventData({...eventData, description: e.target.value})}
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Provide details about the event..."
-                />
-              </div>
-              <div className="flex space-x-3 mt-6">
-                <button 
-                  onClick={() => setShowCreateEventModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={() => {
-                    console.log('Creating event:', eventData);
-                    setEventData({ title: '', date: '', time: '', location: '', description: '' });
-                    setShowCreateEventModal(false);
-                  }}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Create Event
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default ManagementDashboard;
