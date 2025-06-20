@@ -76,6 +76,29 @@ const ManagementDashboard = () => {
     emergencyContact: '',
     notes: ''
   });
+  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+  const [showCreateEventModal, setShowCreateEventModal] = useState(false);
+  const [broadcastMessage, setBroadcastMessage] = useState('');
+  const [broadcastData, setBroadcastData] = useState({
+    title: '',
+    message: '',
+    recipients: 'all', // all, building, specific
+    buildings: [] as string[],
+    deliveryMethods: ['email'] as string[],
+    priority: 'normal', // normal, urgent
+    scheduleType: 'now', // now, later
+    scheduledDate: '',
+    scheduledTime: '',
+    attachImage: false,
+    imageFile: null as File | null
+  });
+  const [eventData, setEventData] = useState({
+    title: '',
+    date: '',
+    time: '',
+    location: '',
+    description: ''
+  });
 
   // Dynamic greeting system
   useEffect(() => {
@@ -968,13 +991,19 @@ const ManagementDashboard = () => {
                       <h3 className="text-base font-semibold text-gray-900">Quick Actions</h3>
                     </div>
                     <div className="p-4 space-y-2">
-                      <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+                      <button 
+                        onClick={() => setShowBroadcastModal(true)}
+                        className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                      >
                         <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                           <Send className="w-4 h-4 text-blue-600" />
                         </div>
                         <span className="font-medium text-gray-900 text-sm">Send Notification</span>
                       </button>
-                      <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+                      <button 
+                        onClick={() => setShowCreateEventModal(true)}
+                        className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                      >
                         <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                           <Plus className="w-4 h-4 text-green-600" />
                         </div>
@@ -991,6 +1020,85 @@ const ManagementDashboard = () => {
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Activity Page */}
+          {currentPage === 'activity' && (
+            <>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div className="p-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">All Recent Activity</h3>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => setActivityFilter('all')}
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                          activityFilter === 'all' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        All
+                      </button>
+                      <button 
+                        onClick={() => setActivityFilter('safety')}
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                          activityFilter === 'safety' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        Safety
+                      </button>
+                      <button 
+                        onClick={() => setActivityFilter('maintenance')}
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                          activityFilter === 'maintenance' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        Maintenance
+                      </button>
+                      <button 
+                        onClick={() => setActivityFilter('community')}
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                          activityFilter === 'community' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        Community
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="divide-y divide-gray-200">
+                  {getFilteredActivity().map((activity: any) => (
+                    <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-2">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(activity.type)}`}>
+                              {activity.type}
+                            </span>
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(activity.priority)}`}>
+                              {activity.priority}
+                            </span>
+                            <span className="text-gray-500 text-sm">{activity.time}</span>
+                          </div>
+                          <h4 className="text-gray-900 font-medium mb-1">{activity.title}</h4>
+                          <p className="text-gray-600 text-sm mb-2">{activity.description}</p>
+                          <div className="flex items-center text-sm text-gray-500">
+                            <MapPin className="w-4 h-4 mr-1" />
+                            {activity.location}
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-3 ml-4">
+                          <div className="flex items-center space-x-1 text-gray-500">
+                            {getStatusIcon(activity.status)}
+                            <span className="text-sm capitalize">{activity.status}</span>
+                          </div>
+                          <span className="text-sm text-gray-600">by {activity.user}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </>
@@ -1614,7 +1722,7 @@ const ManagementDashboard = () => {
 
       {/* Message Modal */}
       {showMessageModal && selectedResident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
@@ -1743,7 +1851,7 @@ const ManagementDashboard = () => {
       {/* Incident Detail Modal */}
       {showIncidentModal && selectedIncident && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
@@ -1876,7 +1984,7 @@ const ManagementDashboard = () => {
 
       {/* Add Update Modal */}
       {showAddUpdate && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
@@ -1917,7 +2025,7 @@ const ManagementDashboard = () => {
 
       {/* Escalate Modal */}
       {showEscalateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
           <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
@@ -1962,6 +2070,394 @@ const ManagementDashboard = () => {
                   className="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                 >
                   Escalate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Broadcast Modal */}
+      {showBroadcastModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Send Community Notification</h3>
+                <button 
+                  onClick={() => setShowBroadcastModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6 space-y-6">
+              {/* Message Content */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Notification Title</label>
+                <input
+                  type="text"
+                  value={broadcastData.title}
+                  onChange={(e) => setBroadcastData({...broadcastData, title: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter notification title"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                <textarea
+                  value={broadcastData.message}
+                  onChange={(e) => setBroadcastData({...broadcastData, message: e.target.value})}
+                  placeholder="Type your notification message here..."
+                  rows={4}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                />
+              </div>
+
+              {/* Recipients */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Send To</label>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="recipients"
+                      value="all"
+                      checked={broadcastData.recipients === 'all'}
+                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
+                      className="mr-2"
+                    />
+                    <span className="text-sm">All Residents</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="recipients"
+                      value="building"
+                      checked={broadcastData.recipients === 'building'}
+                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
+                      className="mr-2"
+                    />
+                    <span className="text-sm">Specific Buildings</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="recipients"
+                      value="active"
+                      checked={broadcastData.recipients === 'active'}
+                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
+                      className="mr-2"
+                    />
+                    <span className="text-sm">Active Residents Only</span>
+                  </label>
+                </div>
+                
+                {broadcastData.recipients === 'building' && (
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Select Buildings</label>
+                    <div className="flex gap-2">
+                      {['Building A', 'Building B', 'Building C'].map((building: string) => (
+                        <label key={building} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={broadcastData.buildings.includes(building)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setBroadcastData({
+                                  ...broadcastData, 
+                                  buildings: [...broadcastData.buildings, building]
+                                });
+                              } else {
+                                setBroadcastData({
+                                  ...broadcastData, 
+                                  buildings: broadcastData.buildings.filter(b => b !== building)
+                                });
+                              }
+                            }}
+                            className="mr-2"
+                          />
+                          <span className="text-sm">{building}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Delivery Methods */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Methods</label>
+                <div className="flex gap-4">
+                  {[
+                    { value: 'email', label: 'Email', icon: Mail },
+                    { value: 'sms', label: 'SMS/Text', icon: MessageSquare },
+                    { value: 'app', label: 'In-App', icon: Bell },
+                    { value: 'phone', label: 'Phone Call', icon: Phone }
+                  ].map(({value, label, icon: Icon}) => (
+                    <label key={value} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={broadcastData.deliveryMethods.includes(value)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setBroadcastData({
+                              ...broadcastData, 
+                              deliveryMethods: [...broadcastData.deliveryMethods, value]
+                            });
+                          } else {
+                            setBroadcastData({
+                              ...broadcastData, 
+                              deliveryMethods: broadcastData.deliveryMethods.filter(m => m !== value)
+                            });
+                          }
+                        }}
+                        className="mr-2"
+                      />
+                      <Icon className="w-4 h-4 mr-1" />
+                      <span className="text-sm">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Priority */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Priority Level</label>
+                <select
+                  value={broadcastData.priority}
+                  onChange={(e) => setBroadcastData({...broadcastData, priority: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="normal">Normal</option>
+                  <option value="urgent">Urgent</option>
+                  <option value="emergency">Emergency</option>
+                </select>
+              </div>
+
+              {/* Scheduling */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">When to Send</label>
+                <div className="space-y-3">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="scheduleType"
+                      value="now"
+                      checked={broadcastData.scheduleType === 'now'}
+                      onChange={(e) => setBroadcastData({...broadcastData, scheduleType: e.target.value})}
+                      className="mr-2"
+                    />
+                    <span className="text-sm">Send Now</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="scheduleType"
+                      value="later"
+                      checked={broadcastData.scheduleType === 'later'}
+                      onChange={(e) => setBroadcastData({...broadcastData, scheduleType: e.target.value})}
+                      className="mr-2"
+                    />
+                    <span className="text-sm">Schedule for Later</span>
+                  </label>
+                  
+                  {broadcastData.scheduleType === 'later' && (
+                    <div className="grid grid-cols-2 gap-3 ml-6">
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1">Date</label>
+                        <input
+                          type="date"
+                          value={broadcastData.scheduledDate}
+                          onChange={(e) => setBroadcastData({...broadcastData, scheduledDate: e.target.value})}
+                          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1">Time</label>
+                        <input
+                          type="time"
+                          value={broadcastData.scheduledTime}
+                          onChange={(e) => setBroadcastData({...broadcastData, scheduledTime: e.target.value})}
+                          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Image Attachment */}
+              <div>
+                <label className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    checked={broadcastData.attachImage}
+                    onChange={(e) => setBroadcastData({...broadcastData, attachImage: e.target.checked})}
+                    className="mr-2"
+                  />
+                  <span className="text-sm font-medium text-gray-700">Attach Image</span>
+                </label>
+                
+                {broadcastData.attachImage && (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setBroadcastData({...broadcastData, imageFile: e.target.files?.[0] || null})}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label htmlFor="image-upload" className="cursor-pointer">
+                      <Camera className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                      <p className="text-sm text-gray-600">Click to upload image</p>
+                      {broadcastData.imageFile && (
+                        <p className="text-xs text-blue-600 mt-1">{broadcastData.imageFile.name}</p>
+                      )}
+                    </label>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex space-x-3 pt-4 border-t">
+                <button 
+                  onClick={() => {
+                    setShowBroadcastModal(false);
+                    setBroadcastData({
+                      title: '',
+                      message: '',
+                      recipients: 'all',
+                      buildings: [],
+                      deliveryMethods: ['email'],
+                      priority: 'normal',
+                      scheduleType: 'now',
+                      scheduledDate: '',
+                      scheduledTime: '',
+                      attachImage: false,
+                      imageFile: null
+                    });
+                  }}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={() => {
+                    console.log('Broadcasting notification:', broadcastData);
+                    setBroadcastData({
+                      title: '',
+                      message: '',
+                      recipients: 'all',
+                      buildings: [],
+                      deliveryMethods: ['email'],
+                      priority: 'normal',
+                      scheduleType: 'now',
+                      scheduledDate: '',
+                      scheduledTime: '',
+                      attachImage: false,
+                      imageFile: null
+                    });
+                    setShowBroadcastModal(false);
+                  }}
+                  className={`flex-1 px-4 py-3 rounded-lg font-medium transition-colors text-white ${
+                    broadcastData.priority === 'emergency' 
+                      ? 'bg-red-600 hover:bg-red-700' 
+                      : broadcastData.priority === 'urgent'
+                      ? 'bg-orange-600 hover:bg-orange-700'
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                >
+                  {broadcastData.scheduleType === 'now' ? 'Send Notification' : 'Schedule Notification'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Event Modal */}
+      {showCreateEventModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Create Community Event</h3>
+                <button 
+                  onClick={() => setShowCreateEventModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Event Title</label>
+                  <input
+                    type="text"
+                    value={eventData.title}
+                    onChange={(e) => setEventData({...eventData, title: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter event title"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                  <input
+                    type="date"
+                    value={eventData.date}
+                    onChange={(e) => setEventData({...eventData, date: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                  <input
+                    type="time"
+                    value={eventData.time}
+                    onChange={(e) => setEventData({...eventData, time: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                  <input
+                    type="text"
+                    value={eventData.location}
+                    onChange={(e) => setEventData({...eventData, location: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Where will this event take place?"
+                  />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={eventData.description}
+                  onChange={(e) => setEventData({...eventData, description: e.target.value})}
+                  rows={4}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  placeholder="Provide details about the event..."
+                />
+              </div>
+              <div className="flex space-x-3 mt-6">
+                <button 
+                  onClick={() => setShowCreateEventModal(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={() => {
+                    console.log('Creating event:', eventData);
+                    setEventData({ title: '', date: '', time: '', location: '', description: '' });
+                    setShowCreateEventModal(false);
+                  }}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Create Event
                 </button>
               </div>
             </div>
