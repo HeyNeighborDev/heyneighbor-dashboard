@@ -391,7 +391,7 @@ const ManagementDashboard = () => {
   ];
 
   // Helper functions
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
