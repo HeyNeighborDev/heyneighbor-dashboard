@@ -935,7 +935,7 @@ const ManagementDashboard = () => {
                       </div>
                     </div>
                     <div className="divide-y divide-gray-200">
-                      {recentActivity.map((activity) => (
+                      {recentActivity.map((activity: any) => (
                         <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
@@ -1120,7 +1120,7 @@ const ManagementDashboard = () => {
 
               {/* Incidents List */}
               <div className="space-y-4">
-                {getFilteredIncidents().map((incident) => (
+                {getFilteredIncidents().map((incident: any) => (
                   <div key={incident.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
@@ -1303,7 +1303,7 @@ const ManagementDashboard = () => {
 
               {/* Residents Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {getFilteredResidents().map((resident) => (
+                {getFilteredResidents().map((resident: any) => (
                   <div key={resident.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
@@ -1771,7 +1771,7 @@ const ManagementDashboard = () => {
                   <div>
                     <h4 className="text-sm font-medium text-gray-900 mb-3">Updates Timeline</h4>
                     <div className="space-y-3">
-                      {selectedIncident.updates.map((update, index) => (
+                      {selectedIncident.updates.map((update: any, index: number) => (
                         <div key={index} className="flex space-x-3">
                           <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
                           <div className="flex-1">
@@ -1789,7 +1789,7 @@ const ManagementDashboard = () => {
                     <div>
                       <h4 className="text-sm font-medium text-gray-900 mb-3">Evidence</h4>
                       <div className="grid grid-cols-2 gap-3">
-                        {selectedIncident.evidence.map((evidence, index) => (
+                        {selectedIncident.evidence.map((evidence: any, index: number) => (
                           <button
                             key={index}
                             onClick={() => handleViewEvidence(evidence)}
