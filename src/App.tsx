@@ -230,56 +230,56 @@ const ManagementDashboard = () => {
 
   // Mock data
   const communityStats = {
-    activeResidents: { count: 342, change: '+12' },
-    engagementScore: { score: 8.7, change: '+0.3' },
-    incidentReports: { count: 3, change: '-2' },
-    safetyRequests: { count: 12, change: '+4' }
+    activeResidents: { count: 342, change: "+12" },
+    engagementScore: { score: 8.7, change: "+0.3" },
+    incidentReports: { count: 3, change: "-2" },
+    safetyRequests: { count: 12, change: "+4" }
   };
 
   const recentActivity = [
     {
       id: 1,
-      type: 'safety',
-      title: 'Package theft reported in Building A',
-      time: '2 mins ago',
-      priority: 'high',
-      user: 'Jessica M.',
-      status: 'investigating',
-      description: 'Resident reported missing package from lobby area.',
-      location: 'Building A - Lobby'
+      type: "safety",
+      title: "Package theft reported in Building A",
+      time: "2 mins ago",
+      priority: "high",
+      user: "Jessica M.",
+      status: "investigating",
+      description: "Resident reported missing package from lobby area.",
+      location: "Building A - Lobby"
     },
     {
       id: 2,
-      type: 'maintenance',
-      title: 'Pool maintenance scheduled for tomorrow',
-      time: '15 mins ago',
-      priority: 'medium',
-      user: 'Maintenance Team',
-      status: 'scheduled',
-      description: 'Quarterly pool cleaning and chemical balancing.',
-      location: 'Community Pool'
+      type: "maintenance",
+      title: "Pool maintenance scheduled for tomorrow",
+      time: "15 mins ago",
+      priority: "medium",
+      user: "Maintenance Team",
+      status: "scheduled",
+      description: "Quarterly pool cleaning and chemical balancing.",
+      location: "Community Pool"
     },
     {
       id: 3,
-      type: 'community',
-      title: 'New resident welcome party planned',
-      time: '1 hour ago',
-      priority: 'low',
-      user: 'Community Team',
-      status: 'approved',
-      description: 'Welcome party for new residents this month.',
-      location: 'Clubhouse'
+      type: "community",
+      title: "New resident welcome party planned",
+      time: "1 hour ago",
+      priority: "low",
+      user: "Community Team",
+      status: "approved",
+      description: "Welcome party for new residents this month.",
+      location: "Clubhouse"
     },
     {
       id: 4,
-      type: 'safety',
-      title: 'Security patrol completed - all clear',
-      time: '2 hours ago',
-      priority: 'low',
-      user: 'Security Team',
-      status: 'completed',
-      description: 'Nightly security patrol completed.',
-      location: 'All Buildings'
+      type: "safety",
+      title: "Security patrol completed - all clear",
+      time: "2 hours ago",
+      priority: "low",
+      user: "Security Team",
+      status: "completed",
+      description: "Nightly security patrol completed.",
+      location: "All Buildings"
     }
   ];
 
@@ -529,25 +529,25 @@ const ManagementDashboard = () => {
     ...recentActivity,
     {
       id: 5,
-      type: 'maintenance',
-      title: 'Elevator inspection completed',
-      time: '3 hours ago',
-      priority: 'medium',
-      user: 'Elevator Services',
-      status: 'completed',
-      description: 'Monthly elevator safety inspection passed.',
-      location: 'Building C'
+      type: "maintenance",
+      title: "Elevator inspection completed",
+      time: "3 hours ago",
+      priority: "medium",
+      user: "Elevator Services",
+      status: "completed",
+      description: "Monthly elevator safety inspection passed.",
+      location: "Building C"
     },
     {
       id: 6,
-      type: 'community',
-      title: 'Yoga class registration opened',
-      time: '4 hours ago',
-      priority: 'low',
-      user: 'Recreation Team',
-      status: 'active',
-      description: 'New morning yoga classes available.',
-      location: 'Fitness Center'
+      type: "community",
+      title: "Yoga class registration opened",
+      time: "4 hours ago",
+      priority: "low",
+      user: "Recreation Team",
+      status: "active",
+      description: "New morning yoga classes available.",
+      location: "Fitness Center"
     }
   ];
 
