@@ -2021,8 +2021,9 @@ const App: React.FC = () => {
   };
 
   // Modal components
-  const AddResidentModal: React.FC = () => (
-    showAddResident && (
+  const AddResidentModal: React.FC = () => {
+    if (!showAddResident) return null;
+    return (
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
           <div className="mt-3">
@@ -2084,11 +2085,12 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-    )
-  );
+    );
+  };
 
-  const CreateEventModal: React.FC = () => (
-    showCreateEvent && (
+  const CreateEventModal: React.FC = () => {
+    if (!showCreateEvent) return null;
+    return (
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
           <div className="mt-3">
@@ -2241,11 +2243,13 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-    )
-  );
+    );
+  };
 
-  const EventDetailsModal: React.FC = () => (
-    showEventDetails && selectedEvent && (
+  const EventDetailsModal: React.FC = () => {
+    if (!showEventDetails || !selectedEvent) return null;
+    const IconComponent = getEventIcon(selectedEvent.category);
+    return (
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div className="relative top-10 mx-auto p-5 border w-full max-w-3xl shadow-lg rounded-md bg-white">
           <div className="mt-3">
@@ -2450,8 +2454,8 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-    )
-  );
+    );
+  };
 
   // Render the appropriate page
   const renderPage = (): JSX.Element => {
@@ -2470,9 +2474,6 @@ const App: React.FC = () => {
         return <DashboardPage />;
     }
   };
-
-  // Fix the IconComponent reference in EventDetailsModal
-  const IconComponent = selectedEvent ? getEventIcon(selectedEvent.category) : Calendar;
 
   return (
     <div className="min-h-screen bg-gray-50">
