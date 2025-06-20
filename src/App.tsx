@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Users, AlertTriangle, Calendar, MessageSquare, Shield, Bell, Search, Plus, MoreHorizontal, Home, Settings, BarChart3, UserPlus, Send, Eye, Clock, CheckCircle, AlertCircle, Building2, MapPin, Phone, Mail, Edit, Trash2, Filter, Download, Upload, FileText, Tag, TrendingUp, Activity, DollarSign, Zap, ChevronDown, ChevronRight, Star, Heart, ThumbsUp, Reply, Forward, Archive, MoreVertical, X, CalendarDays, Users2, PartyPopper, Wrench, Coffee, Gamepad2, BookOpen, Music, Car, Utensils, Gift } from 'lucide-react';
+import { 
+  Users, AlertTriangle, Calendar, MessageSquare, Shield, Bell, Search, Plus, 
+  MoreHorizontal, Home, Settings, BarChart3, UserPlus, Send, Eye, Clock, 
+  CheckCircle, AlertCircle, Building2, MapPin, Phone, Mail, Edit, Trash2, 
+  Filter, Download, Upload, FileText, Tag, TrendingUp, Activity, DollarSign, 
+  Zap, ChevronDown, ChevronRight, Star, Heart, ThumbsUp, Reply, Forward, 
+  Archive, MoreVertical, X, CalendarDays, Users2, PartyPopper, Wrench, 
+  Coffee, Gamepad2, BookOpen, Music, Car, Utensils, Gift 
+} from 'lucide-react';
 
 // Types
 interface Resident {
@@ -114,7 +122,16 @@ interface Event {
   attachments?: string[];
 }
 
+interface EventStats {
+  thisMonth: number;
+  upcoming: number;
+  totalAttendees: number;
+  avgAttendance: number;
+}
+
 type Page = 'dashboard' | 'residents' | 'safety' | 'communications' | 'events';
+type CommTab = 'messages' | 'announcements' | 'templates' | 'direct' | 'reports';
+type EventTab = 'calendar' | 'list' | 'analytics';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
@@ -144,10 +161,10 @@ const App: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   // Communications state
-  const [activeCommTab, setActiveCommTab] = useState<'messages' | 'announcements' | 'templates' | 'direct' | 'reports'>('messages');
+  const [activeCommTab, setActiveCommTab] = useState<CommTab>('messages');
   
   // Events state
-  const [activeEventTab, setActiveEventTab] = useState<'calendar' | 'list' | 'analytics'>('calendar');
+  const [activeEventTab, setActiveEventTab] = useState<EventTab>('calendar');
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [eventFilter, setEventFilter] = useState<string>('all');
   const [calendarView, setCalendarView] = useState<'month' | 'week'>('month');
@@ -251,7 +268,7 @@ const App: React.FC = () => {
     {
       id: '2',
       subject: 'Welcome to the Community!',
-      content: 'Welcome to our community! Here's everything you need to know about your new home.',
+      content: 'Welcome to our community! Here is everything you need to know about your new home.',
       sender: 'Property Management',
       recipients: ['New Residents'],
       timestamp: '2024-01-14T14:30:00Z',
@@ -286,7 +303,7 @@ const App: React.FC = () => {
       id: '3',
       name: 'Welcome Package',
       subject: 'Welcome to {{COMMUNITY_NAME}}!',
-      content: 'Dear {{RESIDENT_NAME}},\n\nWelcome to your new home at {{COMMUNITY_NAME}}!\n\nYour unit {{UNIT_NUMBER}} is ready for move-in on {{MOVE_IN_DATE}}.\n\nImportant information:\n- Office hours: {{OFFICE_HOURS}}\n- Emergency contact: {{EMERGENCY_CONTACT}}\n- WiFi password: {{WIFI_PASSWORD}}\n\nWe're excited to have you as part of our community!',
+      content: 'Dear {{RESIDENT_NAME}},\n\nWelcome to your new home at {{COMMUNITY_NAME}}!\n\nYour unit {{UNIT_NUMBER}} is ready for move-in on {{MOVE_IN_DATE}}.\n\nImportant information:\n- Office hours: {{OFFICE_HOURS}}\n- Emergency contact: {{EMERGENCY_CONTACT}}\n- WiFi password: {{WIFI_PASSWORD}}\n\nWe are excited to have you as part of our community!',
       category: 'welcome',
       variables: ['RESIDENT_NAME', 'COMMUNITY_NAME', 'UNIT_NUMBER', 'MOVE_IN_DATE', 'OFFICE_HOURS', 'EMERGENCY_CONTACT', 'WIFI_PASSWORD'],
       useCount: 12
@@ -303,8 +320,8 @@ const App: React.FC = () => {
     {
       id: '5',
       name: 'Community Event',
-      subject: 'You\'re Invited: {{EVENT_NAME}}',
-      content: 'Dear {{RESIDENT_NAME}},\n\nYou\'re invited to {{EVENT_NAME}}!\n\nWhen: {{EVENT_DATE}} at {{EVENT_TIME}}\nWhere: {{EVENT_LOCATION}}\nWhat to bring: {{BRING_ITEMS}}\n\n{{EVENT_DESCRIPTION}}\n\nRSVP by {{RSVP_DEADLINE}} to {{RSVP_CONTACT}}.\n\nWe hope to see you there!',
+      subject: 'You are Invited: {{EVENT_NAME}}',
+      content: 'Dear {{RESIDENT_NAME}},\n\nYou are invited to {{EVENT_NAME}}!\n\nWhen: {{EVENT_DATE}} at {{EVENT_TIME}}\nWhere: {{EVENT_LOCATION}}\nWhat to bring: {{BRING_ITEMS}}\n\n{{EVENT_DESCRIPTION}}\n\nRSVP by {{RSVP_DEADLINE}} to {{RSVP_CONTACT}}.\n\nWe hope to see you there!',
       category: 'events',
       variables: ['RESIDENT_NAME', 'EVENT_NAME', 'EVENT_DATE', 'EVENT_TIME', 'EVENT_LOCATION', 'BRING_ITEMS', 'EVENT_DESCRIPTION', 'RSVP_DEADLINE', 'RSVP_CONTACT'],
       useCount: 15
@@ -331,14 +348,14 @@ const App: React.FC = () => {
         {
           id: '1',
           sender: 'John Smith',
-          content: 'Hi, I\'m having issues with my heating unit.',
+          content: 'Hi, I am having issues with my heating unit.',
           timestamp: '2024-01-15T15:00:00Z',
           status: 'read'
         },
         {
           id: '2',
           sender: 'Property Management',
-          content: 'I\'ll send maintenance to check it out this afternoon.',
+          content: 'I will send maintenance to check it out this afternoon.',
           timestamp: '2024-01-15T15:15:00Z',
           status: 'read'
         },
@@ -354,21 +371,21 @@ const App: React.FC = () => {
     {
       id: '2',
       participants: ['Property Management', 'Sarah Johnson'],
-      lastMessage: 'I\'ll be out of town that weekend.',
+      lastMessage: 'I will be out of town that weekend.',
       lastMessageTime: '2024-01-14T12:45:00Z',
       unreadCount: 1,
       messages: [
         {
           id: '1',
           sender: 'Property Management',
-          content: 'We\'re planning a community BBQ next weekend. Are you interested?',
+          content: 'We are planning a community BBQ next weekend. Are you interested?',
           timestamp: '2024-01-14T12:00:00Z',
           status: 'read'
         },
         {
           id: '2',
           sender: 'Sarah Johnson',
-          content: 'I\'ll be out of town that weekend.',
+          content: 'I will be out of town that weekend.',
           timestamp: '2024-01-14T12:45:00Z',
           status: 'delivered'
         }
@@ -558,29 +575,30 @@ const App: React.FC = () => {
   };
 
   const getEventsForDate = (date: string): Event[] => {
-    return events.filter(event => event.date === date);
+    return events.filter((event: Event) => event.date === date);
   };
 
-  const getEventStats = () => {
+  const getEventStats = (): EventStats => {
     const now = new Date();
-    const thisMonth = events.filter(event => {
+    const thisMonth = events.filter((event: Event) => {
       const eventDate = new Date(event.date);
       return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
     });
 
-    const upcoming = events.filter(event => {
+    const upcoming = events.filter((event: Event) => {
       const eventDate = new Date(event.date);
       return eventDate > now && event.status === 'scheduled';
     });
 
-    const totalAttendees = events.reduce((sum, event) => 
-      sum + event.attendees.filter(a => a.status === 'going').length, 0
+    const totalAttendees = events.reduce((sum: number, event: Event) => 
+      sum + event.attendees.filter((a) => a.status === 'going').length, 0
     );
 
-    const avgAttendance = events.length > 0 ? 
-      events.filter(e => e.status === 'completed')
-           .reduce((sum, event) => sum + event.attendees.filter(a => a.status === 'going').length, 0) / 
-      events.filter(e => e.status === 'completed').length : 0;
+    const completedEvents = events.filter((e: Event) => e.status === 'completed');
+    const avgAttendance = completedEvents.length > 0 ? 
+      completedEvents.reduce((sum: number, event: Event) => 
+        sum + event.attendees.filter((a) => a.status === 'going').length, 0
+      ) / completedEvents.length : 0;
 
     return {
       thisMonth: thisMonth.length,
@@ -588,6 +606,63 @@ const App: React.FC = () => {
       totalAttendees,
       avgAttendance: Math.round(avgAttendance)
     };
+  };
+
+  // Event handlers
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleEventFilterChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    setEventFilter(e.target.value);
+  };
+
+  const handlePageChange = (page: Page): void => {
+    setCurrentPage(page);
+  };
+
+  const handleCommTabChange = (tab: CommTab): void => {
+    setActiveCommTab(tab);
+  };
+
+  const handleEventTabChange = (tab: EventTab): void => {
+    setActiveEventTab(tab);
+  };
+
+  const handleDateChange = (date: string): void => {
+    setSelectedDate(date);
+  };
+
+  const handleEventClick = (event: Event): void => {
+    setSelectedEvent(event);
+    setShowEventDetails(true);
+  };
+
+  const handleCloseModal = (): void => {
+    setShowAddResident(false);
+    setShowEditResident(false);
+    setShowResidentDetails(false);
+    setShowAddIncident(false);
+    setShowEditIncident(false);
+    setShowIncidentDetails(false);
+    setShowCreateMessage(false);
+    setShowMessageDetails(false);
+    setShowCreateTemplate(false);
+    setShowEditTemplate(false);
+    setShowConversation(false);
+    setShowCreateEvent(false);
+    setShowEditEvent(false);
+    setShowEventDetails(false);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    // Handle form submission
+  };
+
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    e.preventDefault();
+    // Handle button click
   };
 
   // Navigation component
@@ -602,46 +677,51 @@ const App: React.FC = () => {
             </div>
             <div className="flex space-x-6">
               <button
-                onClick={() => setCurrentPage('dashboard')}
+                onClick={() => handlePageChange('dashboard')}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
                   currentPage === 'dashboard' ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-gray-700'
                 }`}
+                type="button"
               >
                 <Home className="h-4 w-4" />
                 <span>Dashboard</span>
               </button>
               <button
-                onClick={() => setCurrentPage('residents')}
+                onClick={() => handlePageChange('residents')}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
                   currentPage === 'residents' ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-gray-700'
                 }`}
+                type="button"
               >
                 <Users className="h-4 w-4" />
                 <span>Residents</span>
               </button>
               <button
-                onClick={() => setCurrentPage('safety')}
+                onClick={() => handlePageChange('safety')}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
                   currentPage === 'safety' ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-gray-700'
                 }`}
+                type="button"
               >
                 <Shield className="h-4 w-4" />
                 <span>Safety</span>
               </button>
               <button
-                onClick={() => setCurrentPage('communications')}
+                onClick={() => handlePageChange('communications')}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
                   currentPage === 'communications' ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-gray-700'
                 }`}
+                type="button"
               >
                 <MessageSquare className="h-4 w-4" />
                 <span>Communications</span>
               </button>
               <button
-                onClick={() => setCurrentPage('events')}
+                onClick={() => handlePageChange('events')}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
                   currentPage === 'events' ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-gray-700'
                 }`}
+                type="button"
               >
                 <Calendar className="h-4 w-4" />
                 <span>Events</span>
@@ -655,15 +735,15 @@ const App: React.FC = () => {
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            <button className="relative p-2 text-gray-400 hover:text-gray-500">
+            <button className="relative p-2 text-gray-400 hover:text-gray-500" type="button">
               <Bell className="h-5 w-5" />
               <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white"></span>
             </button>
-            <button className="p-2 text-gray-400 hover:text-gray-500">
+            <button className="p-2 text-gray-400 hover:text-gray-500" type="button">
               <Settings className="h-5 w-5" />
             </button>
           </div>
@@ -677,7 +757,7 @@ const App: React.FC = () => {
     <div className="p-6">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's what's happening in your property.</p>
+        <p className="text-gray-600">Welcome back! Here is what is happening in your property.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -701,7 +781,7 @@ const App: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Open Incidents</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {safetyIncidents.filter(incident => incident.status !== 'resolved').length}
+                {safetyIncidents.filter((incident: SafetyIncident) => incident.status !== 'resolved').length}
               </p>
             </div>
           </div>
@@ -715,7 +795,7 @@ const App: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Outstanding Balance</p>
               <p className="text-2xl font-semibold text-gray-900">
-                ${residents.reduce((sum, resident) => sum + resident.balance, 0).toLocaleString()}
+                ${residents.reduce((sum: number, resident: Resident) => sum + resident.balance, 0).toLocaleString()}
               </p>
             </div>
           </div>
@@ -729,7 +809,7 @@ const App: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Upcoming Events</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {events.filter(event => new Date(event.date) > new Date() && event.status === 'scheduled').length}
+                {events.filter((event: Event) => new Date(event.date) > new Date() && event.status === 'scheduled').length}
               </p>
             </div>
           </div>
@@ -774,9 +854,9 @@ const App: React.FC = () => {
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Events</h2>
           <div className="space-y-4">
             {events
-              .filter(event => new Date(event.date) > new Date() && event.status === 'scheduled')
+              .filter((event: Event) => new Date(event.date) > new Date() && event.status === 'scheduled')
               .slice(0, 3)
-              .map((event) => {
+              .map((event: Event) => {
                 const IconComponent = getEventIcon(event.category);
                 return (
                   <div key={event.id} className="flex items-center space-x-3">
@@ -805,13 +885,13 @@ const App: React.FC = () => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
 
-    const filteredEvents = events.filter(event => {
+    const filteredEvents = events.filter((event: Event) => {
       if (eventFilter === 'all') return true;
       return event.category === eventFilter;
     });
 
-    const renderCalendar = () => {
-      const days = [];
+    const renderCalendar = (): JSX.Element => {
+      const days: JSX.Element[] = [];
       const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
 
@@ -835,22 +915,21 @@ const App: React.FC = () => {
             className={`h-32 border border-gray-200 p-2 cursor-pointer hover:bg-gray-50 ${
               isToday ? 'bg-blue-50' : 'bg-white'
             } ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
-            onClick={() => setSelectedDate(dateStr)}
+            onClick={() => handleDateChange(dateStr)}
           >
             <div className={`text-sm font-medium mb-1 ${isToday ? 'text-blue-600' : 'text-gray-900'}`}>
               {day}
             </div>
             <div className="space-y-1">
-              {dayEvents.slice(0, 2).map((event) => {
+              {dayEvents.slice(0, 2).map((event: Event) => {
                 const IconComponent = getEventIcon(event.category);
                 return (
                   <div
                     key={event.id}
                     className={`text-xs p-1 rounded truncate ${getEventColor(event.category)}`}
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.stopPropagation();
-                      setSelectedEvent(event);
-                      setShowEventDetails(true);
+                      handleEventClick(event);
                     }}
                   >
                     <div className="flex items-center space-x-1">
@@ -868,6 +947,18 @@ const App: React.FC = () => {
         );
       }
 
+      const handlePrevMonth = (): void => {
+        const newDate = new Date(currentDate);
+        newDate.setMonth(newDate.getMonth() - 1);
+        setSelectedDate(newDate.toISOString().split('T')[0]);
+      };
+
+      const handleNextMonth = (): void => {
+        const newDate = new Date(currentDate);
+        newDate.setMonth(newDate.getMonth() + 1);
+        setSelectedDate(newDate.toISOString().split('T')[0]);
+      };
+
       return (
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b border-gray-200">
@@ -877,22 +968,16 @@ const App: React.FC = () => {
               </h2>
               <div className="flex space-x-2">
                 <button
-                  onClick={() => {
-                    const newDate = new Date(currentDate);
-                    newDate.setMonth(newDate.getMonth() - 1);
-                    setSelectedDate(newDate.toISOString().split('T')[0]);
-                  }}
+                  onClick={handlePrevMonth}
                   className="p-2 text-gray-400 hover:text-gray-600"
+                  type="button"
                 >
                   <ChevronDown className="h-4 w-4 transform rotate-90" />
                 </button>
                 <button
-                  onClick={() => {
-                    const newDate = new Date(currentDate);
-                    newDate.setMonth(newDate.getMonth() + 1);
-                    setSelectedDate(newDate.toISOString().split('T')[0]);
-                  }}
+                  onClick={handleNextMonth}
                   className="p-2 text-gray-400 hover:text-gray-600"
+                  type="button"
                 >
                   <ChevronDown className="h-4 w-4 transform -rotate-90" />
                 </button>
@@ -900,7 +985,7 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="grid grid-cols-7 gap-0">
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day: string) => (
               <div key={day} className="p-4 text-center text-sm font-medium text-gray-500 bg-gray-50 border-b border-gray-200">
                 {day}
               </div>
@@ -911,7 +996,7 @@ const App: React.FC = () => {
       );
     };
 
-    const renderEventList = () => (
+    const renderEventList = (): JSX.Element => (
       <div className="bg-white rounded-lg shadow">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
@@ -919,7 +1004,7 @@ const App: React.FC = () => {
             <div className="flex items-center space-x-4">
               <select
                 value={eventFilter}
-                onChange={(e) => setEventFilter(e.target.value)}
+                onChange={handleEventFilterChange}
                 className="border border-gray-300 rounded-md px-3 py-2 text-sm"
               >
                 <option value="all">All Categories</option>
@@ -936,18 +1021,15 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="divide-y divide-gray-200">
-          {filteredEvents.map((event) => {
+          {filteredEvents.map((event: Event) => {
             const IconComponent = getEventIcon(event.category);
-            const attendingCount = event.attendees.filter(a => a.status === 'going').length;
+            const attendingCount = event.attendees.filter((a) => a.status === 'going').length;
             
             return (
               <div
                 key={event.id}
                 className="p-6 hover:bg-gray-50 cursor-pointer"
-                onClick={() => {
-                  setSelectedEvent(event);
-                  setShowEventDetails(true);
-                }}
+                onClick={() => handleEventClick(event)}
               >
                 <div className="flex items-start space-x-4">
                   <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getEventColor(event.category)}`}>
@@ -990,7 +1072,7 @@ const App: React.FC = () => {
       </div>
     );
 
-    const renderAnalytics = () => (
+    const renderAnalytics = (): JSX.Element => (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-white p-6 rounded-lg shadow">
@@ -1043,10 +1125,10 @@ const App: React.FC = () => {
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Events by Category</h3>
             <div className="space-y-3">
-              {['social', 'maintenance', 'meeting', 'holiday', 'fitness'].map((category) => {
-                const count = events.filter(e => e.category === category).length;
+              {(['social', 'maintenance', 'meeting', 'holiday', 'fitness'] as const).map((category) => {
+                const count = events.filter((e: Event) => e.category === category).length;
                 const percentage = events.length > 0 ? (count / events.length) * 100 : 0;
-                const IconComponent = getEventIcon(category as Event['category']);
+                const IconComponent = getEventIcon(category);
                 
                 return (
                   <div key={category} className="flex items-center justify-between">
@@ -1073,11 +1155,11 @@ const App: React.FC = () => {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
             <div className="space-y-4">
               {events
-                .filter(e => e.status === 'completed')
+                .filter((e: Event) => e.status === 'completed')
                 .slice(0, 5)
-                .map((event) => {
+                .map((event: Event) => {
                   const IconComponent = getEventIcon(event.category);
-                  const attendingCount = event.attendees.filter(a => a.status === 'going').length;
+                  const attendingCount = event.attendees.filter((a) => a.status === 'going').length;
                   
                   return (
                     <div key={event.id} className="flex items-center space-x-3">
@@ -1110,6 +1192,7 @@ const App: React.FC = () => {
             <button
               onClick={() => setShowCreateEvent(true)}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700"
+              type="button"
             >
               <Plus className="h-4 w-4" />
               <span>Create Event</span>
@@ -1120,26 +1203,29 @@ const App: React.FC = () => {
         <div className="mb-6">
           <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
             <button
-              onClick={() => setActiveEventTab('calendar')}
+              onClick={() => handleEventTabChange('calendar')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeEventTab === 'calendar' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               Calendar
             </button>
             <button
-              onClick={() => setActiveEventTab('list')}
+              onClick={() => handleEventTabChange('list')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeEventTab === 'list' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               List View
             </button>
             <button
-              onClick={() => setActiveEventTab('analytics')}
+              onClick={() => handleEventTabChange('analytics')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeEventTab === 'analytics' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               Analytics
             </button>
@@ -1153,18 +1239,19 @@ const App: React.FC = () => {
     );
   };
 
-  // Residents page component (unchanged)
+  // Residents page component
   const ResidentsPage: React.FC = () => (
     <div className="p-6">
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Residents</h1>
-            <p className="text-gray-600">Manage your property's residents and their information</p>
+            <p className="text-gray-600">Manage your property residents and their information</p>
           </div>
           <button
             onClick={() => setShowAddResident(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700"
+            type="button"
           >
             <UserPlus className="h-4 w-4" />
             <span>Add Resident</span>
@@ -1202,19 +1289,19 @@ const App: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {residents
-                .filter(resident => 
+                .filter((resident: Resident) => 
                   resident.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   resident.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   resident.email.toLowerCase().includes(searchTerm.toLowerCase())
                 )
-                .map((resident) => (
+                .map((resident: Resident) => (
                 <tr key={resident.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
                           <span className="text-sm font-medium text-gray-700">
-                            {resident.name.split(' ').map(n => n[0]).join('')}
+                            {resident.name.split(' ').map((n: string) => n[0]).join('')}
                           </span>
                         </div>
                       </div>
@@ -1256,6 +1343,7 @@ const App: React.FC = () => {
                         setShowResidentDetails(true);
                       }}
                       className="text-blue-600 hover:text-blue-900 mr-2"
+                      type="button"
                     >
                       <Eye className="h-4 w-4" />
                     </button>
@@ -1265,10 +1353,11 @@ const App: React.FC = () => {
                         setShowEditResident(true);
                       }}
                       className="text-gray-600 hover:text-gray-900 mr-2"
+                      type="button"
                     >
                       <Edit className="h-4 w-4" />
                     </button>
-                    <button className="text-red-600 hover:text-red-900">
+                    <button className="text-red-600 hover:text-red-900" type="button">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </td>
@@ -1281,7 +1370,7 @@ const App: React.FC = () => {
     </div>
   );
 
-  // Safety page component (unchanged)
+  // Safety page component
   const SafetyPage: React.FC = () => (
     <div className="p-6">
       <div className="mb-8">
@@ -1293,6 +1382,7 @@ const App: React.FC = () => {
           <button
             onClick={() => setShowAddIncident(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700"
+            type="button"
           >
             <Plus className="h-4 w-4" />
             <span>Report Incident</span>
@@ -1309,7 +1399,7 @@ const App: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Critical</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {safetyIncidents.filter(incident => incident.priority === 'critical').length}
+                {safetyIncidents.filter((incident: SafetyIncident) => incident.priority === 'critical').length}
               </p>
             </div>
           </div>
@@ -1323,7 +1413,7 @@ const App: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">High Priority</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {safetyIncidents.filter(incident => incident.priority === 'high').length}
+                {safetyIncidents.filter((incident: SafetyIncident) => incident.priority === 'high').length}
               </p>
             </div>
           </div>
@@ -1337,7 +1427,7 @@ const App: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">In Progress</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {safetyIncidents.filter(incident => incident.status === 'in-progress').length}
+                {safetyIncidents.filter((incident: SafetyIncident) => incident.status === 'in-progress').length}
               </p>
             </div>
           </div>
@@ -1351,7 +1441,7 @@ const App: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Resolved</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {safetyIncidents.filter(incident => incident.status === 'resolved').length}
+                {safetyIncidents.filter((incident: SafetyIncident) => incident.status === 'resolved').length}
               </p>
             </div>
           </div>
@@ -1388,12 +1478,12 @@ const App: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {safetyIncidents
-                .filter(incident => 
+                .filter((incident: SafetyIncident) => 
                   incident.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   incident.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   incident.reportedBy.toLowerCase().includes(searchTerm.toLowerCase())
                 )
-                .map((incident) => (
+                .map((incident: SafetyIncident) => (
                 <tr key={incident.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <div className="text-sm font-medium text-gray-900">{incident.title}</div>
@@ -1442,6 +1532,7 @@ const App: React.FC = () => {
                         setShowIncidentDetails(true);
                       }}
                       className="text-blue-600 hover:text-blue-900 mr-2"
+                      type="button"
                     >
                       <Eye className="h-4 w-4" />
                     </button>
@@ -1451,10 +1542,11 @@ const App: React.FC = () => {
                         setShowEditIncident(true);
                       }}
                       className="text-gray-600 hover:text-gray-900 mr-2"
+                      type="button"
                     >
                       <Edit className="h-4 w-4" />
                     </button>
-                    <button className="text-red-600 hover:text-red-900">
+                    <button className="text-red-600 hover:text-red-900" type="button">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </td>
@@ -1467,7 +1559,7 @@ const App: React.FC = () => {
     </div>
   );
 
-  // Communications page component (unchanged from previous implementation)
+  // Communications page component
   const CommunicationsPage: React.FC = () => {
     return (
       <div className="p-6">
@@ -1480,6 +1572,7 @@ const App: React.FC = () => {
             <button
               onClick={() => setShowCreateMessage(true)}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700"
+              type="button"
             >
               <Send className="h-4 w-4" />
               <span>New Message</span>
@@ -1490,42 +1583,47 @@ const App: React.FC = () => {
         <div className="mb-6">
           <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
             <button
-              onClick={() => setActiveCommTab('messages')}
+              onClick={() => handleCommTabChange('messages')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeCommTab === 'messages' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               Message Center
             </button>
             <button
-              onClick={() => setActiveCommTab('announcements')}
+              onClick={() => handleCommTabChange('announcements')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeCommTab === 'announcements' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               Announcements
             </button>
             <button
-              onClick={() => setActiveCommTab('templates')}
+              onClick={() => handleCommTabChange('templates')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeCommTab === 'templates' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               Templates
             </button>
             <button
-              onClick={() => setActiveCommTab('direct')}
+              onClick={() => handleCommTabChange('direct')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeCommTab === 'direct' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               Direct Messages
             </button>
             <button
-              onClick={() => setActiveCommTab('reports')}
+              onClick={() => handleCommTabChange('reports')}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
                 activeCommTab === 'reports' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              type="button"
             >
               Delivery Reports
             </button>
@@ -1538,7 +1636,7 @@ const App: React.FC = () => {
               <h2 className="text-lg font-semibold text-gray-900">Recent Messages</h2>
             </div>
             <div className="divide-y divide-gray-200">
-              {messages.map((message) => (
+              {messages.map((message: Message) => (
                 <div
                   key={message.id}
                   className="p-6 hover:bg-gray-50 cursor-pointer"
@@ -1582,7 +1680,7 @@ const App: React.FC = () => {
                       }`}>
                         {message.status}
                       </span>
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button className="text-gray-400 hover:text-gray-600" type="button">
                         <MoreVertical className="h-4 w-4" />
                       </button>
                     </div>
@@ -1601,13 +1699,14 @@ const App: React.FC = () => {
                 <button
                   onClick={() => setShowCreateMessage(true)}
                   className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                  type="button"
                 >
                   Create Announcement
                 </button>
               </div>
             </div>
             <div className="divide-y divide-gray-200">
-              {messages.filter(m => m.type === 'announcement').map((message) => (
+              {messages.filter((m: Message) => m.type === 'announcement').map((message: Message) => (
                 <div key={message.id} className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -1629,10 +1728,10 @@ const App: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button className="text-gray-400 hover:text-gray-600" type="button">
                         <Edit className="h-4 w-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button className="text-gray-400 hover:text-gray-600" type="button">
                         <MoreVertical className="h-4 w-4" />
                       </button>
                     </div>
@@ -1653,6 +1752,7 @@ const App: React.FC = () => {
               <button
                 onClick={() => setShowCreateTemplate(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700"
+                type="button"
               >
                 <Plus className="h-4 w-4" />
                 <span>Create Template</span>
@@ -1660,7 +1760,7 @@ const App: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {templates.map((template) => (
+              {templates.map((template: Template) => (
                 <div key={template.id} className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -1679,16 +1779,17 @@ const App: React.FC = () => {
                           setShowEditTemplate(true);
                         }}
                         className="text-gray-400 hover:text-gray-600"
+                        type="button"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button className="text-gray-400 hover:text-gray-600" type="button">
                         <MoreVertical className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-gray-200">
-                    <button className="w-full bg-blue-600 text-white py-2 rounded text-sm hover:bg-blue-700">
+                    <button className="w-full bg-blue-600 text-white py-2 rounded text-sm hover:bg-blue-700" type="button">
                       Use Template
                     </button>
                   </div>
@@ -1705,7 +1806,7 @@ const App: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900">Conversations</h3>
               </div>
               <div className="divide-y divide-gray-200">
-                {conversations.map((conversation) => (
+                {conversations.map((conversation: Conversation) => (
                   <div
                     key={conversation.id}
                     className={`p-4 cursor-pointer hover:bg-gray-50 ${
@@ -1716,7 +1817,7 @@ const App: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <h4 className="text-sm font-medium text-gray-900">
-                          {conversation.participants.filter(p => p !== 'Property Management').join(', ')}
+                          {conversation.participants.filter((p: string) => p !== 'Property Management').join(', ')}
                         </h4>
                         <p className="text-sm text-gray-600 truncate">{conversation.lastMessage}</p>
                         <p className="text-xs text-gray-500 mt-1">
@@ -1739,7 +1840,7 @@ const App: React.FC = () => {
                 <>
                   <div className="p-4 border-b border-gray-200">
                     <h3 className="text-lg font-semibold text-gray-900">
-                      {selectedConversation.participants.filter(p => p !== 'Property Management').join(', ')}
+                      {selectedConversation.participants.filter((p: string) => p !== 'Property Management').join(', ')}
                     </h3>
                   </div>
                   <div className="h-96 overflow-y-auto p-4 space-y-4">
@@ -1776,7 +1877,10 @@ const App: React.FC = () => {
                         placeholder="Type a message..."
                         className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                      <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                      <button 
+                        type="button"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                      >
                         <Send className="h-4 w-4" />
                       </button>
                     </div>
@@ -1802,7 +1906,7 @@ const App: React.FC = () => {
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-500">Messages Sent</p>
                     <p className="text-2xl font-semibold text-gray-900">
-                      {messages.reduce((sum, msg) => sum + (msg.deliveryReport?.sent || 0), 0)}
+                      {messages.reduce((sum: number, msg: Message) => sum + (msg.deliveryReport?.sent || 0), 0)}
                     </p>
                   </div>
                 </div>
@@ -1815,7 +1919,7 @@ const App: React.FC = () => {
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-500">Delivered</p>
                     <p className="text-2xl font-semibold text-gray-900">
-                      {messages.reduce((sum, msg) => sum + (msg.deliveryReport?.delivered || 0), 0)}
+                      {messages.reduce((sum: number, msg: Message) => sum + (msg.deliveryReport?.delivered || 0), 0)}
                     </p>
                   </div>
                 </div>
@@ -1828,7 +1932,7 @@ const App: React.FC = () => {
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-500">Opened</p>
                     <p className="text-2xl font-semibold text-gray-900">
-                      {messages.reduce((sum, msg) => sum + (msg.deliveryReport?.opened || 0), 0)}
+                      {messages.reduce((sum: number, msg: Message) => sum + (msg.deliveryReport?.opened || 0), 0)}
                     </p>
                   </div>
                 </div>
@@ -1842,8 +1946,8 @@ const App: React.FC = () => {
                     <p className="text-sm font-medium text-gray-500">Open Rate</p>
                     <p className="text-2xl font-semibold text-gray-900">
                       {Math.round(
-                        (messages.reduce((sum, msg) => sum + (msg.deliveryReport?.opened || 0), 0) /
-                        Math.max(messages.reduce((sum, msg) => sum + (msg.deliveryReport?.delivered || 0), 0), 1)) * 100
+                        (messages.reduce((sum: number, msg: Message) => sum + (msg.deliveryReport?.opened || 0), 0) /
+                        Math.max(messages.reduce((sum: number, msg: Message) => sum + (msg.deliveryReport?.delivered || 0), 0), 1)) * 100
                       )}%
                     </p>
                   </div>
@@ -1880,7 +1984,7 @@ const App: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {messages.filter(m => m.deliveryReport).map((message) => (
+                    {messages.filter((m: Message) => m.deliveryReport).map((message: Message) => (
                       <tr key={message.id}>
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-gray-900">{message.subject}</div>
@@ -1916,7 +2020,7 @@ const App: React.FC = () => {
     );
   };
 
-  // Modal components (keeping all existing modals and adding new event modals)
+  // Modal components
   const AddResidentModal: React.FC = () => (
     showAddResident && (
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -1925,13 +2029,14 @@ const App: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Add New Resident</h3>
               <button
-                onClick={() => setShowAddResident(false)}
+                onClick={handleCloseModal}
                 className="text-gray-400 hover:text-gray-600"
+                type="button"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleFormSubmit}>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Name</label>
                 <input
@@ -1963,7 +2068,7 @@ const App: React.FC = () => {
               <div className="flex justify-end space-x-3 pt-4">
                 <button
                   type="button"
-                  onClick={() => setShowAddResident(false)}
+                  onClick={handleCloseModal}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                 >
                   Cancel
@@ -1990,13 +2095,14 @@ const App: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Create New Event</h3>
               <button
-                onClick={() => setShowCreateEvent(false)}
+                onClick={handleCloseModal}
                 className="text-gray-400 hover:text-gray-600"
+                type="button"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleFormSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Event Title</label>
@@ -2119,7 +2225,7 @@ const App: React.FC = () => {
               <div className="flex justify-end space-x-3 pt-4">
                 <button
                   type="button"
-                  onClick={() => setShowCreateEvent(false)}
+                  onClick={handleCloseModal}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                 >
                   Cancel
@@ -2146,7 +2252,7 @@ const App: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getEventColor(selectedEvent.category)}`}>
-                  {React.createElement(getEventIcon(selectedEvent.category), { className: "h-6 w-6" })}
+                  <IconComponent className="h-6 w-6" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">{selectedEvent.title}</h3>
@@ -2160,12 +2266,14 @@ const App: React.FC = () => {
                     setShowEditEvent(true);
                   }}
                   className="text-gray-400 hover:text-gray-600"
+                  type="button"
                 >
                   <Edit className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => setShowEventDetails(false)}
+                  onClick={handleCloseModal}
                   className="text-gray-400 hover:text-gray-600"
+                  type="button"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -2213,7 +2321,7 @@ const App: React.FC = () => {
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-2">Requirements</h4>
                     <ul className="text-sm text-gray-600 bg-gray-50 rounded-lg p-4 space-y-1">
-                      {selectedEvent.requirements.map((req, index) => (
+                      {selectedEvent.requirements.map((req: string, index: number) => (
                         <li key={index} className="flex items-start space-x-2">
                           <span className="text-blue-600 mt-1">•</span>
                           <span>{req}</span>
@@ -2240,19 +2348,19 @@ const App: React.FC = () => {
                       <div className="grid grid-cols-3 gap-4 mb-4 text-center">
                         <div>
                           <div className="text-lg font-semibold text-green-600">
-                            {selectedEvent.attendees.filter(a => a.status === 'going').length}
+                            {selectedEvent.attendees.filter((a) => a.status === 'going').length}
                           </div>
                           <div className="text-xs text-gray-500">Going</div>
                         </div>
                         <div>
                           <div className="text-lg font-semibold text-yellow-600">
-                            {selectedEvent.attendees.filter(a => a.status === 'maybe').length}
+                            {selectedEvent.attendees.filter((a) => a.status === 'maybe').length}
                           </div>
                           <div className="text-xs text-gray-500">Maybe</div>
                         </div>
                         <div>
                           <div className="text-lg font-semibold text-red-600">
-                            {selectedEvent.attendees.filter(a => a.status === 'not-going').length}
+                            {selectedEvent.attendees.filter((a) => a.status === 'not-going').length}
                           </div>
                           <div className="text-xs text-gray-500">Not Going</div>
                         </div>
@@ -2280,7 +2388,7 @@ const App: React.FC = () => {
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-2">Reminders</h4>
                     <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                      {selectedEvent.reminders.map((reminder, index) => (
+                      {selectedEvent.reminders.map((reminder, index: number) => (
                         <div key={index} className="flex items-center justify-between text-sm">
                           <span className="text-gray-600">
                             {reminder.type} reminder - {reminder.time} before
@@ -2312,14 +2420,18 @@ const App: React.FC = () => {
 
             <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
               <button
-                onClick={() => setShowEventDetails(false)}
+                onClick={handleCloseModal}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                type="button"
               >
                 Close
               </button>
               {selectedEvent.status === 'scheduled' && (
                 <>
-                  <button className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
+                  <button 
+                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+                    type="button"
+                  >
                     Send Reminder
                   </button>
                   <button
@@ -2328,6 +2440,7 @@ const App: React.FC = () => {
                       setShowEditEvent(true);
                     }}
                     className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                    type="button"
                   >
                     Edit Event
                   </button>
@@ -2357,6 +2470,9 @@ const App: React.FC = () => {
         return <DashboardPage />;
     }
   };
+
+  // Fix the IconComponent reference in EventDetailsModal
+  const IconComponent = selectedEvent ? getEventIcon(selectedEvent.category) : Calendar;
 
   return (
     <div className="min-h-screen bg-gray-50">
