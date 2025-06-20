@@ -128,72 +128,72 @@ import {
 } from 'lucide-react';
 
 const ManagementDashboard = () => {
-  const [greeting, setGreeting] = useState('Good morning, Sarah! ☀️');
-  const [currentPage, setCurrentPage] = useState('dashboard');
-  const [activityFilter, setActivityFilter] = useState('all');
+  const [greeting, setGreeting] = useState("Good morning, Sarah! ☀️");
+  const [currentPage, setCurrentPage] = useState("dashboard");
+  const [activityFilter, setActivityFilter] = useState("all");
   const [showAddResident, setShowAddResident] = useState(false);
-  const [residentFilter, setResidentFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [residentFilter, setResidentFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedResident, setSelectedResident] = useState<any>(null);
   const [showResidentProfile, setShowResidentProfile] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
-  const [messageContent, setMessageContent] = useState('');
-  const [safetyFilter, setSafetyFilter] = useState('all');
+  const [messageContent, setMessageContent] = useState("");
+  const [safetyFilter, setSafetyFilter] = useState("all");
   const [showIncidentModal, setShowIncidentModal] = useState(false);
   const [selectedIncident, setSelectedIncident] = useState<any>(null);
   const [showAddUpdate, setShowAddUpdate] = useState(false);
-  const [updateText, setUpdateText] = useState('');
+  const [updateText, setUpdateText] = useState("");
   const [showEvidenceModal, setShowEvidenceModal] = useState(false);
   const [selectedEvidence, setSelectedEvidence] = useState<any>(null);
   const [showEscalateModal, setShowEscalateModal] = useState(false);
-  const [escalationReason, setEscalationReason] = useState('');
-  const [escalationLevel, setEscalationLevel] = useState('supervisor');
+  const [escalationReason, setEscalationReason] = useState("");
+  const [escalationLevel, setEscalationLevel] = useState("supervisor");
   const [showReportModal, setShowReportModal] = useState(false);
   const [newIncident, setNewIncident] = useState({
-    title: '',
-    type: 'maintenance',
-    priority: 'medium',
-    location: '',
-    description: '',
-    reportedBy: 'Property Manager'
+    title: "",
+    type: "maintenance",
+    priority: "medium",
+    location: "",
+    description: "",
+    reportedBy: "Property Manager"
   });
   const [newResident, setNewResident] = useState({
-    name: '',
-    unit: '',
-    building: 'Building A',
-    email: '',
-    phone: '',
-    moveInDate: '',
-    leaseEndDate: '',
-    emergencyContact: '',
-    notes: ''
+    name: "",
+    unit: "",
+    building: "Building A",
+    email: "",
+    phone: "",
+    moveInDate: "",
+    leaseEndDate: "",
+    emergencyContact: "",
+    notes: ""
   });
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
-  const [broadcastMessage, setBroadcastMessage] = useState('');
+  const [broadcastMessage, setBroadcastMessage] = useState("");
   const [broadcastData, setBroadcastData] = useState({
-    title: '',
-    message: '',
-    recipients: 'all', // all, building, specific
+    title: "",
+    message: "",
+    recipients: "all", // all, building, specific
     buildings: [] as string[],
-    deliveryMethods: ['email'] as string[],
-    priority: 'normal', // normal, urgent
-    scheduleType: 'now', // now, later
-    scheduledDate: '',
-    scheduledTime: '',
+    deliveryMethods: ["email"] as string[],
+    priority: "normal", // normal, urgent
+    scheduleType: "now", // now, later
+    scheduledDate: "",
+    scheduledTime: "",
     attachImage: false,
     imageFile: null as File | null
   });
   const [eventData, setEventData] = useState({
-    title: '',
-    date: '',
-    time: '',
-    location: '',
-    description: ''
+    title: "",
+    date: "",
+    time: "",
+    location: "",
+    description: ""
   });
   
   // Communications states
-  const [commFilter, setCommFilter] = useState('center');
+  const [commFilter, setCommFilter] = useState("center");
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [showCreateTemplateModal, setShowCreateTemplateModal] = useState(false);
   const [showDirectMessageModal, setShowDirectMessageModal] = useState(false);
@@ -202,27 +202,27 @@ const ManagementDashboard = () => {
   const [selectedConversation, setSelectedConversation] = useState<any>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [newTemplate, setNewTemplate] = useState({
-    name: '',
-    description: '',
-    category: 'general',
-    subject: '',
-    content: ''
+    name: "",
+    description: "",
+    category: "general",
+    subject: "",
+    content: ""
   });
   const [directMessageData, setDirectMessageData] = useState({
-    recipientId: '',
-    subject: '',
-    message: ''
+    recipientId: "",
+    subject: "",
+    message: ""
   });
 
   // Dynamic greeting system
   useEffect(() => {
     const hour = new Date().getHours();
-    let newGreeting = 'Good morning, Sarah! ☀️';
+    let newGreeting = "Good morning, Sarah! ☀️";
     
     if (hour >= 12 && hour < 17) {
-      newGreeting = 'Hey there, Sarah! 👋';
+      newGreeting = "Hey there, Sarah! 👋";
     } else if (hour >= 17) {
-      newGreeting = 'Good evening, Sarah! 🌙';
+      newGreeting = "Good evening, Sarah! 🌙";
     }
     
     setGreeting(newGreeting);
