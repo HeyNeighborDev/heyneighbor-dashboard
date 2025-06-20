@@ -555,163 +555,56 @@ const ManagementDashboard = () => {
   const communicationsData = [
     {
       id: 1,
-      type: 'announcement',
-      title: 'Pool Maintenance Scheduled for Tomorrow',
-      preview: 'The community pool will be closed from 8 AM to 4 PM for quarterly maintenance and cleaning.',
-      recipients: 'All Residents (342)',
-      deliveryMethod: 'Email + SMS',
+      type: "announcement",
+      title: "Pool Maintenance Scheduled for Tomorrow",
+      preview: "The community pool will be closed from 8 AM to 4 PM for quarterly maintenance and cleaning.",
+      recipients: "All Residents (342)",
+      deliveryMethod: "Email + SMS",
       openRate: 96.5,
-      sentBy: 'Property Manager',
-      sentDate: '2024-06-20 09:00 AM',
-      status: 'delivered',
-      content: "Dear Residents, We wanted to inform you that our community pool will be temporarily closed tomorrow, June 21st, from 8:00 AM to 4:00 PM for our quarterly maintenance and cleaning. This includes chemical balancing, filter cleaning, and safety equipment inspection. We apologize for any inconvenience and appreciate your understanding. The pool will reopen at 5:00 PM with fresh, clean water ready for your enjoyment. Thank you for your patience!",
+      sentBy: "Property Manager",
+      sentDate: "2024-06-20 09:00 AM",
+      status: "delivered",
+      content: "Dear Residents, We wanted to inform you that our community pool will be temporarily closed tomorrow, June 21st, from 8:00 AM to 4:00 PM for our quarterly maintenance and cleaning.",
       attachments: []
     },
     {
       id: 2,
-      type: 'alert',
-      title: 'Security Update - Package Theft Prevention',
-      preview: 'Important security measures being implemented to prevent package theft in Building A lobby.',
-      recipients: 'Building A Residents (114)',
-      deliveryMethod: 'Email + In-App + SMS',
+      type: "alert",
+      title: "Security Update - Package Theft Prevention",
+      preview: "Important security measures being implemented to prevent package theft in Building A lobby.",
+      recipients: "Building A Residents (114)",
+      deliveryMethod: "Email + In-App + SMS",
       openRate: 98.2,
-      sentBy: 'Security Team',
-      sentDate: '2024-06-19 02:30 PM',
-      status: 'delivered',
-      content: "Following recent package theft incidents, we are implementing enhanced security measures including additional cameras and requiring package pickup verification. Please bring ID when collecting packages.",
-      attachments: ['security_guidelines.pdf']
-    },
-    {
-      id: 3,
-      type: 'event',
-      title: 'Community Yoga Class Registration Open',
-      preview: 'Join us for morning yoga classes starting next Monday. Limited spots available!',
-      recipients: 'Active Residents (298)',
-      deliveryMethod: 'Email + In-App',
-      openRate: 87.3,
-      sentBy: 'Recreation Team',
-      sentDate: '2024-06-18 11:15 AM',
-      status: 'delivered',
-      content: "We are excited to announce new morning yoga classes starting Monday, June 24th at 7:00 AM in the community center. Classes will run Monday, Wednesday, and Friday. Registration is required as space is limited to 20 participants.",
-      attachments: ['yoga_schedule.pdf']
-    },
-    {
-      id: 4,
-      type: 'maintenance',
-      title: 'Elevator Inspection Results - All Clear',
-      preview: 'Monthly elevator safety inspections completed successfully across all buildings.',
-      recipients: 'All Residents (342)',
-      deliveryMethod: 'Email',
-      openRate: 78.9,
-      sentBy: 'Maintenance Team',
-      sentDate: '2024-06-17 04:45 PM',
-      status: 'delivered',
-      content: "All elevators have passed their monthly safety inspections. No issues were found and all systems are operating normally. Next inspection is scheduled for July 17th.",
-      attachments: ['inspection_report.pdf']
-    },
-    {
-      id: 5,
-      type: 'emergency',
-      title: 'Water Service Interruption - Building C',
-      preview: 'Emergency water line repair will affect Building C residents from 10 AM to 2 PM today.',
-      recipients: 'Building C Residents (128)',
-      deliveryMethod: 'Email + SMS + Phone',
-      openRate: 100,
-      sentBy: 'Emergency Services',
-      sentDate: '2024-06-16 08:00 AM',
-      status: 'delivered',
-      content: "Due to an emergency water line break, water service to Building C will be interrupted today from 10:00 AM to approximately 2:00 PM. Our maintenance team is working to resolve this as quickly as possible.",
-      attachments: []
+      sentBy: "Security Team",
+      sentDate: "2024-06-19 02:30 PM",
+      status: "delivered",
+      content: "Following recent package theft incidents, we are implementing enhanced security measures including additional cameras.",
+      attachments: ["security_guidelines.pdf"]
     }
   ];
 
   const announcementsData = [
     {
       id: 1,
-      title: 'Summer Community BBQ Event',
-      content: 'Join us for our annual summer BBQ on July 4th at the community pavilion. Free food, games, and activities for the whole family!',
-      date: 'June 20, 2024',
-      priority: 'medium',
+      title: "Summer Community BBQ Event",
+      content: "Join us for our annual summer BBQ on July 4th at the community pavilion.",
+      date: "June 20, 2024",
+      priority: "medium",
       recipients: 342,
       engagement: 89.5,
-      type: 'event'
-    },
-    {
-      id: 2,
-      title: 'New Recycling Guidelines',
-      content: 'Updated recycling guidelines are now in effect. Please review the new sorting requirements to help keep our community green.',
-      date: 'June 18, 2024',
-      priority: 'low',
-      recipients: 342,
-      engagement: 72.3,
-      type: 'policy'
-    },
-    {
-      id: 3,
-      title: 'Emergency Contact Information Update',
-      content: 'Please update your emergency contact information in the resident portal by June 30th. This is required for all residents.',
-      date: 'June 15, 2024',
-      priority: 'high',
-      recipients: 342,
-      engagement: 94.7,
-      type: 'administrative'
+      type: "event"
     }
   ];
 
   const templatesData = [
     {
       id: 1,
-      name: 'Maintenance Notification',
-      description: 'Standard template for scheduled maintenance announcements',
-      category: 'maintenance',
+      name: "Maintenance Notification",
+      description: "Standard template for scheduled maintenance announcements",
+      category: "maintenance",
       usageCount: 24,
-      subject: 'Scheduled Maintenance - [LOCATION]',
-      content: 'Dear Residents,\n\nWe wanted to inform you of scheduled maintenance that will take place:\n\nDate: [DATE]\nTime: [TIME]\nLocation: [LOCATION]\nWork: [DESCRIPTION]\n\nWe apologize for any inconvenience and appreciate your patience.\n\nBest regards,\nProperty Management'
-    },
-    {
-      id: 2,
-      name: 'Event Invitation',
-      description: 'Template for community event announcements and invitations',
-      category: 'events',
-      usageCount: 18,
-      subject: 'You\'re Invited - [EVENT_NAME]',
-      content: 'Dear Residents,\n\nYou\'re invited to join us for [EVENT_NAME]!\n\nDate: [DATE]\nTime: [TIME]\nLocation: [LOCATION]\n\n[EVENT_DESCRIPTION]\n\nRSVP by [RSVP_DATE] to secure your spot.\n\nLooking forward to seeing you there!\n\nCommunity Team'
-    },
-    {
-      id: 3,
-      name: 'Payment Reminder',
-      description: 'Friendly reminder template for rent and fee payments',
-      category: 'billing',
-      usageCount: 31,
-      subject: 'Friendly Payment Reminder',
-      content: 'Dear [RESIDENT_NAME],\n\nThis is a friendly reminder that your [PAYMENT_TYPE] payment of $[AMOUNT] is due on [DUE_DATE].\n\nYou can make your payment through:\n• Online portal\n• Mobile app\n• Office payment box\n\nThank you for being a valued resident!\n\nAccounting Department'
-    },
-    {
-      id: 4,
-      name: 'Welcome New Resident',
-      description: 'Welcome message for new residents with important information',
-      category: 'onboarding',
-      usageCount: 12,
-      subject: 'Welcome to Our Community!',
-      content: 'Dear [RESIDENT_NAME],\n\nWelcome to our community! We\'re thrilled to have you as our newest resident.\n\nHere\'s important information to get you started:\n• Resident portal: [PORTAL_LINK]\n• Emergency contacts: [EMERGENCY_INFO]\n• Community amenities: [AMENITIES_INFO]\n\nIf you have any questions, please don\'t hesitate to reach out.\n\nWelcome home!\n\nProperty Management'
-    },
-    {
-      id: 5,
-      name: 'Safety Alert',
-      description: 'Template for urgent safety notifications and alerts',
-      category: 'safety',
-      usageCount: 8,
-      subject: 'URGENT - Safety Alert',
-      content: 'Dear Residents,\n\nWe are issuing this safety alert regarding [SAFETY_ISSUE].\n\nImmediate Actions Required:\n• [ACTION_1]\n• [ACTION_2]\n• [ACTION_3]\n\nFor your safety, please follow these guidelines until further notice.\n\nIf you have any concerns, contact us immediately at [EMERGENCY_CONTACT].\n\nSafety Team'
-    },
-    {
-      id: 6,
-      name: 'Policy Update',
-      description: 'Template for announcing policy changes and updates',
-      category: 'administrative',
-      usageCount: 15,
-      subject: 'Important Policy Update',
-      content: 'Dear Residents,\n\nWe are writing to inform you of an important update to our [POLICY_NAME].\n\nEffective [EFFECTIVE_DATE], the following changes will be in place:\n\n[POLICY_CHANGES]\n\nThese changes are designed to [REASON_FOR_CHANGE].\n\nIf you have questions, please contact the office.\n\nManagement Team'
+      subject: "Scheduled Maintenance - [LOCATION]",
+      content: "Dear Residents, We wanted to inform you of scheduled maintenance that will take place on [DATE] at [TIME]."
     }
   ];
 
@@ -719,66 +612,24 @@ const ManagementDashboard = () => {
     {
       id: 1,
       resident: {
-        name: 'Jessica Martinez',
-        unit: 'A-301',
-        building: 'Building A',
-        avatar: 'JM'
+        name: "Jessica Martinez",
+        unit: "A-301",
+        building: "Building A",
+        avatar: "JM"
       },
-      lastMessage: 'Thank you for resolving the heating issue so quickly!',
-      lastActivity: '2 hours ago',
+      lastMessage: "Thank you for resolving the heating issue so quickly!",
+      lastActivity: "2 hours ago",
       unreadCount: 0,
-      status: 'resolved',
+      status: "resolved",
       messageCount: 8
-    },
-    {
-      id: 2,
-      resident: {
-        name: 'Michael Chen',
-        unit: 'B-205',
-        building: 'Building B',
-        avatar: 'MC'
-      },
-      lastMessage: 'When can I expect the maintenance team for the kitchen faucet?',
-      lastActivity: '5 hours ago',
-      unreadCount: 2,
-      status: 'pending',
-      messageCount: 4
-    },
-    {
-      id: 3,
-      resident: {
-        name: 'Sarah Johnson',
-        unit: 'C-102',
-        building: 'Building C',
-        avatar: 'SJ'
-      },
-      lastMessage: 'The new security cameras are working great!',
-      lastActivity: '1 day ago',
-      unreadCount: 0,
-      status: 'closed',
-      messageCount: 3
-    },
-    {
-      id: 4,
-      resident: {
-        name: 'Robert Wilson',
-        unit: 'A-105',
-        building: 'Building A',
-        avatar: 'RW'
-      },
-      lastMessage: 'I have questions about the move-in process',
-      lastActivity: '2 days ago',
-      unreadCount: 1,
-      status: 'active',
-      messageCount: 12
     }
   ];
 
   const deliveryReportsData = [
     {
       id: 1,
-      messageTitle: 'Pool Maintenance Scheduled for Tomorrow',
-      sentDate: 'June 20, 2024 at 9:00 AM',
+      messageTitle: "Pool Maintenance Scheduled for Tomorrow",
+      sentDate: "June 20, 2024 at 9:00 AM",
       stats: {
         sent: 342,
         delivered: 340,
@@ -788,34 +639,6 @@ const ManagementDashboard = () => {
       openRate: 96.5,
       clickRate: 26.2,
       deliveryRate: 99.4
-    },
-    {
-      id: 2,
-      messageTitle: 'Security Update - Package Theft Prevention',
-      sentDate: 'June 19, 2024 at 2:30 PM',
-      stats: {
-        sent: 114,
-        delivered: 114,
-        opened: 112,
-        clicked: 45
-      },
-      openRate: 98.2,
-      clickRate: 40.2,
-      deliveryRate: 100
-    },
-    {
-      id: 3,
-      messageTitle: 'Community Yoga Class Registration Open',
-      sentDate: 'June 18, 2024 at 11:15 AM',
-      stats: {
-        sent: 298,
-        delivered: 296,
-        opened: 260,
-        clicked: 127
-      },
-      openRate: 87.3,
-      clickRate: 42.6,
-      deliveryRate: 99.3
     }
   ];
 
