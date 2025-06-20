@@ -578,7 +578,7 @@ const ManagementDashboard = () => {
       sentBy: 'Security Team',
       sentDate: '2024-06-19 02:30 PM',
       status: 'delivered',
-      content: 'Following recent package theft incidents, we are implementing enhanced security measures including additional cameras and requiring package pickup verification. Please bring ID when collecting packages.',
+      content: "Following recent package theft incidents, we are implementing enhanced security measures including additional cameras and requiring package pickup verification. Please bring ID when collecting packages.",
       attachments: ['security_guidelines.pdf']
     },
     {
@@ -592,7 +592,7 @@ const ManagementDashboard = () => {
       sentBy: 'Recreation Team',
       sentDate: '2024-06-18 11:15 AM',
       status: 'delivered',
-      content: 'We are excited to announce new morning yoga classes starting Monday, June 24th at 7:00 AM in the community center. Classes will run Monday, Wednesday, and Friday. Registration is required as space is limited to 20 participants.',
+      content: "We are excited to announce new morning yoga classes starting Monday, June 24th at 7:00 AM in the community center. Classes will run Monday, Wednesday, and Friday. Registration is required as space is limited to 20 participants.",
       attachments: ['yoga_schedule.pdf']
     },
     {
@@ -606,7 +606,7 @@ const ManagementDashboard = () => {
       sentBy: 'Maintenance Team',
       sentDate: '2024-06-17 04:45 PM',
       status: 'delivered',
-      content: 'All elevators have passed their monthly safety inspections. No issues were found and all systems are operating normally. Next inspection is scheduled for July 17th.',
+      content: "All elevators have passed their monthly safety inspections. No issues were found and all systems are operating normally. Next inspection is scheduled for July 17th.",
       attachments: ['inspection_report.pdf']
     },
     {
@@ -620,7 +620,7 @@ const ManagementDashboard = () => {
       sentBy: 'Emergency Services',
       sentDate: '2024-06-16 08:00 AM',
       status: 'delivered',
-      content: 'Due to an emergency water line break, water service to Building C will be interrupted today from 10:00 AM to approximately 2:00 PM. Our maintenance team is working to resolve this as quickly as possible.',
+      content: "Due to an emergency water line break, water service to Building C will be interrupted today from 10:00 AM to approximately 2:00 PM. Our maintenance team is working to resolve this as quickly as possible.",
       attachments: []
     }
   ];
