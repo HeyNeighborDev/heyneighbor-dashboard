@@ -564,7 +564,7 @@ const ManagementDashboard = () => {
       sentBy: 'Property Manager',
       sentDate: '2024-06-20 09:00 AM',
       status: 'delivered',
-      content: 'Dear Residents, We wanted to inform you that our community pool will be temporarily closed tomorrow, June 21st, from 8:00 AM to 4:00 PM for our quarterly maintenance and cleaning. This includes chemical balancing, filter cleaning, and safety equipment inspection. We apologize for any inconvenience and appreciate your understanding. The pool will reopen at 5:00 PM with fresh, clean water ready for your enjoyment. Thank you for your patience!',
+      content: "Dear Residents, We wanted to inform you that our community pool will be temporarily closed tomorrow, June 21st, from 8:00 AM to 4:00 PM for our quarterly maintenance and cleaning. This includes chemical balancing, filter cleaning, and safety equipment inspection. We apologize for any inconvenience and appreciate your understanding. The pool will reopen at 5:00 PM with fresh, clean water ready for your enjoyment. Thank you for your patience!",
       attachments: []
     },
     {
