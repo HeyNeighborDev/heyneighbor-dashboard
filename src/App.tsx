@@ -1,4 +1,96 @@
-import React, { useState, useEffect } from 'react';
+{/* Create Template Modal */}
+        {showCreateTemplateModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {selectedTemplate ? 'Edit Template' : 'Create New Template'}
+                  </h3>
+                  <button 
+                    onClick={() => {
+                      setShowCreateTemplateModal(false);
+                      setSelectedTemplate(null);
+                      setNewTemplate({
+                        name: '',
+                        description: '',
+                        category: 'general',
+                        subject: '',
+                        content: ''
+                      });
+                    }}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Template Name</label>
+                    <input
+                      type="text"
+                      value={newTemplate.name}
+                      onChange={(e) => setNewTemplate({...newTemplate, name: e.target.value})}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter template name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select
+                      value={newTemplate.category}
+                      onChange={(e) => setNewTemplate({...newTemplate, category: e.target.value})}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="general">General</option>
+                      <option value="maintenance">Maintenance</option>
+                      <option value="events">Events</option>
+                      <option value="billing">Billing</option>
+                      <option value="onboarding">Onboarding</option>
+                      <option value="safety">Safety</option>
+                      <option value="administrative">Administrative</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <input
+                    type="text"
+                    value={newTemplate.description}
+                    onChange={(e) => setNewTemplate({...newTemplate, description: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Brief description of this template"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Subject Line</label>
+                  <input
+                    type="text"
+                    value={newTemplate.subject}
+                    onChange={(e) => setNewTemplate({...newTemplate, subject: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Email subject line (use [VARIABLES] for dynamic content)"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Message Content</label>
+                  <textarea
+                    value={newTemplate.content}
+                    onChange={(e) => setNewTemplate({...newTemplate, content: e.target.value})}
+                    rows={8}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    placeholder="Template content (use [VARIABLES] for dynamic content like [RESIDENT_NAME], [DATE], [LOCATION], etc.)"
+                  />
+                </div>
+
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium text-blue-900 mb-2">Available Variables:</h4>
+                  <div className="text-sm textimport React, { useState, useEffect } from 'react';
 import { 
   Users, 
   AlertTriangle, 
