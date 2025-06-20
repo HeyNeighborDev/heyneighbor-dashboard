@@ -1707,7 +1707,7 @@ const ManagementDashboard = () => {
                 <div>
                   <h4 className="text-sm font-medium text-gray-900 mb-3">Interests</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedResident.interests.map((interest, index) => (
+                    {selectedResident.interests.map((interest: string, index: number) => (
                       <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                         {interest}
                       </span>
@@ -1720,7 +1720,7 @@ const ManagementDashboard = () => {
                 <div>
                   <h4 className="text-sm font-medium text-gray-900 mb-3">Community Groups</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedResident.groups.map((group, index) => (
+                    {selectedResident.groups.map((group: string, index: number) => (
                       <span key={index} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
                         {group}
                       </span>
