@@ -19,7 +19,20 @@ import {
   CheckCircle,
   AlertCircle,
   Building,
-  Activity
+  Activity,
+  Phone,
+  Mail,
+  MapPin,
+  X,
+  ChevronRight,
+  Star,
+  Heart,
+  Camera,
+  FileText,
+  Video,
+  Upload,
+  Edit3,
+  Trash2
 } from 'lucide-react';
 
 const ManagementDashboard = () => {
@@ -51,6 +64,17 @@ const ManagementDashboard = () => {
     location: '',
     description: '',
     reportedBy: 'Property Manager'
+  });
+  const [newResident, setNewResident] = useState({
+    name: '',
+    unit: '',
+    building: 'Building A',
+    email: '',
+    phone: '',
+    moveInDate: '',
+    leaseEndDate: '',
+    emergencyContact: '',
+    notes: ''
   });
 
   // Dynamic greeting system
@@ -391,7 +415,7 @@ const ManagementDashboard = () => {
   ];
 
   // Helper functions
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
@@ -400,7 +424,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status) => {
     switch (status) {
       case 'investigating': return <Eye className="w-4 h-4" />;
       case 'scheduled': return <Clock className="w-4 h-4" />;
@@ -411,7 +435,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (type) => {
     switch (type) {
       case 'safety': return <Shield className="w-4 h-4" />;
       case 'maintenance': return <Settings className="w-4 h-4" />;
@@ -420,7 +444,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getTypeColor = (type: string) => {
+  const getTypeColor = (type) => {
     switch (type) {
       case 'safety': return 'bg-red-100 text-red-800';
       case 'maintenance': return 'bg-blue-100 text-blue-800';
@@ -465,7 +489,7 @@ const ManagementDashboard = () => {
     return filtered;
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
@@ -483,12 +507,12 @@ const ManagementDashboard = () => {
     return { total, active, pending, occupancyRate };
   };
 
-  const handleViewProfile = (resident: any) => {
+  const handleViewProfile = (resident) => {
     setSelectedResident(resident);
     setShowResidentProfile(true);
   };
 
-  const handleSendMessage = (resident: any) => {
+  const handleSendMessage = (resident) => {
     setSelectedResident(resident);
     setShowMessageModal(true);
     setMessageContent('');
@@ -496,7 +520,7 @@ const ManagementDashboard = () => {
 
   const handleSendMessageSubmit = () => {
     // Here you would integrate with your notification API
-    console.log('Sending message to:', selectedResident.name);
+    console.log('Sending message to:', selectedResident?.name);
     console.log('Message:', messageContent);
     setShowMessageModal(false);
     setMessageContent('');
@@ -531,7 +555,7 @@ const ManagementDashboard = () => {
     return { total, open, highPriority, resolved };
   };
 
-  const getIncidentTypeColor = (type: string) => {
+  const getIncidentTypeColor = (type) => {
     switch (type) {
       case 'theft': return 'bg-red-100 text-red-800';
       case 'security': return 'bg-orange-100 text-orange-800';
@@ -542,7 +566,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getIncidentStatusIcon = (status: string) => {
+  const getIncidentStatusIcon = (status) => {
     switch (status) {
       case 'investigating': return <Eye className="w-4 h-4" />;
       case 'scheduled': return <Clock className="w-4 h-4" />;
@@ -553,12 +577,12 @@ const ManagementDashboard = () => {
     }
   };
 
-  const handleViewIncident = (incident: any) => {
+  const handleViewIncident = (incident) => {
     setSelectedIncident(incident);
     setShowIncidentModal(true);
   };
 
-  const handleStatClick = (filterType: string) => {
+  const handleStatClick = (filterType) => {
     setSafetyFilter(filterType);
   };
 
@@ -577,12 +601,12 @@ const ManagementDashboard = () => {
     }
   };
 
-  const handleViewEvidence = (evidence: any) => {
+  const handleViewEvidence = (evidence) => {
     setSelectedEvidence(evidence);
     setShowEvidenceModal(true);
   };
 
-  const handleMessageResident = (residentName: string) => {
+  const handleMessageResident = (residentName) => {
     // Find resident and open message modal
     const resident = residentsData.find(r => r.name === residentName);
     if (resident) {
@@ -595,7 +619,7 @@ const ManagementDashboard = () => {
   };
 
   const handleEscalateSubmit = () => {
-    if (escalationReason.trim()) {
+    if (escalationReason.trim() && selectedIncident) {
       const escalationUpdate = {
         date: new Date().toISOString(),
         update: `ESCALATED to ${escalationLevel}: ${escalationReason}`,
@@ -610,9 +634,6 @@ const ManagementDashboard = () => {
       setEscalationReason('');
       setEscalationLevel('supervisor');
       setShowEscalateModal(false);
-      
-      // Optionally close the incident modal too
-      // setShowIncidentModal(false);
     }
   };
 
@@ -656,7 +677,40 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getAssignedTeam = (type: string) => {
+  const handleAddResident = () => {
+    if (newResident.name.trim() && newResident.email.trim() && newResident.unit.trim()) {
+      const residentData = {
+        ...newResident,
+        id: Date.now(),
+        status: 'pending',
+        lastActivity: 'Never',
+        avatar: newResident.name.split(' ').map(n => n[0]).join('').toUpperCase(),
+        interests: [],
+        groups: ['New Residents'],
+        communityScore: null
+      };
+      
+      // In real app, this would create the resident in the database
+      console.log('Creating new resident:', residentData);
+      
+      // Reset form
+      setNewResident({
+        name: '',
+        unit: '',
+        building: 'Building A',
+        email: '',
+        phone: '',
+        moveInDate: '',
+        leaseEndDate: '',
+        emergencyContact: '',
+        notes: ''
+      });
+      
+      setShowAddResident(false);
+    }
+  };
+
+  const getAssignedTeam = (type) => {
     switch (type) {
       case 'theft': return 'Security Team';
       case 'security': return 'Security Team';
@@ -885,192 +939,7 @@ const ManagementDashboard = () => {
                         <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                          <span className="text-white font-medium text-sm">{resident.avatar}</span>
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900">{resident.name}</h3>
-                          <p className="text-gray-600 text-sm">{resident.unit}</p>
-                        </div>
-                      </div>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(resident.status)}`}>
-                        {resident.status}
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Building className="w-4 h-4 mr-2" />
-                        {resident.building}
-                      </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        {resident.email}
-                      </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Moved in {new Date(resident.moveInDate).toLocaleDateString()}
-                      </div>
-                    </div>
-                    
-                    <div className="border-t pt-4">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-500">Last activity</span>
-                        <span className="text-gray-900 font-medium">{resident.lastActivity}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4 flex space-x-2">
-                      <button 
-                        onClick={() => handleViewProfile(resident)}
-                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                      >
-                        View Profile
-                      </button>
-                      <button 
-                        onClick={() => handleSendMessage(resident)}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                      >
-                        Message
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Empty State */}
-              {getFilteredResidents().length === 0 && (
-                <div className="text-center py-12">
-                  <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No residents found</h3>
-                  <p className="text-gray-600 mb-4">
-                    {searchTerm ? 'Try adjusting your search terms.' : 'No residents match the selected filters.'}
-                  </p>
-                  {searchTerm && (
-                    <button 
-                      onClick={() => setSearchTerm('')}
-                      className="text-blue-600 hover:text-blue-700 font-medium"
-                    >
-                      Clear search
-                    </button>
-                  )}
-                </div>
-              )}
-            </>
-          )}
-
-          {/* Activity Page */}
-          {currentPage === 'activity' && (
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Filter Activity</h3>
-                  <button 
-                    onClick={() => setCurrentPage('dashboard')}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                  >
-                    ← Back to Dashboard
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <button 
-                    onClick={() => setActivityFilter('all')}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                      activityFilter === 'all' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    All
-                  </button>
-                  <button 
-                    onClick={() => setActivityFilter('safety')}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                      activityFilter === 'safety' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Safety
-                  </button>
-                  <button 
-                    onClick={() => setActivityFilter('maintenance')}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                      activityFilter === 'maintenance' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Maintenance
-                  </button>
-                  <button 
-                    onClick={() => setActivityFilter('community')}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                      activityFilter === 'community' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Community
-                  </button>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                <div className="p-4 border-b border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900">Activity Feed</h3>
-                </div>
-                <div className="divide-y divide-gray-200">
-                  {getFilteredActivity().map((activity) => (
-                    <div key={activity.id} className="p-6 hover:bg-gray-50 transition-colors">
-                      <div className="flex items-start space-x-4">
-                        <div className={`p-2 rounded-lg ${getTypeColor(activity.type)}`}>
-                          {getTypeIcon(activity.type)}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(activity.priority)}`}>
-                              {activity.priority}
-                            </span>
-                            <span className="text-gray-500 text-sm">{activity.time}</span>
-                            <span className="text-gray-400">•</span>
-                            <span className="text-gray-600 text-sm">{activity.location}</span>
-                          </div>
-                          <h4 className="text-gray-900 font-semibold mb-2">{activity.title}</h4>
-                          <p className="text-gray-600 text-sm mb-2">{activity.description}</p>
-                          <div className="flex items-center justify-between">
-                            <p className="text-gray-500 text-sm">Reported by {activity.user}</p>
-                            <div className="flex items-center space-x-1 text-gray-500">
-                              {getStatusIcon(activity.status)}
-                              <span className="text-sm capitalize">{activity.status}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Other pages placeholder */}
-          {currentPage !== 'dashboard' && currentPage !== 'activity' && currentPage !== 'residents' && currentPage !== 'safety' && (
-            <div className="text-center py-20">
-              <div className="w-16 h-16 mx-auto mb-4 text-gray-400">
-                {currentPage === 'communications' && <MessageSquare className="w-16 h-16" />}
-                {currentPage === 'events' && <Calendar className="w-16 h-16" />}
-                {currentPage === 'analytics' && <BarChart3 className="w-16 h-16" />}
-                {currentPage === 'settings' && <Settings className="w-16 h-16" />}
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)} Page
-              </h3>
-              <p className="text-gray-600">Coming soon - Full functionality</p>
-            </div>
-          )}
-
-          {/* All the modals would continue here but cutting for brevity */}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ManagementDashboard;3 mb-2">
+                              <div className="flex items-center space-x-3 mb-2">
                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(activity.priority)}`}>
                                   {activity.priority}
                                 </span>
@@ -1111,7 +980,10 @@ export default ManagementDashboard;3 mb-2">
                         </div>
                         <span className="font-medium text-gray-900 text-sm">Create Event</span>
                       </button>
-                      <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+                      <button 
+                        onClick={() => setShowAddResident(true)}
+                        className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                      >
                         <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                           <UserPlus className="w-4 h-4 text-purple-600" />
                         </div>
@@ -1434,4 +1306,670 @@ export default ManagementDashboard;3 mb-2">
                 {getFilteredResidents().map((resident) => (
                   <div key={resident.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center space-x-
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 font-semibold">{resident.avatar}</span>
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{resident.name}</h3>
+                          <p className="text-sm text-gray-600">{resident.unit}</p>
+                        </div>
+                      </div>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(resident.status)}`}>
+                        {resident.status}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Building className="w-4 h-4 mr-2" />
+                        {resident.building}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Mail className="w-4 h-4 mr-2" />
+                        {resident.email}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Phone className="w-4 h-4 mr-2" />
+                        {resident.phone}
+                      </div>
+                    </div>
+                    
+                    {resident.communityScore && (
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-sm text-gray-600">Community Score</span>
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="text-sm font-medium text-gray-900">{resident.communityScore}</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={() => handleViewProfile(resident)}
+                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                      >
+                        View Profile
+                      </button>
+                      <button 
+                        onClick={() => handleSendMessage(resident)}
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                      >
+                        Message
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Empty State */}
+              {getFilteredResidents().length === 0 && (
+                <div className="text-center py-12">
+                  <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No residents found</h3>
+                  <p className="text-gray-600">No residents match the selected filters.</p>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Other Pages Placeholder */}
+          {(currentPage === 'communications' || currentPage === 'events' || currentPage === 'analytics' || currentPage === 'settings') && (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
+                {currentPage === 'communications' && <MessageSquare className="w-8 h-8 text-gray-400" />}
+                {currentPage === 'events' && <Calendar className="w-8 h-8 text-gray-400" />}
+                {currentPage === 'analytics' && <BarChart3 className="w-8 h-8 text-gray-400" />}
+                {currentPage === 'settings' && <Settings className="w-8 h-8 text-gray-400" />}
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)} Coming Soon
+              </h3>
+              <p className="text-gray-600">This section is under development.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Add Resident Modal */}
+      {showAddResident && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Add New Resident</h3>
+                <button 
+                  onClick={() => setShowAddResident(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    value={newResident.name}
+                    onChange={(e) => setNewResident({...newResident, name: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter resident's full name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Unit Number</label>
+                  <input
+                    type="text"
+                    value={newResident.unit}
+                    onChange={(e) => setNewResident({...newResident, unit: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="e.g., A-301"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
+                  <select
+                    value={newResident.building}
+                    onChange={(e) => setNewResident({...newResident, building: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="Building A">Building A</option>
+                    <option value="Building B">Building B</option>
+                    <option value="Building C">Building C</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    value={newResident.email}
+                    onChange={(e) => setNewResident({...newResident, email: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="resident@email.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                  <input
+                    type="tel"
+                    value={newResident.phone}
+                    onChange={(e) => setNewResident({...newResident, phone: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Move-in Date</label>
+                  <input
+                    type="date"
+                    value={newResident.moveInDate}
+                    onChange={(e) => setNewResident({...newResident, moveInDate: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Lease End Date</label>
+                  <input
+                    type="date"
+                    value={newResident.leaseEndDate}
+                    onChange={(e) => setNewResident({...newResident, leaseEndDate: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Emergency Contact</label>
+                  <input
+                    type="text"
+                    value={newResident.emergencyContact}
+                    onChange={(e) => setNewResident({...newResident, emergencyContact: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Name - Phone Number"
+                  />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <textarea
+                  value={newResident.notes}
+                  onChange={(e) => setNewResident({...newResident, notes: e.target.value})}
+                  rows={3}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  placeholder="Any additional notes about the resident..."
+                />
+              </div>
+              <div className="flex space-x-3 mt-6">
+                <button 
+                  onClick={() => setShowAddResident(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleAddResident}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Add Resident
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Report Incident Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Report New Incident</h3>
+                <button 
+                  onClick={() => setShowReportModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Incident Title</label>
+                  <input
+                    type="text"
+                    value={newIncident.title}
+                    onChange={(e) => setNewIncident({...newIncident, title: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Brief description of the incident"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                  <select
+                    value={newIncident.type}
+                    onChange={(e) => setNewIncident({...newIncident, type: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="maintenance">Maintenance</option>
+                    <option value="theft">Theft</option>
+                    <option value="security">Security</option>
+                    <option value="accident">Accident</option>
+                    <option value="system">System</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                  <select
+                    value={newIncident.priority}
+                    onChange={(e) => setNewIncident({...newIncident, priority: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                  <input
+                    type="text"
+                    value={newIncident.location}
+                    onChange={(e) => setNewIncident({...newIncident, location: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Where did this incident occur?"
+                  />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={newIncident.description}
+                  onChange={(e) => setNewIncident({...newIncident, description: e.target.value})}
+                  rows={4}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  placeholder="Provide detailed information about the incident..."
+                />
+              </div>
+              <div className="flex space-x-3 mt-6">
+                <button 
+                  onClick={() => setShowReportModal(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleSubmitIncident}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Report Incident
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Message Modal */}
+      {showMessageModal && selectedResident && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Send Message to {selectedResident.name}
+                </h3>
+                <button 
+                  onClick={() => setShowMessageModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <textarea
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+                placeholder="Type your message here..."
+                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+              <div className="flex space-x-3 mt-4">
+                <button 
+                  onClick={() => setShowMessageModal(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleSendMessageSubmit}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Send Message
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Resident Profile Modal */}
+      {showResidentProfile && selectedResident && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-blue-600 font-semibold text-xl">{selectedResident.avatar}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">{selectedResident.name}</h3>
+                    <p className="text-gray-600">{selectedResident.unit} • {selectedResident.building}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowResidentProfile(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Contact Information</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center text-sm">
+                      <Mail className="w-4 h-4 mr-2 text-gray-400" />
+                      <span className="text-gray-900">{selectedResident.email}</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <Phone className="w-4 h-4 mr-2 text-gray-400" />
+                      <span className="text-gray-900">{selectedResident.phone}</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Lease Information</h4>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="text-gray-500">Move-in:</span> {new Date(selectedResident.moveInDate).toLocaleDateString()}</p>
+                    <p><span className="text-gray-500">Lease End:</span> {new Date(selectedResident.leaseEndDate).toLocaleDateString()}</p>
+                    <p><span className="text-gray-500">Last Activity:</span> {selectedResident.lastActivity}</p>
+                  </div>
+                </div>
+              </div>
+              
+              {selectedResident.interests && selectedResident.interests.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Interests</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedResident.interests.map((interest, index) => (
+                      <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {interest}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {selectedResident.groups && selectedResident.groups.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Community Groups</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedResident.groups.map((group, index) => (
+                      <span key={index} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                        {group}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {selectedResident.notes && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Notes</h4>
+                  <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedResident.notes}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Incident Detail Modal */}
+      {showIncidentModal && selectedIncident && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">{selectedIncident.title}</h3>
+                  <p className="text-gray-600 mt-1">Incident ID: {selectedIncident.incidentId}</p>
+                </div>
+                <button 
+                  onClick={() => setShowIncidentModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Main Content */}
+                <div className="lg:col-span-2 space-y-6">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">Description</h4>
+                    <p className="text-gray-700">{selectedIncident.description}</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-3">Updates Timeline</h4>
+                    <div className="space-y-3">
+                      {selectedIncident.updates.map((update, index) => (
+                        <div key={index} className="flex space-x-3">
+                          <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                          <div className="flex-1">
+                            <p className="text-sm text-gray-900">{update.update}</p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {new Date(update.date).toLocaleString()} by {update.by}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {selectedIncident.evidence && selectedIncident.evidence.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-3">Evidence</h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        {selectedIncident.evidence.map((evidence, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleViewEvidence(evidence)}
+                            className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                          >
+                            {evidence.type === 'video' && <Video className="w-5 h-5 text-blue-600" />}
+                            {evidence.type === 'image' && <Camera className="w-5 h-5 text-green-600" />}
+                            {evidence.type === 'document' && <FileText className="w-5 h-5 text-orange-600" />}
+                            <span className="text-sm text-gray-900">{evidence.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Sidebar */}
+                <div className="space-y-4">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-900 mb-3">Incident Details</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Type:</span>
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${getIncidentTypeColor(selectedIncident.type)}`}>
+                          {selectedIncident.type}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Priority:</span>
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${getPriorityColor(selectedIncident.priority)}`}>
+                          {selectedIncident.priority}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Status:</span>
+                        <span className="text-gray-900 capitalize">{selectedIncident.status}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Location:</span>
+                        <span className="text-gray-900">{selectedIncident.location}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Reported by:</span>
+                        <span className="text-gray-900">{selectedIncident.reportedBy}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Assigned to:</span>
+                        <span className="text-gray-900">{selectedIncident.assignedTo}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <button 
+                      onClick={() => setShowAddUpdate(true)}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add Update</span>
+                    </button>
+                    
+                    <button 
+                      onClick={() => handleMessageResident(selectedIncident.reportedBy)}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Message Reporter</span>
+                    </button>
+                    
+                    <button 
+                      onClick={handleEscalate}
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                    >
+                      <AlertTriangle className="w-4 h-4" />
+                      <span>Escalate</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Update Modal */}
+      {showAddUpdate && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Add Update</h3>
+                <button 
+                  onClick={() => setShowAddUpdate(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <textarea
+                value={updateText}
+                onChange={(e) => setUpdateText(e.target.value)}
+                placeholder="Enter update details..."
+                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+              <div className="flex space-x-3 mt-4">
+                <button 
+                  onClick={() => setShowAddUpdate(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleAddUpdate}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Add Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Escalate Modal */}
+      {showEscalateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Escalate Incident</h3>
+                <button 
+                  onClick={() => setShowEscalateModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Escalate to</label>
+                <select
+                  value={escalationLevel}
+                  onChange={(e) => setEscalationLevel(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="supervisor">Supervisor</option>
+                  <option value="management">Management</option>
+                  <option value="corporate">Corporate</option>
+                  <option value="legal">Legal Department</option>
+                </select>
+              </div>
+              <textarea
+                value={escalationReason}
+                onChange={(e) => setEscalationReason(e.target.value)}
+                placeholder="Reason for escalation..."
+                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+              <div className="flex space-x-3 mt-4">
+                <button 
+                  onClick={() => setShowEscalateModal(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleEscalateSubmit}
+                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Escalate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ManagementDashboard;
