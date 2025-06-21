@@ -1364,9 +1364,9 @@ const ManagementDashboard = () => {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-center">
   <img 
-    src="https://i.imgur.com/NCXsk3K.png" 
+    src="https://i.imgur.com/24BkumE.png" 
     alt="HeyNeighbor Logo" 
-    className="h-12 w-auto"
+    className="h-10 w-10"
   />
 </div>
         </div>
