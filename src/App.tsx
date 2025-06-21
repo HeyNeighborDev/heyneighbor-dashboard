@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import HeyNeighborLogo from './assets/heyneighbor-logo.svg';
+import HeyNeighborLogo from './Assets/heyneighbor-logo.svg';
 import { 
   Users, 
   AlertTriangle, 
