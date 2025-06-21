@@ -2206,6 +2206,7 @@ const ManagementDashboard = () => {
                     </div>
                   </div>
               </button>
+            </div>
 
               {/* Search and Filters */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
