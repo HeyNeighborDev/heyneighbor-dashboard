@@ -123,6 +123,7 @@ const ManagementDashboard = () => {
   const [showMessageDetailModal, setShowMessageDetailModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const [showAddResidentModal, setShowAddResidentModal] = useState(false);
+  const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
     name: '',
@@ -1151,7 +1152,7 @@ const ManagementDashboard = () => {
   };
 
   const handleReportIncident = () => {
-    setShowReportModal(true);
+    setShowReportIncidentModal(true);
   };
 
   const handleSubmitIncident = () => {
@@ -3381,6 +3382,83 @@ const ManagementDashboard = () => {
                   className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
                 >
                   Add Resident
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Report Incident Modal */}
+      {showReportIncidentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Report Safety Incident</h3>
+                <button 
+                  onClick={() => setShowReportIncidentModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Incident Type</label>
+                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option>Security Concern</option>
+                  <option>Safety Hazard</option>
+                  <option>Emergency</option>
+                  <option>Maintenance Issue</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Building, floor, unit number..."
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  rows="3"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Describe the incident in detail..."
+                ></textarea>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option>Low</option>
+                  <option>Medium</option>
+                  <option>High</option>
+                  <option>Critical</option>
+                </select>
+              </div>
+              
+              <div className="flex space-x-3 pt-4">
+                <button
+                  onClick={() => setShowReportIncidentModal(false)}
+                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowReportIncidentModal(false);
+                    // Add incident reporting logic here
+                  }}
+                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Report Incident
                 </button>
               </div>
             </div>
