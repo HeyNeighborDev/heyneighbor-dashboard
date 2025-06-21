@@ -1362,15 +1362,13 @@ const ManagementDashboard = () => {
       <div className="w-64 bg-white shadow-sm border-r border-gray-200 flex flex-col fixed h-full z-10">
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Building className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h1 className="font-semibold text-gray-900 text-lg">HeyNeighbor</h1>
-              <p className="text-xs text-gray-500">Management</p>
-            </div>
-          </div>
+          <div className="flex items-center justify-center">
+  <img 
+    src="/heyneighbor-logo.png" 
+    alt="HeyNeighbor Logo" 
+    className="h-12 w-auto"
+  />
+</div>
         </div>
 
         {/* Navigation */}
