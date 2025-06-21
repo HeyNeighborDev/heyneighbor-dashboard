@@ -2146,7 +2146,10 @@ const ManagementDashboard = () => {
             <>
               {/* Residents Stats */}
               <div className="flex flex-wrap gap-3 mb-6">
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                <button
+  onClick={() => handleResidentStatClick('all')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">Total Residents</p>
@@ -2156,9 +2159,12 @@ const ManagementDashboard = () => {
                       <Users className="w-6 h-6 text-blue-600" />
                     </div>
                   </div>
-                </div>
+                </button>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                <button
+  onClick={() => handleResidentStatClick('active')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">Active Residents</p>
@@ -2168,9 +2174,12 @@ const ManagementDashboard = () => {
                       <CheckCircle className="w-6 h-6 text-green-600" />
                     </div>
                   </div>
-                </div>
+                </button>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                <button
+  onClick={() => handleResidentStatClick('pending')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">Pending Move-ins</p>
@@ -2180,9 +2189,12 @@ const ManagementDashboard = () => {
                       <Clock className="w-6 h-6 text-yellow-600" />
                     </div>
                   </div>
-                </div>
+                </button>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                <button
+  onClick={() => handleResidentStatClick('occupancy')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">Occupancy Rate</p>
@@ -2192,8 +2204,7 @@ const ManagementDashboard = () => {
                       <Building className="w-6 h-6 text-blue-600" />
                     </div>
                   </div>
-                </div>
-              </div>
+              </button>
 
               {/* Search and Filters */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
