@@ -2193,8 +2193,8 @@ const ManagementDashboard = () => {
                 </button>
                 
                 <button
-  onClick={() => setResidentFilter('occupancy')}
-  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-blue-50 hover:shadow-md transition-all cursor-pointer"
+ 
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 transition-all"
 >
                   <div className="flex items-center justify-between">
                     <div>
