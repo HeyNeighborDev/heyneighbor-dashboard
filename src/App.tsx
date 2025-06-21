@@ -2148,8 +2148,8 @@ const ManagementDashboard = () => {
               <div className="flex flex-wrap gap-3 mb-6">
                 
   <button
-  onClick={() => handleResidentStatClick('all')}
-  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+  onClick={() => setResidentFilter('all')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-blue-50 hover:shadow-md transition-all cursor-pointer"
 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -2163,8 +2163,8 @@ const ManagementDashboard = () => {
                 </button>
                 
                 <button
-  onClick={() => handleResidentStatClick('active')}
-  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+  onClick={() => setResidentFilter('active')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-green-50 hover:shadow-md transition-all cursor-pointer"
 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -2178,8 +2178,8 @@ const ManagementDashboard = () => {
                 </button>
                 
                 <button
-  onClick={() => handleResidentStatClick('pending')}
-  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+  onClick={() => setResidentFilter('pending')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-yellow-50 hover:shadow-md transition-all cursor-pointer"
 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -2193,8 +2193,8 @@ const ManagementDashboard = () => {
                 </button>
                 
                 <button
-  onClick={() => handleResidentStatClick('occupancy')}
-  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+  onClick={() => setResidentFilter('occupancy')}
+  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-blue-50 hover:shadow-md transition-all cursor-pointer"
 >
                   <div className="flex items-center justify-between">
                     <div>
