@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
+import HeyNeighborLogo from './assets/heyneighbor-logo.svg';
 import { 
   Users, 
   AlertTriangle, 
@@ -1364,9 +1365,9 @@ const ManagementDashboard = () => {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-center">
   <img 
-    src="https://i.imgur.com/24BkumE.png" 
+    src={HeyNeighborLogo} 
     alt="HeyNeighbor Logo" 
-    className="h-10 w-10"
+    className="h-10 w-auto"
   />
 </div>
         </div>
