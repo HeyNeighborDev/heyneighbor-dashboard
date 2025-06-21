@@ -1364,7 +1364,7 @@ const ManagementDashboard = () => {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-center">
   <img 
-    src="/heyneighbor-logo.png" 
+    src={`${process.env.PUBLIC_URL}/heyneighbor-logo.png`} 
     alt="HeyNeighbor Logo" 
     className="h-12 w-auto"
   />
