@@ -2146,7 +2146,8 @@ const ManagementDashboard = () => {
             <>
               {/* Residents Stats */}
               <div className="flex flex-wrap gap-3 mb-6">
-                <button
+                
+  <button
   onClick={() => handleResidentStatClick('all')}
   className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
 >
