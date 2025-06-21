@@ -42,17 +42,17 @@ const ManagementDashboard = () => {
   const [showAddResident, setShowAddResident] = useState(false);
   const [residentFilter, setResidentFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedResident, setSelectedResident] = useState<any>(null);
+  const [selectedResident, setSelectedResident] = useState(null);
   const [showResidentProfile, setShowResidentProfile] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageContent, setMessageContent] = useState('');
   const [safetyFilter, setSafetyFilter] = useState('all');
   const [showIncidentModal, setShowIncidentModal] = useState(false);
-  const [selectedIncident, setSelectedIncident] = useState<any>(null);
+  const [selectedIncident, setSelectedIncident] = useState(null);
   const [showAddUpdate, setShowAddUpdate] = useState(false);
   const [updateText, setUpdateText] = useState('');
   const [showEvidenceModal, setShowEvidenceModal] = useState(false);
-  const [selectedEvidence, setSelectedEvidence] = useState<any>(null);
+  const [selectedEvidence, setSelectedEvidence] = useState(null);
   const [showEscalateModal, setShowEscalateModal] = useState(false);
   const [escalationReason, setEscalationReason] = useState('');
   const [escalationLevel, setEscalationLevel] = useState('supervisor');
@@ -82,15 +82,15 @@ const ManagementDashboard = () => {
   const [broadcastData, setBroadcastData] = useState({
     title: '',
     message: '',
-    recipients: 'all', // all, building, specific
-    buildings: [] as string[],
-    deliveryMethods: ['email'] as string[],
-    priority: 'normal', // normal, urgent
-    scheduleType: 'now', // now, later
+    recipients: 'all',
+    buildings: [],
+    deliveryMethods: ['email'],
+    priority: 'normal',
+    scheduleType: 'now',
     scheduledDate: '',
     scheduledTime: '',
     attachImage: false,
-    imageFile: null as File | null
+    imageFile: null
   });
   const [eventData, setEventData] = useState({
     title: '',
@@ -106,7 +106,7 @@ const ManagementDashboard = () => {
   // Events page state
   const [eventsFilter, setEventsFilter] = useState('all');
   const [eventSearchTerm, setEventSearchTerm] = useState('');
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showEditEventModal, setShowEditEventModal] = useState(false);
   const [showRSVPModal, setShowRSVPModal] = useState(false);
@@ -116,9 +116,17 @@ const ManagementDashboard = () => {
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [showCreateTemplateModal, setShowCreateTemplateModal] = useState(false);
   const [showDirectMessageModal, setShowDirectMessageModal] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState<any>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
-  const [selectedConversation, setSelectedConversation] = useState<any>(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [showMessageDetailModal, setShowMessageDetailModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [newTemplate, setNewTemplate] = useState({
+    name: '',
+    category: 'maintenance',
+    content: ''
+  });
 
   // Dynamic greeting system
   useEffect(() => {
@@ -201,7 +209,8 @@ const ManagementDashboard = () => {
       deliveryMethod: 'Email + SMS',
       openRate: 87.6,
       sentBy: 'Property Manager',
-      sentDate: '6/20/2024 at 10:30:00 AM'
+      sentDate: '6/20/2024 at 10:30:00 AM',
+      content: 'The community pool will be closed for maintenance this weekend from Saturday 8 AM to Sunday 6 PM. We will be performing deep cleaning, chemical balancing, and equipment inspections. We apologize for any inconvenience.'
     },
     {
       id: 2,
@@ -213,7 +222,8 @@ const ManagementDashboard = () => {
       deliveryMethod: 'All Channels',
       openRate: 95.8,
       sentBy: 'Property Manager',
-      sentDate: '6/20/2024 at 8:15:00 AM'
+      sentDate: '6/20/2024 at 8:15:00 AM',
+      content: 'URGENT: Water main break on Oak Street will affect water service to Building A and B from 10 AM to 2 PM today. Emergency water will be provided in the lobby. We will update you as repairs progress.'
     },
     {
       id: 3,
@@ -225,7 +235,8 @@ const ManagementDashboard = () => {
       deliveryMethod: 'Email',
       openRate: 75.7,
       sentBy: 'Community Team',
-      sentDate: '6/19/2024 at 4:45:00 PM'
+      sentDate: '6/19/2024 at 4:45:00 PM',
+      content: 'You are invited to our annual Summer BBQ celebration on July 4th starting at 3 PM at the community pool area. Food, drinks, and entertainment will be provided. Please RSVP by June 30th.'
     },
     {
       id: 4,
@@ -237,7 +248,8 @@ const ManagementDashboard = () => {
       deliveryMethod: 'Email',
       openRate: 0,
       sentBy: 'Property Manager',
-      sentDate: '6/22/2024 at 9:00:00 AM'
+      sentDate: '6/22/2024 at 9:00:00 AM',
+      content: 'Reminder: All guest vehicles must be registered at the front desk and display a visitor pass. Unregistered vehicles may be towed at owner expense. Please inform your guests of this policy.'
     }
   ];
 
@@ -249,7 +261,10 @@ const ManagementDashboard = () => {
       date: '6/19/2024',
       priority: 'medium',
       recipients: 342,
-      engagement: 76
+      engagement: 76,
+      views: 298,
+      likes: 45,
+      category: 'amenities'
     },
     {
       id: 2,
@@ -258,7 +273,10 @@ const ManagementDashboard = () => {
       date: '6/18/2024',
       priority: 'high',
       recipients: 203,
-      engagement: 65
+      engagement: 65,
+      views: 187,
+      likes: 12,
+      category: 'policy'
     },
     {
       id: 3,
@@ -267,7 +285,10 @@ const ManagementDashboard = () => {
       date: '6/15/2024',
       priority: 'low',
       recipients: 342,
-      engagement: 82
+      engagement: 82,
+      views: 256,
+      likes: 67,
+      category: 'amenities'
     }
   ];
 
@@ -278,7 +299,8 @@ const ManagementDashboard = () => {
       description: 'Standard template for maintenance announcements',
       category: 'maintenance',
       usageCount: 45,
-      lastUsed: '6/20/2024'
+      lastUsed: '6/20/2024',
+      content: 'We will be performing maintenance on [ITEM] on [DATE] from [START_TIME] to [END_TIME]. This may cause [EXPECTED_IMPACT]. We apologize for any inconvenience and appreciate your patience.'
     },
     {
       id: 2,
@@ -286,7 +308,8 @@ const ManagementDashboard = () => {
       description: 'Template for community event invitations',
       category: 'events',
       usageCount: 23,
-      lastUsed: '6/19/2024'
+      lastUsed: '6/19/2024',
+      content: 'You are invited to [EVENT_NAME] on [DATE] at [TIME] in [LOCATION]. [EVENT_DESCRIPTION]. Please RSVP by [RSVP_DATE]. We look forward to seeing you there!'
     },
     {
       id: 3,
@@ -294,7 +317,8 @@ const ManagementDashboard = () => {
       description: 'Monthly payment reminder template',
       category: 'administrative',
       usageCount: 67,
-      lastUsed: '6/18/2024'
+      lastUsed: '6/18/2024',
+      content: 'This is a friendly reminder that your monthly payment of $[AMOUNT] is due on [DUE_DATE]. Please submit payment through the resident portal or contact the office if you have any questions.'
     },
     {
       id: 4,
@@ -302,7 +326,8 @@ const ManagementDashboard = () => {
       description: 'Welcome message for new community members',
       category: 'administrative',
       usageCount: 12,
-      lastUsed: '6/17/2024'
+      lastUsed: '6/17/2024',
+      content: 'Welcome to [COMMUNITY_NAME]! We are excited to have you as part of our community. Your move-in date is [DATE]. Please contact the office to schedule your orientation and key pickup.'
     },
     {
       id: 5,
@@ -310,7 +335,8 @@ const ManagementDashboard = () => {
       description: 'Emergency safety notification template',
       category: 'safety',
       usageCount: 8,
-      lastUsed: '6/16/2024'
+      lastUsed: '6/16/2024',
+      content: 'SAFETY ALERT: [INCIDENT_TYPE] reported in [LOCATION]. Please [ACTION_REQUIRED]. If you see anything suspicious, contact security immediately at [PHONE]. Your safety is our priority.'
     },
     {
       id: 6,
@@ -318,7 +344,8 @@ const ManagementDashboard = () => {
       description: 'Template for community policy updates',
       category: 'policy',
       usageCount: 34,
-      lastUsed: '6/15/2024'
+      lastUsed: '6/15/2024',
+      content: 'Important policy update regarding [POLICY_AREA]. Effective [DATE], [NEW_POLICY]. This change is being implemented to [REASON]. Please review the updated community guidelines.'
     }
   ];
 
@@ -778,7 +805,7 @@ const ManagementDashboard = () => {
   ];
 
   // Helper functions
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
@@ -787,7 +814,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status) => {
     switch (status) {
       case 'investigating': return <Eye className="w-4 h-4" />;
       case 'scheduled': return <Clock className="w-4 h-4" />;
@@ -799,7 +826,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (type) => {
     switch (type) {
       case 'safety': return <Shield className="w-4 h-4" />;
       case 'maintenance': return <Settings className="w-4 h-4" />;
@@ -808,7 +835,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getTypeColor = (type: string) => {
+  const getTypeColor = (type) => {
     switch (type) {
       case 'safety': return 'bg-red-100 text-red-800';
       case 'maintenance': return 'bg-blue-100 text-blue-800';
@@ -817,7 +844,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getEventCategoryColor = (category: string) => {
+  const getEventCategoryColor = (category) => {
     switch (category) {
       case 'social': return 'bg-blue-100 text-blue-800';
       case 'wellness': return 'bg-green-100 text-green-800';
@@ -828,7 +855,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getEventStatusColor = (status: string) => {
+  const getEventStatusColor = (status) => {
     switch (status) {
       case 'upcoming': return 'bg-blue-100 text-blue-800';
       case 'completed': return 'bg-green-100 text-green-800';
@@ -837,7 +864,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getCommTypeColor = (type: string) => {
+  const getCommTypeColor = (type) => {
     switch (type) {
       case 'maintenance': return 'bg-blue-100 text-blue-800';
       case 'emergency': return 'bg-red-100 text-red-800';
@@ -847,7 +874,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getCommStatusColor = (status: string) => {
+  const getCommStatusColor = (status) => {
     switch (status) {
       case 'delivered': return 'bg-green-100 text-green-800';
       case 'scheduled': return 'bg-blue-100 text-blue-800';
@@ -856,7 +883,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getTemplateTypeColor = (category: string) => {
+  const getTemplateTypeColor = (category) => {
     switch (category) {
       case 'maintenance': return 'bg-blue-100 text-blue-800';
       case 'events': return 'bg-green-100 text-green-800';
@@ -867,7 +894,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getConversationStatusColor = (status: string) => {
+  const getConversationStatusColor = (status) => {
     switch (status) {
       case 'active': return 'bg-blue-100 text-blue-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
@@ -939,7 +966,7 @@ const ManagementDashboard = () => {
     return filtered;
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
@@ -967,12 +994,12 @@ const ManagementDashboard = () => {
     return { total, upcoming, completed, avgAttendance };
   };
 
-  const handleViewProfile = (resident: any) => {
+  const handleViewProfile = (resident) => {
     setSelectedResident(resident);
     setShowResidentProfile(true);
   };
 
-  const handleSendMessage = (resident: any) => {
+  const handleSendMessage = (resident) => {
     setSelectedResident(resident);
     setShowMessageModal(true);
     setMessageContent('');
@@ -1015,7 +1042,7 @@ const ManagementDashboard = () => {
     return { total, open, highPriority, resolved };
   };
 
-  const getIncidentTypeColor = (type: string) => {
+  const getIncidentTypeColor = (type) => {
     switch (type) {
       case 'theft': return 'bg-red-100 text-red-800';
       case 'security': return 'bg-orange-100 text-orange-800';
@@ -1026,7 +1053,7 @@ const ManagementDashboard = () => {
     }
   };
 
-  const getIncidentStatusIcon = (status: string) => {
+  const getIncidentStatusIcon = (status) => {
     switch (status) {
       case 'investigating': return <Eye className="w-4 h-4" />;
       case 'scheduled': return <Clock className="w-4 h-4" />;
@@ -1037,17 +1064,17 @@ const ManagementDashboard = () => {
     }
   };
 
-  const handleViewIncident = (incident: any) => {
+  const handleViewIncident = (incident) => {
     setSelectedIncident(incident);
     setShowIncidentModal(true);
   };
 
-  const handleViewEvent = (event: any) => {
+  const handleViewEvent = (event) => {
     setSelectedEvent(event);
     setShowEventModal(true);
   };
 
-  const handleEditEvent = (event: any) => {
+  const handleEditEvent = (event) => {
     setSelectedEvent(event);
     setEventData({
       title: event.title,
@@ -1062,11 +1089,11 @@ const ManagementDashboard = () => {
     setShowEditEventModal(true);
   };
 
-  const handleStatClick = (filterType: string) => {
+  const handleStatClick = (filterType) => {
     setSafetyFilter(filterType);
   };
 
-  const handleEventStatClick = (filterType: string) => {
+  const handleEventStatClick = (filterType) => {
     setEventsFilter(filterType);
   };
 
@@ -1085,12 +1112,12 @@ const ManagementDashboard = () => {
     }
   };
 
-  const handleViewEvidence = (evidence: any) => {
+  const handleViewEvidence = (evidence) => {
     setSelectedEvidence(evidence);
     setShowEvidenceModal(true);
   };
 
-  const handleMessageResident = (residentName: string) => {
+  const handleMessageResident = (residentName) => {
     // Find resident and open message modal
     const resident = residentsData.find(r => r.name === residentName);
     if (resident) {
@@ -1245,28 +1272,77 @@ const ManagementDashboard = () => {
     }
   };
 
-  const handleViewMessage = (message: any) => {
+  // Communications Handlers
+  const handleViewMessage = (message) => {
     setSelectedMessage(message);
-    // In real app, this would open message detail modal
-    console.log('Viewing message:', message);
+    setShowMessageDetailModal(true);
   };
 
-  const handleUseTemplate = (template: any) => {
+  const handleUseTemplate = (template) => {
     setSelectedTemplate(template);
-    setShowTemplateModal(true);
+    // Pre-fill broadcast modal with template content
+    setBroadcastData({
+      ...broadcastData,
+      title: template.name,
+      message: template.content
+    });
+    setShowBroadcastModal(true);
   };
 
-  const handleEditTemplate = (template: any) => {
+  const handleEditTemplate = (template) => {
     setSelectedTemplate(template);
+    setNewTemplate({
+      name: template.name,
+      category: template.category,
+      content: template.content
+    });
     setShowCreateTemplateModal(true);
   };
 
-  const handleOpenConversation = (conversation: any) => {
+  const handleCreateTemplate = () => {
+    if (newTemplate.name.trim() && newTemplate.content.trim()) {
+      const templateData = {
+        ...newTemplate,
+        id: Date.now(),
+        description: `${newTemplate.category} template`,
+        usageCount: 0,
+        lastUsed: new Date().toLocaleDateString()
+      };
+      
+      console.log('Creating new template:', templateData);
+      
+      // Reset form
+      setNewTemplate({
+        name: '',
+        category: 'maintenance',
+        content: ''
+      });
+      
+      setShowCreateTemplateModal(false);
+    }
+  };
+
+  const handleOpenConversation = (conversation) => {
     setSelectedConversation(conversation);
     setShowDirectMessageModal(true);
   };
 
-  const getAssignedTeam = (type: string) => {
+  const handleViewAnalytics = (announcement) => {
+    setSelectedAnnouncement(announcement);
+    setShowAnalyticsModal(true);
+  };
+
+  const handleMessageOptions = (message) => {
+    console.log('Message options for:', message.title);
+    // You can add a dropdown menu here for additional options
+  };
+
+  const handleAnnouncementOptions = (announcement) => {
+    console.log('Announcement options for:', announcement.title);
+    // You can add a dropdown menu here for additional options
+  };
+
+  const getAssignedTeam = (type) => {
     switch (type) {
       case 'theft': return 'Security Team';
       case 'security': return 'Security Team';
@@ -1492,7 +1568,7 @@ const ManagementDashboard = () => {
                       </div>
                     </div>
                     <div className="divide-y divide-gray-200">
-                      {recentActivity.map((activity: any) => (
+                      {recentActivity.map((activity) => (
                         <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
@@ -1603,7 +1679,7 @@ const ManagementDashboard = () => {
                   </div>
                 </div>
                 <div className="divide-y divide-gray-200">
-                  {getFilteredActivity().map((activity: any) => (
+                  {getFilteredActivity().map((activity) => (
                     <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -1772,7 +1848,7 @@ const ManagementDashboard = () => {
 
               {/* Events Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {getFilteredEvents().map((event: any) => (
+                {getFilteredEvents().map((event) => (
                   <div key={event.id} className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="p-6">
                       <div className="flex items-start justify-between mb-4">
@@ -1952,6 +2028,22 @@ const ManagementDashboard = () => {
                       Theft
                     </button>
                     <button 
+                      onClick={() => setSafetyFilter('security')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        safetyFilter === 'security' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Security
+                    </button>
+                    <button 
+                      onClick={() => setSafetyFilter('maintenance')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        safetyFilter === 'maintenance' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Maintenance
+                    </button>
+                    <button 
                       onClick={() => setSafetyFilter('resolved')}
                       className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                         safetyFilter === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -1973,7 +2065,7 @@ const ManagementDashboard = () => {
 
               {/* Incidents List */}
               <div className="space-y-4">
-                {getFilteredIncidents().map((incident: any) => (
+                {getFilteredIncidents().map((incident) => (
                   <div key={incident.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
@@ -2156,7 +2248,7 @@ const ManagementDashboard = () => {
 
               {/* Residents Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {getFilteredResidents().map((resident: any) => (
+                {getFilteredResidents().map((resident) => (
                   <div key={resident.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
@@ -2353,7 +2445,7 @@ const ManagementDashboard = () => {
                   </div>
 
                   <div className="space-y-4">
-                    {communicationsData.map((comm: any) => (
+                    {communicationsData.map((comm) => (
                       <div key={comm.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex-1">
@@ -2396,7 +2488,10 @@ const ManagementDashboard = () => {
                             >
                               View Details
                             </button>
-                            <button className="text-gray-400 hover:text-gray-600">
+                            <button 
+                              onClick={() => handleMessageOptions(comm)}
+                              className="text-gray-400 hover:text-gray-600"
+                            >
                               <MoreHorizontal className="w-5 h-5" />
                             </button>
                           </div>
@@ -2422,7 +2517,7 @@ const ManagementDashboard = () => {
                   </div>
 
                   <div className="grid gap-4">
-                    {announcementsData.map((announcement: any) => (
+                    {announcementsData.map((announcement) => (
                       <div key={announcement.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -2441,10 +2536,16 @@ const ManagementDashboard = () => {
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                            <button 
+                              onClick={() => handleViewAnalytics(announcement)}
+                              className="text-blue-600 hover:text-blue-700 text-sm font-medium cursor-pointer"
+                            >
                               View Analytics
                             </button>
-                            <button className="text-gray-400 hover:text-gray-600">
+                            <button 
+                              onClick={() => handleAnnouncementOptions(announcement)}
+                              className="text-gray-400 hover:text-gray-600"
+                            >
                               <MoreHorizontal className="w-5 h-5" />
                             </button>
                           </div>
@@ -2470,23 +2571,35 @@ const ManagementDashboard = () => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {templatesData.map((template: any) => (
+                    {templatesData.map((template) => (
                       <div key={template.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">{template.name}</h3>
-                            <p className="text-gray-600 text-sm mb-3">{template.description}</p>
-                            <div className="flex items-center space-x-2 text-sm text-gray-500">
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTemplateTypeColor(template.category)}`}>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTemplateTypeColor(template.category)}`}>
                                 {template.category}
                               </span>
-                              <span>Used {template.usageCount} times</span>
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">{template.name}</h3>
+                            <p className="text-gray-600 text-sm mb-3">{template.description}</p>
+                            
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-500">Usage count:</span>
+                                <span className="text-gray-900">{template.usageCount}</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-500">Last used:</span>
+                                <span className="text-gray-900">{template.lastUsed}</span>
+                              </div>
                             </div>
                           </div>
-                          <button className="text-gray-400 hover:text-gray-600">
-                            <MoreHorizontal className="w-5 h-5" />
-                          </button>
                         </div>
+                        
+                        <div className="border-t pt-4 mb-4">
+                          <p className="text-gray-600 text-sm italic line-clamp-3">"{template.content}"</p>
+                        </div>
+                        
                         <div className="flex space-x-2">
                           <button 
                             onClick={() => handleUseTemplate(template)}
@@ -2511,40 +2624,42 @@ const ManagementDashboard = () => {
               {commFilter === 'direct' && (
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Direct Message Conversations</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">Direct Messages</h3>
                     <button 
                       onClick={() => setShowDirectMessageModal(true)}
                       className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
                     >
-                      <MessageSquare className="w-4 h-4" />
+                      <Plus className="w-4 h-4" />
                       <span>New Conversation</span>
                     </button>
                   </div>
 
-                  <div className="grid gap-4">
-                    {directMessagesData.map((conversation: any) => (
-                      <div key={conversation.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-                           onClick={() => handleOpenConversation(conversation)}>
+                  <div className="space-y-4">
+                    {directMessagesData.map((conversation) => (
+                      <div key={conversation.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer" onClick={() => handleOpenConversation(conversation)}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                               <span className="text-blue-600 font-semibold">{conversation.resident.avatar}</span>
                             </div>
-                            <div>
-                              <h3 className="text-lg font-semibold text-gray-900">{conversation.resident.name}</h3>
-                              <p className="text-gray-600 text-sm">{conversation.resident.unit} • {conversation.resident.building}</p>
-                              <p className="text-gray-500 text-sm mt-1">{conversation.lastMessage}</p>
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <h3 className="font-semibold text-gray-900">{conversation.resident.name}</h3>
+                                <span className="text-gray-500 text-sm">•</span>
+                                <span className="text-gray-500 text-sm">{conversation.resident.unit}</span>
+                                <span className="text-gray-500 text-sm">•</span>
+                                <span className="text-gray-500 text-sm">{conversation.resident.building}</span>
+                              </div>
+                              <p className="text-gray-600 text-sm">{conversation.lastMessage}</p>
+                              <p className="text-gray-500 text-xs mt-1">Last activity: {conversation.lastActivity}</p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="flex items-center space-x-2 mb-2">
-                              {conversation.unreadCount > 0 && (
-                                <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                                  {conversation.unreadCount}
-                                </span>
-                              )}
-                              <span className="text-sm text-gray-500">{conversation.lastActivity}</span>
-                            </div>
+                          <div className="flex items-center space-x-3">
+                            {conversation.unreadCount > 0 && (
+                              <div className="bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+                                {conversation.unreadCount}
+                              </div>
+                            )}
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getConversationStatusColor(conversation.status)}`}>
                               {conversation.status}
                             </span>
@@ -2559,44 +2674,83 @@ const ManagementDashboard = () => {
               {/* Delivery Reports */}
               {commFilter === 'reports' && (
                 <div className="space-y-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Delivery & Engagement Reports</h3>
-                  
-                  <div className="grid gap-6">
-                    {deliveryReportsData.map((report: any) => (
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">Delivery Reports</h3>
+                  </div>
+
+                  <div className="space-y-4">
+                    {deliveryReportsData.map((report) => (
                       <div key={report.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div className="flex items-start justify-between mb-6">
-                          <div>
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">{report.messageTitle}</h3>
-                            <p className="text-gray-600 text-sm">Sent on {report.sentDate}</p>
+                            <p className="text-gray-600 text-sm mb-4">Sent on {report.sentDate}</p>
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4">
+                              <div className="text-center">
+                                <p className="text-2xl font-bold text-gray-900">{report.stats.sent}</p>
+                                <p className="text-sm text-gray-600">Sent</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="text-2xl font-bold text-green-600">{report.stats.delivered}</p>
+                                <p className="text-sm text-gray-600">Delivered</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="text-2xl font-bold text-blue-600">{report.stats.opened}</p>
+                                <p className="text-sm text-gray-600">Opened</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="text-2xl font-bold text-purple-600">{report.stats.clicked}</p>
+                                <p className="text-sm text-gray-600">Clicked</p>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                              <div className="flex justify-between">
+                                <span className="text-gray-500">Delivery Rate:</span>
+                                <span className="font-medium text-green-600">{report.deliveryRate}%</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-500">Open Rate:</span>
+                                <span className="font-medium text-blue-600">{report.openRate}%</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-500">Click Rate:</span>
+                                <span className="font-medium text-purple-600">{report.clickRate}%</span>
+                              </div>
+                            </div>
                           </div>
-                          <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                            Download Report
-                          </button>
                         </div>
                         
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                          <div className="text-center p-4 bg-blue-50 rounded-lg">
-                            <p className="text-2xl font-bold text-blue-600">{report.stats.sent}</p>
-                            <p className="text-sm text-gray-600">Sent</p>
+                        {/* Progress Bars */}
+                        <div className="space-y-3">
+                          <div>
+                            <div className="flex justify-between text-xs text-gray-600 mb-1">
+                              <span>Delivery Rate</span>
+                              <span>{report.deliveryRate}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div className="bg-green-600 h-2 rounded-full" style={{ width: `${report.deliveryRate}%` }}></div>
+                            </div>
                           </div>
-                          <div className="text-center p-4 bg-green-50 rounded-lg">
-                            <p className="text-2xl font-bold text-green-600">{report.stats.delivered}</p>
-                            <p className="text-sm text-gray-600">Delivered</p>
+                          <div>
+                            <div className="flex justify-between text-xs text-gray-600 mb-1">
+                              <span>Open Rate</span>
+                              <span>{report.openRate}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${report.openRate}%` }}></div>
+                            </div>
                           </div>
-                          <div className="text-center p-4 bg-purple-50 rounded-lg">
-                            <p className="text-2xl font-bold text-purple-600">{report.stats.opened}</p>
-                            <p className="text-sm text-gray-600">Opened</p>
+                          <div>
+                            <div className="flex justify-between text-xs text-gray-600 mb-1">
+                              <span>Click Rate</span>
+                              <span>{report.clickRate}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div className="bg-purple-600 h-2 rounded-full" style={{ width: `${report.clickRate}%` }}></div>
+                            </div>
                           </div>
-                          <div className="text-center p-4 bg-orange-50 rounded-lg">
-                            <p className="text-2xl font-bold text-orange-600">{report.stats.clicked}</p>
-                            <p className="text-sm text-gray-600">Clicked</p>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-600">Open Rate: <span className="font-semibold text-gray-900">{report.openRate}%</span></span>
-                          <span className="text-gray-600">Click Rate: <span className="font-semibold text-gray-900">{report.clickRate}%</span></span>
-                          <span className="text-gray-600">Delivery Rate: <span className="font-semibold text-gray-900">{report.deliveryRate}%</span></span>
                         </div>
                       </div>
                     ))}
@@ -2605,894 +2759,18 @@ const ManagementDashboard = () => {
               )}
             </>
           )}
-
-          {/* Other Pages Placeholder */}
-          {(currentPage === 'analytics' || currentPage === 'settings') && (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-                {currentPage === 'analytics' && <BarChart3 className="w-8 h-8 text-gray-400" />}
-                {currentPage === 'settings' && <Settings className="w-8 h-8 text-gray-400" />}
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)} Coming Soon
-              </h3>
-              <p className="text-gray-600">This section is under development.</p>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Event Detail Modal */}
-      {showEventModal && selectedEvent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">{selectedEvent.title}</h3>
-                  <p className="text-gray-600 mt-1">Event Details</p>
-                </div>
-                <button 
-                  onClick={() => setShowEventModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Main Content */}
-                <div className="lg:col-span-2 space-y-6">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-2">Description</h4>
-                    <p className="text-gray-700">{selectedEvent.description}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Event Details</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-500">Date & Time:</span>
-                        <span className="ml-2 text-gray-900">
-                          {new Date(selectedEvent.date).toLocaleDateString()} at {selectedEvent.time}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500">Location:</span>
-                        <span className="ml-2 text-gray-900">{selectedEvent.location}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500">Category:</span>
-                        <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${getEventCategoryColor(selectedEvent.category)}`}>
-                          {selectedEvent.category}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500">Status:</span>
-                        <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${getEventStatusColor(selectedEvent.status)}`}>
-                          {selectedEvent.status}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500">Organizer:</span>
-                        <span className="ml-2 text-gray-900">{selectedEvent.organizer}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-500">RSVP Required:</span>
-                        <span className="ml-2 text-gray-900">{selectedEvent.rsvpRequired ? 'Yes' : 'No'}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {selectedEvent.attendees && selectedEvent.attendees.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Recent RSVPs</h4>
-                      <div className="space-y-2">
-                        {selectedEvent.attendees.slice(0, 5).map((attendee: any, index: number) => (
-                          <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <div>
-                              <span className="font-medium text-gray-900">{attendee.name}</span>
-                              <span className="text-gray-500 ml-2">({attendee.unit})</span>
-                            </div>
-                            <span className="text-xs text-gray-500">
-                              {new Date(attendee.rsvpDate).toLocaleDateString()}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Sidebar */}
-                <div className="space-y-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Attendance</h4>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-blue-600 mb-1">
-                        {selectedEvent.currentAttendees}
-                      </div>
-                      <div className="text-sm text-gray-500 mb-3">
-                        of {selectedEvent.maxAttendees} max
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                        <div 
-                          className="bg-blue-600 h-3 rounded-full" 
-                          style={{ width: `${Math.min((selectedEvent.currentAttendees / selectedEvent.maxAttendees) * 100, 100)}%` }}
-                        ></div>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {Math.round((selectedEvent.currentAttendees / selectedEvent.maxAttendees) * 100)}% capacity
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <button 
-                      onClick={() => handleEditEvent(selectedEvent)}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <Edit3 className="w-4 h-4" />
-                      <span>Edit Event</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => setShowRSVPModal(true)}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <Users className="w-4 h-4" />
-                      <span>Manage RSVPs</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => console.log('Cancelled event:', selectedEvent.id)}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <X className="w-4 h-4" />
-                      <span>Cancel Event</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Create/Edit Event Modal */}
-      {(showCreateEventModal || showEditEventModal) && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {showEditEventModal ? 'Edit Event' : 'Create Community Event'}
-                </h3>
-                <button 
-                  onClick={() => {
-                    setShowCreateEventModal(false);
-                    setShowEditEventModal(false);
-                    setEventData({
-                      title: '',
-                      date: '',
-                      time: '',
-                      location: '',
-                      description: '',
-                      maxAttendees: '',
-                      rsvpRequired: true,
-                      category: 'social'
-                    });
-                  }}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Event Title</label>
-                  <input
-                    type="text"
-                    value={eventData.title}
-                    onChange={(e) => setEventData({...eventData, title: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter event title"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                  <input
-                    type="date"
-                    value={eventData.date}
-                    onChange={(e) => setEventData({...eventData, date: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                  <input
-                    type="time"
-                    value={eventData.time}
-                    onChange={(e) => setEventData({...eventData, time: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                  <select
-                    value={eventData.category}
-                    onChange={(e) => setEventData({...eventData, category: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="social">Social</option>
-                    <option value="wellness">Wellness</option>
-                    <option value="safety">Safety</option>
-                    <option value="family">Family</option>
-                    <option value="maintenance">Maintenance</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Max Attendees</label>
-                  <input
-                    type="number"
-                    value={eventData.maxAttendees}
-                    onChange={(e) => setEventData({...eventData, maxAttendees: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="50"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                  <input
-                    type="text"
-                    value={eventData.location}
-                    onChange={(e) => setEventData({...eventData, location: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Where will this event take place?"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="flex items-center mb-2">
-                    <input
-                      type="checkbox"
-                      checked={eventData.rsvpRequired}
-                      onChange={(e) => setEventData({...eventData, rsvpRequired: e.target.checked})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm font-medium text-gray-700">RSVP Required</span>
-                  </label>
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea
-                  value={eventData.description}
-                  onChange={(e) => setEventData({...eventData, description: e.target.value})}
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Provide details about the event..."
-                />
-              </div>
-              <div className="flex space-x-3 mt-6">
-                <button 
-                  onClick={() => {
-                    setShowCreateEventModal(false);
-                    setShowEditEventModal(false);
-                    setEventData({
-                      title: '',
-                      date: '',
-                      time: '',
-                      location: '',
-                      description: '',
-                      maxAttendees: '',
-                      rsvpRequired: true,
-                      category: 'social'
-                    });
-                  }}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={showEditEventModal ? handleUpdateEvent : handleCreateEvent}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  {showEditEventModal ? 'Update Event' : 'Create Event'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Resident Modal */}
-      {showAddResident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Add New Resident</h3>
-                <button 
-                  onClick={() => setShowAddResident(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                  <input
-                    type="text"
-                    value={newResident.name}
-                    onChange={(e) => setNewResident({...newResident, name: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter resident's full name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Unit Number</label>
-                  <input
-                    type="text"
-                    value={newResident.unit}
-                    onChange={(e) => setNewResident({...newResident, unit: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., A-301"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
-                  <select
-                    value={newResident.building}
-                    onChange={(e) => setNewResident({...newResident, building: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="Building A">Building A</option>
-                    <option value="Building B">Building B</option>
-                    <option value="Building C">Building C</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={newResident.email}
-                    onChange={(e) => setNewResident({...newResident, email: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="resident@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    value={newResident.phone}
-                    onChange={(e) => setNewResident({...newResident, phone: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="(555) 123-4567"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Move-in Date</label>
-                  <input
-                    type="date"
-                    value={newResident.moveInDate}
-                    onChange={(e) => setNewResident({...newResident, moveInDate: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Lease End Date</label>
-                  <input
-                    type="date"
-                    value={newResident.leaseEndDate}
-                    onChange={(e) => setNewResident({...newResident, leaseEndDate: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Emergency Contact</label>
-                  <input
-                    type="text"
-                    value={newResident.emergencyContact}
-                    onChange={(e) => setNewResident({...newResident, emergencyContact: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Name - Phone Number"
-                  />
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                <textarea
-                  value={newResident.notes}
-                  onChange={(e) => setNewResident({...newResident, notes: e.target.value})}
-                  rows={3}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Any additional notes about the resident..."
-                />
-              </div>
-              <div className="flex space-x-3 mt-6">
-                <button 
-                  onClick={() => setShowAddResident(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleAddResident}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Resident
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Report Incident Modal */}
-      {showReportModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Report New Incident</h3>
-                <button 
-                  onClick={() => setShowReportModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Incident Title</label>
-                  <input
-                    type="text"
-                    value={newIncident.title}
-                    onChange={(e) => setNewIncident({...newIncident, title: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Brief description of the incident"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                  <select
-                    value={newIncident.type}
-                    onChange={(e) => setNewIncident({...newIncident, type: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="maintenance">Maintenance</option>
-                    <option value="theft">Theft</option>
-                    <option value="security">Security</option>
-                    <option value="accident">Accident</option>
-                    <option value="system">System</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-                  <select
-                    value={newIncident.priority}
-                    onChange={(e) => setNewIncident({...newIncident, priority: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                  </select>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                  <input
-                    type="text"
-                    value={newIncident.location}
-                    onChange={(e) => setNewIncident({...newIncident, location: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Where did this incident occur?"
-                  />
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea
-                  value={newIncident.description}
-                  onChange={(e) => setNewIncident({...newIncident, description: e.target.value})}
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Provide detailed information about the incident..."
-                />
-              </div>
-              <div className="flex space-x-3 mt-6">
-                <button 
-                  onClick={() => setShowReportModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleSubmitIncident}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Report Incident
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Message Modal */}
-      {showMessageModal && selectedResident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Send Message to {selectedResident.name}
-                </h3>
-                <button 
-                  onClick={() => setShowMessageModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <textarea
-                value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
-                placeholder="Type your message here..."
-                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-              <div className="flex space-x-3 mt-4">
-                <button 
-                  onClick={() => setShowMessageModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleSendMessageSubmit}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Send Message
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Resident Profile Modal */}
-      {showResidentProfile && selectedResident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 font-semibold text-xl">{selectedResident.avatar}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{selectedResident.name}</h3>
-                    <p className="text-gray-600">{selectedResident.unit} • {selectedResident.building}</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowResidentProfile(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Contact Information</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center text-sm">
-                      <Mail className="w-4 h-4 mr-2 text-gray-400" />
-                      <span className="text-gray-900">{selectedResident.email}</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                      <span className="text-gray-900">{selectedResident.phone}</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Lease Information</h4>
-                  <div className="space-y-1 text-sm">
-                    <p><span className="text-gray-500">Move-in:</span> {new Date(selectedResident.moveInDate).toLocaleDateString()}</p>
-                    <p><span className="text-gray-500">Lease End:</span> {new Date(selectedResident.leaseEndDate).toLocaleDateString()}</p>
-                    <p><span className="text-gray-500">Last Activity:</span> {selectedResident.lastActivity}</p>
-                  </div>
-                </div>
-              </div>
-              
-              {selectedResident.interests && selectedResident.interests.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Interests</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedResident.interests.map((interest: string, index: number) => (
-                      <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                        {interest}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {selectedResident.groups && selectedResident.groups.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Community Groups</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedResident.groups.map((group: string, index: number) => (
-                      <span key={index} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                        {group}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {selectedResident.notes && (
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Notes</h4>
-                  <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedResident.notes}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Incident Detail Modal */}
-      {showIncidentModal && selectedIncident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">{selectedIncident.title}</h3>
-                  <p className="text-gray-600 mt-1">Incident ID: {selectedIncident.incidentId}</p>
-                </div>
-                <button 
-                  onClick={() => setShowIncidentModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Main Content */}
-                <div className="lg:col-span-2 space-y-6">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-2">Description</h4>
-                    <p className="text-gray-700">{selectedIncident.description}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Updates Timeline</h4>
-                    <div className="space-y-3">
-                      {selectedIncident.updates.map((update: any, index: number) => (
-                        <div key={index} className="flex space-x-3">
-                          <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-900">{update.update}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {new Date(update.date).toLocaleString()} by {update.by}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {selectedIncident.evidence && selectedIncident.evidence.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Evidence</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        {selectedIncident.evidence.map((evidence: any, index: number) => (
-                          <button
-                            key={index}
-                            onClick={() => handleViewEvidence(evidence)}
-                            className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                          >
-                            {evidence.type === 'video' && <Video className="w-5 h-5 text-blue-600" />}
-                            {evidence.type === 'image' && <Camera className="w-5 h-5 text-green-600" />}
-                            {evidence.type === 'document' && <FileText className="w-5 h-5 text-orange-600" />}
-                            <span className="text-sm text-gray-900">{evidence.name}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Sidebar */}
-                <div className="space-y-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Incident Details</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Type:</span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getIncidentTypeColor(selectedIncident.type)}`}>
-                          {selectedIncident.type}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Priority:</span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getPriorityColor(selectedIncident.priority)}`}>
-                          {selectedIncident.priority}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Status:</span>
-                        <span className="text-gray-900 capitalize">{selectedIncident.status}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Location:</span>
-                        <span className="text-gray-900">{selectedIncident.location}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Reported by:</span>
-                        <span className="text-gray-900">{selectedIncident.reportedBy}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Assigned to:</span>
-                        <span className="text-gray-900">{selectedIncident.assignedTo}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <button 
-                      onClick={() => setShowAddUpdate(true)}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>Add Update</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => handleMessageResident(selectedIncident.reportedBy)}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Message Reporter</span>
-                    </button>
-                    
-                    <button 
-                      onClick={handleEscalate}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <AlertTriangle className="w-4 h-4" />
-                      <span>Escalate</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Update Modal */}
-      {showAddUpdate && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Add Update</h3>
-                <button 
-                  onClick={() => setShowAddUpdate(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <textarea
-                value={updateText}
-                onChange={(e) => setUpdateText(e.target.value)}
-                placeholder="Enter update details..."
-                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-              <div className="flex space-x-3 mt-4">
-                <button 
-                  onClick={() => setShowAddUpdate(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleAddUpdate}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Update
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Escalate Modal */}
-      {showEscalateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Escalate Incident</h3>
-                <button 
-                  onClick={() => setShowEscalateModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Escalate to</label>
-                <select
-                  value={escalationLevel}
-                  onChange={(e) => setEscalationLevel(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="supervisor">Supervisor</option>
-                  <option value="management">Management</option>
-                  <option value="corporate">Corporate</option>
-                  <option value="legal">Legal Department</option>
-                </select>
-              </div>
-              <textarea
-                value={escalationReason}
-                onChange={(e) => setEscalationReason(e.target.value)}
-                placeholder="Reason for escalation..."
-                className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
-              <div className="flex space-x-3 mt-4">
-                <button 
-                  onClick={() => setShowEscalateModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleEscalateSubmit}
-                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Escalate
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Broadcast Modal */}
+      {/* All Modals */}
+      
+      {/* Broadcast Message Modal */}
       {showBroadcastModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Send Community Notification</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Send Message</h3>
                 <button 
                   onClick={() => setShowBroadcastModal(false)}
                   className="text-gray-400 hover:text-gray-600"
@@ -3501,285 +2779,533 @@ const ManagementDashboard = () => {
                 </button>
               </div>
             </div>
+            
             <div className="p-6 space-y-6">
-              {/* Message Content */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Notification Title</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Message Title</label>
                 <input
                   type="text"
                   value={broadcastData.title}
                   onChange={(e) => setBroadcastData({...broadcastData, title: e.target.value})}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter notification title"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter message title..."
                 />
               </div>
-
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Message Content</label>
                 <textarea
                   value={broadcastData.message}
                   onChange={(e) => setBroadcastData({...broadcastData, message: e.target.value})}
-                  placeholder="Type your notification message here..."
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your message..."
                 />
               </div>
-
-              {/* Recipients */}
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Recipients</label>
+                  <select
+                    value={broadcastData.recipients}
+                    onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="all">All Residents</option>
+                    <option value="building-a">Building A Only</option>
+                    <option value="building-b">Building B Only</option>
+                    <option value="building-c">Building C Only</option>
+                    <option value="active">Active Residents Only</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                  <select
+                    value={broadcastData.priority}
+                    onChange={(e) => setBroadcastData({...broadcastData, priority: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="low">Low Priority</option>
+                    <option value="normal">Normal Priority</option>
+                    <option value="high">High Priority</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+              </div>
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Send To</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Methods</label>
                 <div className="space-y-2">
                   <label className="flex items-center">
                     <input
-                      type="radio"
-                      name="recipients"
-                      value="all"
-                      checked={broadcastData.recipients === 'all'}
-                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
+                      type="checkbox"
+                      checked={broadcastData.deliveryMethods.includes('email')}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setBroadcastData({...broadcastData, deliveryMethods: [...broadcastData.deliveryMethods, 'email']});
+                        } else {
+                          setBroadcastData({...broadcastData, deliveryMethods: broadcastData.deliveryMethods.filter(m => m !== 'email')});
+                        }
+                      }}
                       className="mr-2"
                     />
-                    <span className="text-sm">All Residents</span>
+                    <span className="text-sm text-gray-700">Email</span>
                   </label>
                   <label className="flex items-center">
                     <input
-                      type="radio"
-                      name="recipients"
-                      value="building"
-                      checked={broadcastData.recipients === 'building'}
-                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
+                      type="checkbox"
+                      checked={broadcastData.deliveryMethods.includes('sms')}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setBroadcastData({...broadcastData, deliveryMethods: [...broadcastData.deliveryMethods, 'sms']});
+                        } else {
+                          setBroadcastData({...broadcastData, deliveryMethods: broadcastData.deliveryMethods.filter(m => m !== 'sms')});
+                        }
+                      }}
                       className="mr-2"
                     />
-                    <span className="text-sm">Specific Buildings</span>
+                    <span className="text-sm text-gray-700">SMS</span>
                   </label>
                   <label className="flex items-center">
                     <input
-                      type="radio"
-                      name="recipients"
-                      value="active"
-                      checked={broadcastData.recipients === 'active'}
-                      onChange={(e) => setBroadcastData({...broadcastData, recipients: e.target.value})}
+                      type="checkbox"
+                      checked={broadcastData.deliveryMethods.includes('push')}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setBroadcastData({...broadcastData, deliveryMethods: [...broadcastData.deliveryMethods, 'push']});
+                        } else {
+                          setBroadcastData({...broadcastData, deliveryMethods: broadcastData.deliveryMethods.filter(m => m !== 'push')});
+                        }
+                      }}
                       className="mr-2"
                     />
-                    <span className="text-sm">Active Residents Only</span>
+                    <span className="text-sm text-gray-700">Push Notification</span>
                   </label>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+              <button 
+                onClick={() => setShowBroadcastModal(false)}
+                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  console.log('Sending broadcast:', broadcastData);
+                  setShowBroadcastModal(false);
+                  setBroadcastData({
+                    title: '',
+                    message: '',
+                    recipients: 'all',
+                    buildings: [],
+                    deliveryMethods: ['email'],
+                    priority: 'normal',
+                    scheduleType: 'now',
+                    scheduledDate: '',
+                    scheduledTime: '',
+                    attachImage: false,
+                    imageFile: null
+                  });
+                }}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Send Message
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Event Modal */}
+      {showCreateEventModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Create New Event</h3>
+                <button 
+                  onClick={() => setShowCreateEventModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Event Title</label>
+                <input
+                  type="text"
+                  value={eventData.title}
+                  onChange={(e) => setEventData({...eventData, title: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter event title..."
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                  <input
+                    type="date"
+                    value={eventData.date}
+                    onChange={(e) => setEventData({...eventData, date: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
                 </div>
                 
-                {broadcastData.recipients === 'building' && (
-                  <div className="mt-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Select Buildings</label>
-                    <div className="flex gap-2">
-                      {['Building A', 'Building B', 'Building C'].map((building: string) => (
-                        <label key={building} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={broadcastData.buildings.includes(building)}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setBroadcastData({
-                                  ...broadcastData, 
-                                  buildings: [...broadcastData.buildings, building]
-                                });
-                              } else {
-                                setBroadcastData({
-                                  ...broadcastData, 
-                                  buildings: broadcastData.buildings.filter(b => b !== building)
-                                });
-                              }
-                            }}
-                            className="mr-2"
-                          />
-                          <span className="text-sm">{building}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Delivery Methods */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Methods</label>
-                <div className="flex gap-4">
-                  {[
-                    { value: 'email', label: 'Email', icon: Mail },
-                    { value: 'sms', label: 'SMS/Text', icon: MessageSquare },
-                    { value: 'app', label: 'In-App', icon: Bell },
-                    { value: 'phone', label: 'Phone Call', icon: Phone }
-                  ].map(({value, label, icon: Icon}) => (
-                    <label key={value} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={broadcastData.deliveryMethods.includes(value)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setBroadcastData({
-                              ...broadcastData, 
-                              deliveryMethods: [...broadcastData.deliveryMethods, value]
-                            });
-                          } else {
-                            setBroadcastData({
-                              ...broadcastData, 
-                              deliveryMethods: broadcastData.deliveryMethods.filter(m => m !== value)
-                            });
-                          }
-                        }}
-                        className="mr-2"
-                      />
-                      <Icon className="w-4 h-4 mr-1" />
-                      <span className="text-sm">{label}</span>
-                    </label>
-                  ))}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                  <input
+                    type="time"
+                    value={eventData.time}
+                    onChange={(e) => setEventData({...eventData, time: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
                 </div>
               </div>
-
-              {/* Priority */}
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Priority Level</label>
-                <select
-                  value={broadcastData.priority}
-                  onChange={(e) => setBroadcastData({...broadcastData, priority: e.target.value})}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="emergency">Emergency</option>
-                </select>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                <input
+                  type="text"
+                  value={eventData.location}
+                  onChange={(e) => setEventData({...eventData, location: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter event location..."
+                />
               </div>
-
-              {/* Scheduling */}
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">When to Send</label>
-                <div className="space-y-3">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="scheduleType"
-                      value="now"
-                      checked={broadcastData.scheduleType === 'now'}
-                      onChange={(e) => setBroadcastData({...broadcastData, scheduleType: e.target.value})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">Send Now</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="scheduleType"
-                      value="later"
-                      checked={broadcastData.scheduleType === 'later'}
-                      onChange={(e) => setBroadcastData({...broadcastData, scheduleType: e.target.value})}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">Schedule for Later</span>
-                  </label>
-                  
-                  {broadcastData.scheduleType === 'later' && (
-                    <div className="grid grid-cols-2 gap-3 ml-6">
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1">Date</label>
-                        <input
-                          type="date"
-                          value={broadcastData.scheduledDate}
-                          onChange={(e) => setBroadcastData({...broadcastData, scheduledDate: e.target.value})}
-                          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1">Time</label>
-                        <input
-                          type="time"
-                          value={broadcastData.scheduledTime}
-                          onChange={(e) => setBroadcastData({...broadcastData, scheduledTime: e.target.value})}
-                          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                    </div>
-                  )}
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <textarea
+                  value={eventData.description}
+                  onChange={(e) => setEventData({...eventData, description: e.target.value})}
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter event description..."
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <select
+                    value={eventData.category}
+                    onChange={(e) => setEventData({...eventData, category: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="social">Social</option>
+                    <option value="wellness">Wellness</option>
+                    <option value="safety">Safety</option>
+                    <option value="family">Family</option>
+                    <option value="maintenance">Maintenance</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Max Attendees</label>
+                  <input
+                    type="number"
+                    value={eventData.maxAttendees}
+                    onChange={(e) => setEventData({...eventData, maxAttendees: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="50"
+                  />
                 </div>
               </div>
-
-              {/* Image Attachment */}
+              
               <div>
-                <label className="flex items-center mb-2">
+                <label className="flex items-center">
                   <input
                     type="checkbox"
-                    checked={broadcastData.attachImage}
-                    onChange={(e) => setBroadcastData({...broadcastData, attachImage: e.target.checked})}
+                    checked={eventData.rsvpRequired}
+                    onChange={(e) => setEventData({...eventData, rsvpRequired: e.target.checked})}
                     className="mr-2"
                   />
-                  <span className="text-sm font-medium text-gray-700">Attach Image</span>
+                  <span className="text-sm text-gray-700">RSVP Required</span>
                 </label>
-                
-                {broadcastData.attachImage && (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setBroadcastData({...broadcastData, imageFile: e.target.files?.[0] || null})}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <label htmlFor="image-upload" className="cursor-pointer">
-                      <Camera className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                      <p className="text-sm text-gray-600">Click to upload image</p>
-                      {broadcastData.imageFile && (
-                        <p className="text-xs text-blue-600 mt-1">{broadcastData.imageFile.name}</p>
-                      )}
-                    </label>
-                  </div>
-                )}
               </div>
+            </div>
+            
+            <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+              <button 
+                onClick={() => setShowCreateEventModal(false)}
+                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleCreateEvent}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Create Event
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-              <div className="flex space-x-3 pt-4 border-t">
+      {/* Create Template Modal */}
+      {showCreateTemplateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {selectedTemplate ? 'Edit Template' : 'Create New Template'}
+                </h3>
                 <button 
                   onClick={() => {
-                    setShowBroadcastModal(false);
-                    setBroadcastData({
-                      title: '',
-                      message: '',
-                      recipients: 'all',
-                      buildings: [],
-                      deliveryMethods: ['email'],
-                      priority: 'normal',
-                      scheduleType: 'now',
-                      scheduledDate: '',
-                      scheduledTime: '',
-                      attachImage: false,
-                      imageFile: null
-                    });
+                    setShowCreateTemplateModal(false);
+                    setSelectedTemplate(null);
                   }}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors"
+                  className="text-gray-400 hover:text-gray-600"
                 >
-                  Cancel
+                  <X className="w-6 h-6" />
                 </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Template Name</label>
+                <input
+                  type="text"
+                  value={newTemplate.name}
+                  onChange={(e) => setNewTemplate({...newTemplate, name: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter template name..."
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select
+                  value={newTemplate.category}
+                  onChange={(e) => setNewTemplate({...newTemplate, category: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="maintenance">Maintenance</option>
+                  <option value="events">Events</option>
+                  <option value="administrative">Administrative</option>
+                  <option value="safety">Safety</option>
+                  <option value="policy">Policy</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Template Content</label>
+                <textarea
+                  value={newTemplate.content}
+                  onChange={(e) => setNewTemplate({...newTemplate, content: e.target.value})}
+                  rows={8}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter template content... Use [VARIABLE_NAME] for placeholders."
+                />
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-600 mb-2"><strong>Available Variables:</strong></p>
+                <p className="text-xs text-gray-500">
+                  [DATE], [TIME], [LOCATION], [EVENT_NAME], [RESIDENT_NAME], [AMOUNT], [DUE_DATE], [COMMUNITY_NAME], [PHONE]
+                </p>
+              </div>
+            </div>
+            
+            <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+              <button 
+                onClick={() => {
+                  setShowCreateTemplateModal(false);
+                  setSelectedTemplate(null);
+                }}
+                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  handleCreateTemplate();
+                  setSelectedTemplate(null);
+                }}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+              >
+                {selectedTemplate ? 'Update Template' : 'Create Template'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Template Selection Modal */}
+      {showTemplateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Select a Template</h3>
                 <button 
-                  onClick={() => {
-                    console.log('Broadcasting notification:', broadcastData);
-                    setBroadcastData({
-                      title: '',
-                      message: '',
-                      recipients: 'all',
-                      buildings: [],
-                      deliveryMethods: ['email'],
-                      priority: 'normal',
-                      scheduleType: 'now',
-                      scheduledDate: '',
-                      scheduledTime: '',
-                      attachImage: false,
-                      imageFile: null
-                    });
-                    setShowBroadcastModal(false);
-                  }}
-                  className={`flex-1 px-4 py-3 rounded-lg font-medium transition-colors text-white ${
-                    broadcastData.priority === 'emergency' 
-                      ? 'bg-red-600 hover:bg-red-700' 
-                      : broadcastData.priority === 'urgent'
-                      ? 'bg-orange-600 hover:bg-orange-700'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
+                  onClick={() => setShowTemplateModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
                 >
-                  {broadcastData.scheduleType === 'now' ? 'Send Notification' : 'Schedule Notification'}
+                  <X className="w-6 h-6" />
                 </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {templatesData.map((template) => (
+                  <div key={template.id} className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 cursor-pointer transition-colors" onClick={() => handleUseTemplate(template)}>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTemplateTypeColor(template.category)}`}>
+                        {template.category}
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-gray-900 mb-1">{template.name}</h4>
+                    <p className="text-gray-600 text-sm mb-3">{template.description}</p>
+                    <p className="text-gray-500 text-xs italic line-clamp-3">"{template.content}"</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Message Detail Modal */}
+      {showMessageDetailModal && selectedMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">{selectedMessage.title}</h3>
+                <button 
+                  onClick={() => setShowMessageDetailModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div className="flex items-center space-x-3 mb-4">
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCommTypeColor(selectedMessage.type)}`}>
+                  {selectedMessage.type}
+                </span>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCommStatusColor(selectedMessage.status)}`}>
+                  {selectedMessage.status}
+                </span>
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-900">{selectedMessage.content}</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-500">Sent to:</span>
+                  <span className="ml-2 text-gray-900">{selectedMessage.recipients} recipients</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Delivery method:</span>
+                  <span className="ml-2 text-gray-900">{selectedMessage.deliveryMethod}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Open rate:</span>
+                  <span className="ml-2 text-gray-900">{selectedMessage.openRate}%</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Sent by:</span>
+                  <span className="ml-2 text-gray-900">{selectedMessage.sentBy}</span>
+                </div>
+              </div>
+              
+              <div className="text-sm text-gray-500">
+                Sent on {selectedMessage.sentDate}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Analytics Modal */}
+      {showAnalyticsModal && selectedAnnouncement && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Analytics: {selectedAnnouncement.title}</h3>
+                <button 
+                  onClick={() => setShowAnalyticsModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-blue-600">{selectedAnnouncement.views}</p>
+                  <p className="text-sm text-gray-600">Total Views</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-green-600">{selectedAnnouncement.engagement}%</p>
+                  <p className="text-sm text-gray-600">Engagement Rate</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-purple-600">{selectedAnnouncement.likes}</p>
+                  <p className="text-sm text-gray-600">Likes</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-sm text-gray-600 mb-1">
+                    <span>View Rate</span>
+                    <span>{Math.round((selectedAnnouncement.views / selectedAnnouncement.recipients) * 100)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full" 
+                      style={{ width: `${Math.round((selectedAnnouncement.views / selectedAnnouncement.recipients) * 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-sm text-gray-600 mb-1">
+                    <span>Engagement Rate</span>
+                    <span>{selectedAnnouncement.engagement}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-green-600 h-2 rounded-full" 
+                      style={{ width: `${selectedAnnouncement.engagement}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-sm text-gray-600 mb-1">
+                    <span>Like Rate</span>
+                    <span>{Math.round((selectedAnnouncement.likes / selectedAnnouncement.views) * 100)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-purple-600 h-2 rounded-full" 
+                      style={{ width: `${Math.round((selectedAnnouncement.likes / selectedAnnouncement.views) * 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
