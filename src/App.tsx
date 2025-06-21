@@ -122,6 +122,7 @@ const ManagementDashboard = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [showMessageDetailModal, setShowMessageDetailModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [showAddResidentModal, setShowAddResidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
     name: '',
@@ -1621,7 +1622,7 @@ const ManagementDashboard = () => {
                         <span className="font-medium text-gray-900 text-sm">Create Event</span>
                       </button>
                       <button 
-                        onClick={() => setShowAddResident(true)}
+                        onClick={() => setShowAddResidentModal(true)}
                         className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                       >
                         <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -2238,7 +2239,7 @@ const ManagementDashboard = () => {
                   </div>
                   
                   <button 
-                    onClick={() => setShowAddResident(true)}
+                    onClick={() => setShowAddResidentModal(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
                   >
                     <UserPlus className="w-4 h-4" />
@@ -3307,6 +3308,80 @@ const ManagementDashboard = () => {
                     ></div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Add Resident Modal */}
+      {showAddResidentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Add New Resident</h3>
+                <button 
+                  onClick={() => setShowAddResidentModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter resident's full name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter email address"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Unit Number</label>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., 4B, 205, etc."
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <input
+                  type="tel"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter phone number"
+                />
+              </div>
+              
+              <div className="flex space-x-3 pt-4">
+                <button
+                  onClick={() => setShowAddResidentModal(false)}
+                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowAddResidentModal(false);
+                    // Add resident logic here
+                  }}
+                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Add Resident
+                </button>
               </div>
             </div>
           </div>
