@@ -1938,6 +1938,398 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
               )}
             </>
           )}
+          {/* Analytics Page */}
+          {currentPage === 'analytics' && (
+            <>
+              {/* Analytics Stats */}
+              <div className="flex flex-wrap gap-3 mb-6">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Community Health</p>
+                      <p className="text-2xl font-bold text-green-600">92%</p>
+                      <p className="text-xs text-green-600">↗ +5% this month</p>
+                    </div>
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                      <BarChart3 className="w-6 h-6 text-green-600" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Renewal Probability</p>
+                      <p className="text-2xl font-bold text-blue-600">89%</p>
+                      <p className="text-xs text-blue-600">↗ +3% this quarter</p>
+                    </div>
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Users className="w-6 h-6 text-blue-600" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">At-Risk Residents</p>
+                      <p className="text-2xl font-bold text-yellow-600">3</p>
+                      <p className="text-xs text-yellow-600">→ Same as last month</p>
+                    </div>
+                    <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                      <AlertTriangle className="w-6 h-6 text-yellow-600" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Engagement Score</p>
+                      <p className="text-2xl font-bold text-purple-600">87%</p>
+                      <p className="text-xs text-purple-600">↗ +8% this month</p>
+                    </div>
+                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <MessageSquare className="w-6 h-6 text-purple-600" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Analytics Dashboard - Hybrid Layout */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                
+                {/* Left Column - Data Visualizations (2/3 width) */}
+                <div className="lg:col-span-2 space-y-6">
+                  
+                  {/* Community Health Trends */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-gray-900">Community Health Trends</h3>
+                      <div className="flex space-x-2">
+                        <button className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg">30d</button>
+                        <button className="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">90d</button>
+                        <button className="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">1y</button>
+                      </div>
+                    </div>
+                    <div className="h-48 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <BarChart3 className="w-16 h-16 mx-auto mb-2 text-blue-500" />
+                        <p className="text-gray-600">Interactive Health Score Chart</p>
+                        <p className="text-sm text-gray-500">Trending upward +12% over 30 days</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Renewal Risk Analysis */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Renewal Risk Analysis</h3>
+                    <div className="space-y-4">
+                      
+                      {/* High Risk Residents */}
+                      <div className="border-l-4 border-red-400 bg-red-50 p-4 rounded-r-lg">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="font-medium text-red-800">High Risk - Immediate Attention</h4>
+                            <p className="text-sm text-red-700 mt-1">3 residents likely to not renew (probability under 40%)</p>
+                            <div className="mt-2 space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium text-red-800">Unit 4B - Sarah Chen</span>
+                                <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">25% renewal chance</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium text-red-800">Unit 12A - Mike Rodriguez</span>
+                                <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">35% renewal chance</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Medium Risk */}
+                      <div className="border-l-4 border-yellow-400 bg-yellow-50 p-4 rounded-r-lg">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="font-medium text-yellow-800">Medium Risk - Monitor Closely</h4>
+                            <p className="text-sm text-yellow-700 mt-1">5 residents showing concerning patterns (40-70% probability)</p>
+                          </div>
+                          <span className="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">5 residents</span>
+                        </div>
+                      </div>
+
+                      {/* Low Risk */}
+                      <div className="border-l-4 border-green-400 bg-green-50 p-4 rounded-r-lg">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="font-medium text-green-800">Low Risk - Likely to Renew</h4>
+                            <p className="text-sm text-green-700 mt-1">47 residents with high renewal probability (over 70%)</p>
+                          </div>
+                          <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">47 residents</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Safety & Engagement Metrics */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    {/* Safety Heat Map */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Safety Heat Map</h3>
+                      <div className="h-32 bg-gradient-to-br from-green-100 via-yellow-100 to-red-100 rounded-lg flex items-center justify-center">
+                        <div className="text-center">
+                          <Shield className="w-12 h-12 mx-auto mb-2 text-green-600" />
+                          <p className="text-sm text-gray-600">Peak incidents: 6-8 PM</p>
+                          <p className="text-xs text-gray-500">Parking garage needs attention</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Event Impact */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Event Impact Score</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Coffee Hours</span>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-16 bg-gray-200 rounded-full h-2">
+                              <div className="w-14 bg-green-500 h-2 rounded-full"></div>
+                            </div>
+                            <span className="text-sm font-medium text-green-600">+12%</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Pool Parties</span>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-16 bg-gray-200 rounded-full h-2">
+                              <div className="w-12 bg-blue-500 h-2 rounded-full"></div>
+                            </div>
+                            <span className="text-sm font-medium text-blue-600">+8%</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Game Nights</span>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-16 bg-gray-200 rounded-full h-2">
+                              <div className="w-8 bg-purple-500 h-2 rounded-full"></div>
+                            </div>
+                            <span className="text-sm font-medium text-purple-600">+5%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - AI Recommendations Panel (1/3 width) */}
+                <div className="space-y-6">
+                  
+                  {/* AI Recommendations Header */}
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-sm p-6 text-white">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <span className="text-xl">🤖</span>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold">AI Insights</h3>
+                        <p className="text-blue-100 text-sm">Smart recommendations</p>
+                      </div>
+                    </div>
+                    <div className="bg-white bg-opacity-10 rounded-lg p-3">
+                      <p className="text-sm">Your community health improved 5% this month! Here's how to keep the momentum...</p>
+                    </div>
+                  </div>
+
+                  {/* Priority Actions */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">🎯 Priority Actions</h3>
+                    <div className="space-y-4">
+                      
+                      {/* High Priority */}
+                      <div className="border-l-4 border-red-400 bg-red-50 p-3 rounded-r-lg">
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="font-medium text-red-800">🚨 Urgent</h4>
+                          <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">+89% success</span>
+                        </div>
+                        <p className="text-sm text-red-700 mb-3">Schedule 1-on-1 with Sarah Chen (Unit 4B)</p>
+                        <button className="w-full bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                          Schedule Meeting
+                        </button>
+                      </div>
+
+                      {/* Medium Priority */}
+                      <div className="border-l-4 border-blue-400 bg-blue-50 p-3 rounded-r-lg">
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="font-medium text-blue-800">📈 High Impact</h4>
+                          <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">+67% success</span>
+                        </div>
+                        <p className="text-sm text-blue-700 mb-3">Host coffee hour this Thursday - 12 residents likely to attend</p>
+                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                          Create Event
+                        </button>
+                      </div>
+
+                      {/* Lower Priority */}
+                      <div className="border-l-4 border-green-400 bg-green-50 p-3 rounded-r-lg">
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="font-medium text-green-800">💡 Opportunity</h4>
+                          <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">+45% success</span>
+                        </div>
+                        <p className="text-sm text-green-700 mb-3">Send appreciation gifts to 5 long-term residents</p>
+                        <button className="w-full bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                          Send Gifts
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Predictive Insights */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">🔮 Predictive Insights</h3>
+                    <div className="space-y-4">
+                      
+                      <div className="bg-purple-50 p-4 rounded-lg">
+                        <h4 className="font-medium text-purple-800 mb-2">Next Month Forecast</h4>
+                        <ul className="text-sm text-purple-700 space-y-1">
+                          <li>• 2 move-out notices expected</li>
+                          <li>• Pool party will boost engagement +15%</li>
+                          <li>• Maintenance requests likely to increase</li>
+                        </ul>
+                      </div>
+
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <h4 className="font-medium text-blue-800 mb-2">Optimal Actions</h4>
+                        <ul className="text-sm text-blue-700 space-y-1">
+                          <li>• Tuesday 6 PM: Best time for community events</li>
+                          <li>• Weekend newsletters get 73% open rate</li>
+                          <li>• Security patrols needed after 8 PM</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Community Sentiment */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">💭 Community Sentiment</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Overall Mood</span>
+                        <span className="text-lg">😊</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Trending Topics</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Pool maintenance</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Satisfaction</span>
+                        <div className="flex space-x-1">
+                          <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
+                          <span className="text-sm text-gray-500">4.6/5</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Analytics Section */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                {/* Communication Analytics */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">📱 Communication Analytics</h3>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div>
+                        <p className="text-2xl font-bold text-blue-600">87%</p>
+                        <p className="text-sm text-gray-600">Message Open Rate</p>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold text-green-600">73%</p>
+                        <p className="text-sm text-gray-600">Response Rate</p>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold text-purple-600">4.2s</p>
+                        <p className="text-sm text-gray-600">Avg Response Time</p>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium text-gray-900 mb-3">Channel Performance</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">App Notifications</span>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-20 bg-gray-200 rounded-full h-2">
+                              <div className="w-18 bg-blue-500 h-2 rounded-full"></div>
+                            </div>
+                            <span className="text-sm font-medium">92%</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Email</span>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-20 bg-gray-200 rounded-full h-2">
+                              <div className="w-14 bg-green-500 h-2 rounded-full"></div>
+                            </div>
+                            <span className="text-sm font-medium">73%</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">SMS</span>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-20 bg-gray-200 rounded-full h-2">
+                              <div className="w-16 bg-yellow-500 h-2 rounded-full"></div>
+                            </div>
+                            <span className="text-sm font-medium">85%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Resident Lifecycle Analytics */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">🏠 Resident Lifecycle</h3>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center p-3 bg-blue-50 rounded-lg">
+                        <p className="text-xl font-bold text-blue-600">2.8 yrs</p>
+                        <p className="text-sm text-gray-600">Avg Lease Length</p>
+                      </div>
+                      <div className="text-center p-3 bg-green-50 rounded-lg">
+                        <p className="text-xl font-bold text-green-600">18 days</p>
+                        <p className="text-sm text-gray-600">Avg Vacancy</p>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium text-gray-900 mb-3">Move-out Reasons (Last 6 months)</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Job Relocation</span>
+                          <span className="text-sm font-medium">45%</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Rent Increase</span>
+                          <span className="text-sm font-medium">25%</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Lifestyle Change</span>
+                          <span className="text-sm font-medium">20%</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Other</span>
+                          <span className="text-sm font-medium">10%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Safety Page */}
           {currentPage === 'safety' && (
