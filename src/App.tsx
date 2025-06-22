@@ -4924,6 +4924,185 @@ const toggleNoraAction = (actionKey) => {
           </div>
         </div>
       )}
+      {/* Direct Message Modal */}
+{showDirectMessageModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900">New Conversation</h3>
+          <button
+            onClick={() => setShowDirectMessageModal(false)}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+      
+      <div className="p-6 space-y-6">
+        {/* Recipient Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Send To</label>
+          <select 
+            value={selectedMessage?.recipient || ''}
+            onChange={(e) => setSelectedMessage({...selectedMessage, recipient: e.target.value})}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Select a resident...</option>
+            <option value="sarah_chen">Sarah Chen - Unit 4B</option>
+            <option value="mike_rodriguez">Mike Rodriguez - Unit 12A</option>
+            <option value="emily_johnson">Emily Johnson - Unit 7C</option>
+            <option value="david_kim">David Kim - Unit 15D</option>
+            <option value="lisa_garcia">Lisa Garcia - Unit 3A</option>
+            <option value="james_wilson">James Wilson - Unit 9B</option>
+            <option value="maria_lopez">Maria Lopez - Unit 11E</option>
+            <option value="robert_brown">Robert Brown - Unit 6F</option>
+          </select>
+        </div>
+
+        {/* Subject Field */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+          <input
+            type="text"
+            value={selectedMessage?.subject || ''}
+            onChange={(e) => setSelectedMessage({...selectedMessage, subject: e.target.value})}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter message subject..."
+          />
+        </div>
+
+        {/* Message Priority */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+          <div className="flex space-x-3">
+            {['Low', 'Normal', 'High', 'Urgent'].map((priority) => (
+              <label key={priority} className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="priority"
+                  value={priority.toLowerCase()}
+                  checked={(selectedMessage?.priority || 'normal') === priority.toLowerCase()}
+                  onChange={(e) => setSelectedMessage({...selectedMessage, priority: e.target.value})}
+                  className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                />
+                <span className={`ml-2 text-sm font-medium ${
+                  priority === 'Urgent' ? 'text-red-600' : 
+                  priority === 'High' ? 'text-orange-600' : 
+                  'text-gray-700'
+                }`}>
+                  {priority}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Message Composer */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+          <textarea
+            value={selectedMessage?.content || ''}
+            onChange={(e) => setSelectedMessage({...selectedMessage, content: e.target.value})}
+            rows={8}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+            placeholder="Type your message here..."
+          />
+          <div className="mt-2 flex items-center justify-between text-sm text-gray-500">
+            <span>📎 Attach files (optional)</span>
+            <span>{selectedMessage?.content?.length || 0}/1000 characters</span>
+          </div>
+        </div>
+
+        {/* Quick Templates */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Quick Templates</label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setSelectedMessage({
+                ...selectedMessage, 
+                content: "Hi! I hope you're doing well. I wanted to follow up regarding your recent request. Please let me know if you have any questions or need assistance with anything."
+              })}
+              className="text-left p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
+            >
+              <div className="font-medium text-sm text-gray-900">Follow-up Message</div>
+              <div className="text-xs text-gray-500">General follow-up template</div>
+            </button>
+            <button
+              onClick={() => setSelectedMessage({
+                ...selectedMessage, 
+                content: "Thank you for bringing this to our attention. We take all maintenance requests seriously and will address this promptly. Our team will contact you within 24 hours to schedule a convenient time."
+              })}
+              className="text-left p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
+            >
+              <div className="font-medium text-sm text-gray-900">Maintenance Response</div>
+              <div className="text-xs text-gray-500">Standard maintenance reply</div>
+            </button>
+            <button
+              onClick={() => setSelectedMessage({
+                ...selectedMessage, 
+                content: "We appreciate you as a valued resident of our community. Your feedback helps us improve our services. If you have any suggestions or concerns, please don't hesitate to reach out."
+              })}
+              className="text-left p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
+            >
+              <div className="font-medium text-sm text-gray-900">Appreciation Note</div>
+              <div className="text-xs text-gray-500">Thank you message</div>
+            </button>
+            <button
+              onClick={() => setSelectedMessage({
+                ...selectedMessage, 
+                content: "I wanted to check in and see how everything is going with your recent move-in. Please let us know if you need assistance with anything or have questions about the community amenities."
+              })}
+              className="text-left p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
+            >
+              <div className="font-medium text-sm text-gray-900">New Resident Check-in</div>
+              <div className="text-xs text-gray-500">Welcome and check-in</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+        <button
+          onClick={() => setShowDirectMessageModal(false)}
+          className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => {
+            // Save draft functionality
+            console.log('Message saved as draft:', selectedMessage);
+            setShowDirectMessageModal(false);
+          }}
+          className="px-4 py-2 text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors"
+        >
+          Save Draft
+        </button>
+        <button
+          onClick={() => {
+            // Send message functionality
+            if (selectedMessage?.recipient && selectedMessage?.content) {
+              console.log('Sending message:', selectedMessage);
+              // Here you would typically send the message via API
+              setShowDirectMessageModal(false);
+              setSelectedMessage({});
+              // Show success notification
+              alert('Message sent successfully!');
+            } else {
+              alert('Please select a recipient and enter a message.');
+            }
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+        >
+          <Send size={16} />
+          <span>Send Message</span>
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Message Detail Modal */}
       {showMessageDetailModal && selectedMessage && (
