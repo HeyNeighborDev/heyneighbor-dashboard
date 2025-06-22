@@ -2539,7 +2539,24 @@ const [noraLearning, setNoraLearning] = useState({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
                     {/* Enhanced Safety Heat Map */}
-                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer">
+                    <div 
+  className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer"
+  onClick={() => {
+    setSelectedKpi({
+      type: 'safety-heat-map',
+      title: 'Safety Heat Map Analysis',
+      description: 'Comprehensive incident pattern analysis with location-based risk assessment and timing insights.',
+      details: [
+        { label: 'Peak Risk Hours', value: '10 PM - 2 AM', trend: 'Consistent pattern' },
+        { label: 'High-Risk Zones', value: 'Parking Garage (Zone 4), Pool Area (Zone 7)', trend: 'Requires attention' },
+        { label: 'Incident Reduction', value: '23% decrease since security upgrade', trend: 'Positive trend' },
+        { label: 'Response Time', value: 'Average 4.2 minutes', trend: 'Within target' },
+        { label: 'Predicted Risk', value: 'Low risk next 7 days', trend: 'Stable conditions' }
+      ]
+    });
+    setShowKpiModal(true);
+  }}
+>
                       <div className="mb-4">
                         <div className="flex items-center space-x-2">
                           <h2 className="text-xl font-bold text-gray-900">Safety Heat Map</h2>
