@@ -134,6 +134,34 @@ const [selectedKpi, setSelectedKpi] = useState(null);
 const [showKpiModal, setShowKpiModal] = useState(false);
 const [hoveredMetric, setHoveredMetric] = useState(null);
 const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
+// Nora AI Interactive States
+const [showNoraChat, setShowNoraChat] = useState(false);
+const [noraMessages, setNoraMessages] = useState([
+  {
+    id: 1,
+    type: 'nora',
+    message: "Hi! I'm Nora, your AI property assistant. I've been analyzing your community data and noticed some interesting patterns. How can I help you today?",
+    timestamp: new Date(),
+    context: 'greeting'
+  }
+]);
+const [noraNotifications, setNoraNotifications] = useState([
+  {
+    id: 1,
+    type: 'urgent',
+    title: 'Sarah Chen Intervention Needed',
+    message: 'Renewal probability dropped to 25.3%. Recommend scheduling 1-on-1 within 48 hours.',
+    timestamp: new Date(),
+    seen: false,
+    action: 'schedule_meeting'
+  }
+]);
+const [noraLearning, setNoraLearning] = useState({
+  interactions: 0,
+  preferences: ['community_health', 'renewal_focus'],
+  lastContext: 'dashboard_view',
+  userPersonality: 'data_driven'
+});
   const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
@@ -1946,41 +1974,115 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
           {/* Analytics Page */}
           {currentPage === 'analytics' && (
             <>
-              {/* Analytics Stats with Sparklines */}
+              {/* Nora Proactive Notifications */}
+              {noraNotifications.filter(n => !n.seen).length > 0 && (
+                <div className="mb-6">
+                  {noraNotifications.filter(n => !n.seen).map((notification) => (
+                    <div key={notification.id} className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-xl shadow-lg mb-4 animate-slide-down">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start space-x-3">
+                          <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-xl">🤖</span>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <h4 className="font-bold text-white">Nora AI Alert</h4>
+                              <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">
+                                {notification.type === 'urgent' ? '🚨 Urgent' : '💡 Insight'}
+                              </span>
+                            </div>
+                            <h5 className="font-semibold text-blue-100">{notification.title}</h5>
+                            <p className="text-sm text-blue-100 mt-1">{notification.message}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => {
+                              if (notification.action === 'schedule_meeting') {
+                                setSelectedKpi({
+                                  type: 'ai-action',
+                                  title: 'Schedule Meeting with Sarah Chen',
+                                  description: 'AI-recommended intervention based on declining renewal probability and engagement patterns.',
+                                  details: [
+                                    { label: 'Current Risk Level', value: 'High (25.3% renewal chance)', trend: '↓ Declining rapidly' },
+                                    { label: 'Primary Issues', value: 'Noise complaints, low engagement', trend: 'Multiple factors' },
+                                    { label: 'Recommended Action', value: 'In-person meeting within 48 hours', trend: 'Time-sensitive' },
+                                    { label: 'Expected Outcome', value: '89% success rate if addressed now', trend: 'High confidence' },
+                                    { label: 'Alternative Actions', value: 'Phone call (67% success) or email (23% success)', trend: 'Less effective' }
+                                  ]
+                                });
+                                setShowKpiModal(true);
+                              }
+                            }}
+                            className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+                          >
+                            Take Action
+                          </button>
+                          <button
+                            onClick={() => {
+                              setNoraNotifications(prev => 
+                                prev.map(n => n.id === notification.id ? {...n, seen: true} : n)
+                              );
+                            }}
+                            className="text-white hover:text-blue-200 transition-colors"
+                          >
+                            <X className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Analytics Stats with Enhanced Nora Integration */}
               <div className="flex flex-wrap gap-4 mb-8">
                 
-                {/* Community Health KPI */}
+                {/* Community Health KPI - Enhanced with Nora */}
                 <div 
-                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                   onClick={() => {
                     setSelectedKpi({
                       type: 'health',
-                      title: 'Community Health',
+                      title: 'Community Health Analysis',
                       value: '91.7%',
                       trend: '+5.2%',
-                      description: 'Overall community wellbeing score based on engagement, safety, and satisfaction metrics.',
+                      description: 'Nora has analyzed 47 data points to calculate your community health score.',
                       details: [
-                        { label: 'Resident Satisfaction', value: '94.2%', trend: '+3.1%' },
-                        { label: 'Safety Score', value: '89.5%', trend: '+7.2%' },
-                        { label: 'Engagement Rate', value: '91.3%', trend: '+5.8%' },
-                        { label: 'Community Events', value: '88.9%', trend: '+4.5%' }
+                        { label: 'Resident Satisfaction', value: '94.2%', trend: '↗ +3.1% (12 positive reviews)' },
+                        { label: 'Safety Score', value: '89.5%', trend: '↗ +7.2% (Fewer incidents this month)' },
+                        { label: 'Engagement Rate', value: '91.3%', trend: '↗ +5.8% (Coffee hours working!)' },
+                        { label: 'Nora Confidence', value: '96.7%', trend: 'High accuracy prediction' }
                       ]
                     });
                     setShowKpiModal(true);
+                    setNoraLearning(prev => ({
+                      ...prev,
+                      interactions: prev.interactions + 1,
+                      lastContext: 'health_analysis'
+                    }));
                   }}
                   onMouseEnter={() => setHoveredMetric('health')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
+                  {hoveredMetric === 'health' && (
+                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-3 py-1 rounded-lg text-xs font-medium z-10">
+                      Nora: "Strong upward trend! 🎉"
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="text-gray-500 text-sm font-medium">Community Health</p>
+                      <div className="flex items-center space-x-2 mb-1">
+                        <p className="text-gray-500 text-sm font-medium">Community Health</p>
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Nora is monitoring"></div>
+                      </div>
                       <p className="text-3xl font-bold text-green-600 mt-1">91.7%</p>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-green-600 font-medium">↗ +5.2% this month</p>
-                        <p className="text-xs text-gray-400">Updated 2h ago</p>
+                        <p className="text-xs text-purple-500 font-medium">Nora: Excellent!</p>
                       </div>
                       
-                      {/* Sparkline Chart */}
+                      {/* Enhanced Sparkline with Nora Intelligence */}
                       <div className="mt-3">
                         <div className="flex items-end space-x-1 h-8">
                           {[65, 68, 72, 75, 78, 82, 85, 87, 89, 91.7].map((value, index) => (
@@ -1988,10 +2090,11 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                               key={index}
                               className="bg-green-200 rounded-sm flex-1 transition-all duration-300 hover:bg-green-400"
                               style={{ height: `${(value / 100) * 32}px` }}
+                              title={`Day ${index + 1}: ${value}% (${index === 9 ? 'Nora prediction: 93% next week' : 'Historical'})`}
                             ></div>
                           ))}
                         </div>
-                        <p className="text-xs text-gray-400 mt-1">30-day trend</p>
+                        <p className="text-xs text-gray-400 mt-1">30-day trend • Nora confidence: 96%</p>
                       </div>
                     </div>
                     <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center ml-4">
@@ -2000,38 +2103,56 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                   </div>
                 </div>
 
-                {/* Renewal Probability KPI */}
+                {/* Renewal Probability KPI - Enhanced with Nora AI */}
                 <div 
-                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                   onClick={() => {
                     setSelectedKpi({
                       type: 'renewal',
-                      title: 'Renewal Probability',
+                      title: 'Nora\'s Renewal Prediction Model',
                       value: '86.3%',
                       trend: '+3.1%',
-                      description: 'AI-predicted likelihood of lease renewals based on resident behavior patterns.',
+                      description: 'Advanced AI analysis of 23 behavioral indicators to predict lease renewals.',
                       details: [
-                        { label: 'High Confidence (>80%)', value: '47 residents', trend: '+2' },
-                        { label: 'Medium Confidence (60-80%)', value: '8 residents', trend: '+1' },
-                        { label: 'Low Confidence (<60%)', value: '5 residents', trend: '0' },
-                        { label: 'At Risk (<40%)', value: '3 residents', trend: '-1' }
+                        { label: 'High Confidence Renewals (>80%)', value: '47 residents', trend: '+2 from last month' },
+                        { label: 'Medium Risk (60-80%)', value: '8 residents', trend: 'Stable, monitoring closely' },
+                        { label: 'Action Required (<60%)', value: '5 residents', trend: 'Nora has intervention plans' },
+                        { label: 'AI Model Accuracy', value: '94.2%', trend: 'Based on 2 years of data' }
                       ]
                     });
                     setShowKpiModal(true);
+                    // Trigger Nora insight
+                    setTimeout(() => {
+                      setNoraMessages(prev => [...prev, {
+                        id: Date.now(),
+                        type: 'nora',
+                        message: "I see you're interested in renewal predictions! Based on my analysis, focusing on the 3 high-risk residents could improve your overall rate to 94%. Would you like me to create an action plan?",
+                        timestamp: new Date(),
+                        context: 'renewal_drill_down'
+                      }]);
+                    }, 2000);
                   }}
                   onMouseEnter={() => setHoveredMetric('renewal')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
+                  {hoveredMetric === 'renewal' && (
+                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-3 py-1 rounded-lg text-xs font-medium z-10">
+                      Nora: "3 residents need attention 🎯"
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="text-gray-500 text-sm font-medium">Renewal Probability</p>
+                      <div className="flex items-center space-x-2 mb-1">
+                        <p className="text-gray-500 text-sm font-medium">Renewal Probability</p>
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" title="AI actively predicting"></div>
+                      </div>
                       <p className="text-3xl font-bold text-blue-600 mt-1">86.3%</p>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-blue-600 font-medium">↗ +3.1% this quarter</p>
-                        <p className="text-xs text-gray-400">Updated 2h ago</p>
+                        <p className="text-xs text-purple-500 font-medium">AI: 94% accuracy</p>
                       </div>
                       
-                      {/* Sparkline Chart */}
+                      {/* AI Prediction Sparkline */}
                       <div className="mt-3">
                         <div className="flex items-end space-x-1 h-8">
                           {[78, 79, 81, 82, 80, 83, 84, 85, 85.1, 86.3].map((value, index) => (
@@ -2039,10 +2160,11 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                               key={index}
                               className="bg-blue-200 rounded-sm flex-1 transition-all duration-300 hover:bg-blue-400"
                               style={{ height: `${(value / 100) * 32}px` }}
+                              title={`Period ${index + 1}: ${value}% ${index === 9 ? '(Nora predicts 89% next quarter)' : ''}`}
                             ></div>
                           ))}
                         </div>
-                        <p className="text-xs text-gray-400 mt-1">Quarterly trend</p>
+                        <p className="text-xs text-gray-400 mt-1">Quarterly trend • Nora AI model</p>
                       </div>
                     </div>
                     <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center ml-4">
@@ -2051,20 +2173,35 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                   </div>
                 </div>
 
-                {/* At-Risk Residents KPI */}
+                {/* At-Risk Residents KPI - Critical Nora Integration */}
                 <div 
-                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  className="bg-white p-6 rounded-xl shadow-md border border-yellow-200 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                   onClick={() => {
                     setSelectedKpi({
                       type: 'risk',
-                      title: 'At-Risk Residents',
+                      title: 'High-Risk Resident Intelligence',
                       value: '3',
-                      trend: 'Same as last month',
-                      description: 'Residents with high probability of not renewing, requiring immediate attention.',
+                      trend: 'Stable - Immediate action required',
+                      description: 'Nora has identified critical patterns requiring immediate intervention.',
                       details: [
-                        { label: 'Sarah Chen (Unit 4B)', value: '25.3% renewal chance', trend: '↓ High Risk' },
-                        { label: 'Mike Rodriguez (Unit 12A)', value: '34.7% renewal chance', trend: '↓ High Risk' },
-                        { label: 'Lisa Park (Unit 8C)', value: '38.9% renewal chance', trend: '↓ Medium Risk' }
+                        { 
+                          label: 'Sarah Chen (Unit 4B)', 
+                          value: '25.3% renewal chance', 
+                          trend: '🚨 Critical: Schedule meeting within 48hrs',
+                          additional: 'AI Analysis: Noise complaints + low engagement + rent concerns. Success rate: 89% if addressed immediately.'
+                        },
+                        { 
+                          label: 'Mike Rodriguez (Unit 12A)', 
+                          value: '34.7% renewal chance', 
+                          trend: '⚠️ High Risk: Maintenance intervention needed',
+                          additional: 'AI Analysis: Multiple work order delays causing frustration. Quick resolution could improve to 78%.'
+                        },
+                        { 
+                          label: 'Lisa Park (Unit 8C)', 
+                          value: '38.9% renewal chance', 
+                          trend: '⚠️ Medium Risk: Proactive engagement recommended',
+                          additional: 'AI Analysis: Social isolation detected. Community event invitation could improve to 65%.'
+                        }
                       ]
                     });
                     setShowKpiModal(true);
@@ -2072,48 +2209,59 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                   onMouseEnter={() => setHoveredMetric('risk')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
+                  {hoveredMetric === 'risk' && (
+                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-medium z-10">
+                      Nora: "Urgent: Sarah needs help! 🚨"
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="text-gray-500 text-sm font-medium">At-Risk Residents</p>
+                      <div className="flex items-center space-x-2 mb-1">
+                        <p className="text-gray-500 text-sm font-medium">At-Risk Residents</p>
+                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" title="Critical alerts active"></div>
+                      </div>
                       <p className="text-3xl font-bold text-yellow-600 mt-1">3</p>
                       <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-yellow-600 font-medium">→ Same as last month</p>
-                        <p className="text-xs text-gray-400">Updated 2h ago</p>
+                        <p className="text-xs text-red-600 font-medium">🚨 1 Critical, 2 High Risk</p>
+                        <p className="text-xs text-purple-500 font-medium">Nora: Act now!</p>
                       </div>
                       
-                      {/* Risk Level Indicator */}
+                      {/* Risk Level Indicator with AI Intelligence */}
                       <div className="mt-3">
                         <div className="flex space-x-1">
-                          <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                          <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                          <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" title="Sarah Chen - Critical"></div>
+                          <div className="w-3 h-3 bg-red-400 rounded-full" title="Mike Rodriguez - High Risk"></div>
+                          <div className="w-3 h-3 bg-yellow-400 rounded-full" title="Lisa Park - Medium Risk"></div>
                           <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
                           <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
                         </div>
-                        <p className="text-xs text-gray-400 mt-1">Risk distribution</p>
+                        <p className="text-xs text-gray-400 mt-1">AI risk distribution • 89% intervention success rate</p>
                       </div>
                     </div>
-                    <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center ml-4">
+                    <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center ml-4 relative">
                       <AlertTriangle className="w-7 h-7 text-yellow-600" />
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">!</span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Engagement Score KPI */}
+                {/* Engagement Score KPI - Nora Success Story */}
                 <div 
-                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                   onClick={() => {
                     setSelectedKpi({
                       type: 'engagement',
-                      title: 'Engagement Score',
+                      title: 'Community Engagement Intelligence',
                       value: '84.2%',
                       trend: '+8.4%',
-                      description: 'Community participation and interaction levels across events and communications.',
+                      description: 'Nora\'s recommendations drove significant engagement improvements this month.',
                       details: [
-                        { label: 'Event Attendance', value: '87.3%', trend: '+12.1%' },
-                        { label: 'Message Response Rate', value: '82.1%', trend: '+6.8%' },
-                        { label: 'Community App Usage', value: '91.7%', trend: '+15.2%' },
-                        { label: 'Neighbor Interactions', value: '75.8%', trend: '+4.3%' }
+                        { label: 'Coffee Hour Impact', value: '87.3% attendance', trend: '↗ +12.1% (Nora\'s suggestion!)' },
+                        { label: 'Message Response Rate', value: '82.1%', trend: '↗ +6.8% (Improved timing)' },
+                        { label: 'Community App Usage', value: '91.7%', trend: '↗ +15.2% (New features working)' },
+                        { label: 'Nora Success Score', value: '94.7%', trend: 'Recommendations driving results!' }
                       ]
                     });
                     setShowKpiModal(true);
@@ -2121,27 +2269,38 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                   onMouseEnter={() => setHoveredMetric('engagement')}
                   onMouseLeave={() => setHoveredMetric(null)}
                 >
+                  {hoveredMetric === 'engagement' && (
+                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-3 py-1 rounded-lg text-xs font-medium z-10">
+                      Nora: "My suggestions are working! 🎉"
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="text-gray-500 text-sm font-medium">Engagement Score</p>
+                      <div className="flex items-center space-x-2 mb-1">
+                        <p className="text-gray-500 text-sm font-medium">Engagement Score</p>
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Nora optimization active"></div>
+                      </div>
                       <p className="text-3xl font-bold text-purple-600 mt-1">84.2%</p>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-purple-600 font-medium">↗ +8.4% this month</p>
-                        <p className="text-xs text-gray-400">Updated 2h ago</p>
+                        <p className="text-xs text-green-600 font-medium">Nora impact!</p>
                       </div>
                       
-                      {/* Sparkline Chart */}
+                      {/* Success Sparkline */}
                       <div className="mt-3">
                         <div className="flex items-end space-x-1 h-8">
                           {[68, 71, 69, 74, 76, 78, 79, 81, 82, 84.2].map((value, index) => (
                             <div
                               key={index}
-                              className="bg-purple-200 rounded-sm flex-1 transition-all duration-300 hover:bg-purple-400"
+                              className={`rounded-sm flex-1 transition-all duration-300 hover:bg-purple-400 ${
+                                index >= 7 ? 'bg-green-400' : 'bg-purple-200'
+                              }`}
                               style={{ height: `${(value / 100) * 32}px` }}
+                              title={`Day ${index + 1}: ${value}% ${index >= 7 ? '(Nora recommendations impact)' : ''}`}
                             ></div>
                           ))}
                         </div>
-                        <p className="text-xs text-gray-400 mt-1">30-day trend</p>
+                        <p className="text-xs text-gray-400 mt-1">30-day trend • Green = Nora impact</p>
                       </div>
                     </div>
                     <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center ml-4">
@@ -2151,22 +2310,41 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                 </div>
               </div>
 
-              {/* Main Analytics Dashboard - Hybrid Layout */}
+              {/* Main Analytics Dashboard with Nora Intelligence */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
                 
-                {/* Left Column - Data Visualizations (2/3 width) */}
+                {/* Left Column - Enhanced with Nora Insights */}
                 <div className="lg:col-span-2 space-y-8">
                   
-                  {/* Community Health Trends */}
-                  <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
+                  {/* Community Health Trends with Nora Analysis */}
+                  <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 relative">
+                    <div className="absolute top-4 right-4">
+                      <div className="flex items-center space-x-2 bg-purple-50 px-3 py-1 rounded-full">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                        <span className="text-xs text-purple-700 font-medium">Nora analyzing</span>
+                      </div>
+                    </div>
+                    
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h2 className="text-xl font-bold text-gray-900">Community Health Trends</h2>
-                        <p className="text-sm text-gray-500 mt-1">Performance overview and patterns</p>
+                        <p className="text-sm text-gray-500 mt-1">AI-powered performance analysis and predictions</p>
                       </div>
                       <div className="flex space-x-2">
                         <button 
-                          onClick={() => setAnalyticsTimeRange('30d')}
+                          onClick={() => {
+                            setAnalyticsTimeRange('30d');
+                            // Simulate Nora providing context
+                            setTimeout(() => {
+                              setNoraMessages(prev => [...prev, {
+                                id: Date.now(),
+                                type: 'nora',
+                                message: "Looking at 30-day trends! I notice your coffee hours on Thursdays are driving the biggest engagement spikes. The pattern suggests Tuesday 6 PM would be even better based on resident activity data.",
+                                timestamp: new Date(),
+                                context: 'chart_analysis'
+                              }]);
+                            }, 1500);
+                          }}
                           className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
                             analyticsTimeRange === '30d' 
                               ? 'bg-blue-100 text-blue-700' 
@@ -2198,88 +2376,117 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                       </div>
                     </div>
                     
-                    {/* Interactive Chart Area */}
+                    {/* Enhanced Interactive Chart with Nora Insights */}
                     <div className="h-52 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl flex items-center justify-center border border-gray-100 relative overflow-hidden">
                       
-                      {/* Simulated Chart Data */}
+                      {/* AI-Enhanced Chart Data */}
                       <div className="absolute inset-4">
                         <div className="flex items-end justify-between h-full">
                           {Array.from({length: analyticsTimeRange === '30d' ? 30 : analyticsTimeRange === '90d' ? 12 : 12}).map((_, index) => {
-                            const height = Math.random() * 60 + 30;
+                            const baseHeight = Math.random() * 40 + 30;
+                            const aiBoost = index > (analyticsTimeRange === '30d' ? 20 : 8) ? 15 : 0; // Recent AI impact
+                            const height = baseHeight + aiBoost;
+                            const isAiImpacted = aiBoost > 0;
+                            
                             return (
                               <div
                                 key={index}
-                                className="bg-blue-400 opacity-70 rounded-t-sm hover:opacity-100 transition-opacity cursor-pointer"
+                                className={`${isAiImpacted ? 'bg-green-500' : 'bg-blue-400'} opacity-70 rounded-t-sm hover:opacity-100 transition-all cursor-pointer`}
                                 style={{ 
                                   width: analyticsTimeRange === '30d' ? '8px' : '16px',
                                   height: `${height}%`,
                                   marginRight: '2px'
                                 }}
-                                title={`${analyticsTimeRange === '30d' ? 'Day' : 'Period'} ${index + 1}: ${(70 + height/3).toFixed(1)}%`}
+                                title={`${analyticsTimeRange === '30d' ? 'Day' : 'Period'} ${index + 1}: ${(70 + height/3).toFixed(1)}% ${isAiImpacted ? '(Nora impact!)' : ''}`}
                               ></div>
                             );
                           })}
                         </div>
                       </div>
                       
-                      {/* Chart Label Overlay */}
-                      <div className="text-center relative z-10 bg-white bg-opacity-90 rounded-lg p-4">
-                        <BarChart3 className="w-12 h-12 mx-auto mb-2 text-blue-500" />
-                        <h3 className="text-lg font-semibold text-gray-800 mb-1">Health Score Trending</h3>
+                      {/* Nora Intelligence Overlay */}
+                      <div className="text-center relative z-10 bg-white bg-opacity-95 rounded-lg p-4">
+                        <div className="flex items-center justify-center space-x-2 mb-2">
+                          <BarChart3 className="w-12 h-12 text-blue-500" />
+                          <span className="text-2xl">🤖</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-1">Nora's Health Analysis</h3>
                         <p className="text-sm text-gray-600">
-                          {analyticsTimeRange === '30d' && 'Daily tracking +12.3% over 30 days'}
-                          {analyticsTimeRange === '90d' && 'Weekly averages +18.7% over 90 days'}
-                          {analyticsTimeRange === '1y' && 'Monthly growth +34.2% over 1 year'}
+                          {analyticsTimeRange === '30d' && 'Recent spike: My coffee hour suggestions working! 📈'}
+                          {analyticsTimeRange === '90d' && 'Quarterly AI optimizations +18.7% improvement 🎯'}
+                          {analyticsTimeRange === '1y' && 'Annual AI learning: +34.2% community growth 🚀'}
                         </p>
-                        <p className="text-xs text-blue-600 mt-1 font-medium">Click time range to explore</p>
+                        <p className="text-xs text-purple-600 mt-2 font-medium">Green bars = Nora's impact</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Enhanced Renewal Risk Analysis */}
+                  {/* AI-Enhanced Renewal Risk Analysis */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
                     <div className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-900">Renewal Risk Analysis</h2>
-                      <p className="text-sm text-gray-500 mt-1">AI-powered predictive insights for lease renewals</p>
+                      <div className="flex items-center space-x-3">
+                        <h2 className="text-xl font-bold text-gray-900">Renewal Risk Analysis</h2>
+                        <div className="bg-purple-100 px-3 py-1 rounded-full">
+                          <span className="text-xs text-purple-700 font-bold">🤖 AI-Powered</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-500 mt-1">Nora's advanced prediction model with 94.2% accuracy</p>
                     </div>
                     <div className="space-y-6">
                       
-                      {/* High Risk Residents - Enhanced */}
+                      {/* Critical Risk - Enhanced with Nora Intelligence */}
                       <div 
-                        className="border-l-4 border-red-400 bg-red-50 p-6 rounded-r-xl hover:bg-red-100 transition-colors cursor-pointer"
+                        className="border-l-4 border-red-400 bg-red-50 p-6 rounded-r-xl hover:bg-red-100 transition-colors cursor-pointer relative"
                         onClick={() => {
                           setSelectedKpi({
-                            type: 'high-risk-detail',
-                            title: 'High Risk Residents - Detailed Analysis',
-                            description: 'Residents requiring immediate intervention to prevent move-outs.',
+                            type: 'critical-intervention',
+                            title: 'Nora\'s Critical Intervention Plan',
+                            description: 'AI-generated action plan for high-risk residents based on behavioral analysis.',
                             details: [
                               { 
-                                label: 'Sarah Chen (Unit 4B)', 
-                                value: '25.3% renewal chance',
-                                additional: 'Last contact: 2 weeks ago, Complaint: Noise issues, Suggested action: Schedule 1-on-1 meeting'
+                                label: 'Sarah Chen - Primary Intervention', 
+                                value: 'Schedule 1-on-1 meeting',
+                                additional: 'Nora Analysis: Noise complaints (3x), engagement drop (67%), rent concern signals. Success rate: 89% if addressed within 48 hours. Talking points: noise solutions, community benefits, lease terms.'
                               },
                               { 
-                                label: 'Mike Rodriguez (Unit 12A)', 
-                                value: '34.7% renewal chance',
-                                additional: 'Last contact: 1 week ago, Complaint: Maintenance delays, Suggested action: Expedite work orders'
+                                label: 'Mike Rodriguez - Service Recovery', 
+                                value: 'Expedite maintenance + follow-up',
+                                additional: 'Nora Analysis: 5 delayed work orders causing frustration. Quick resolution + personal apology could improve renewal chance from 34.7% to 78%. Cost: $150, Value: $2,400 annual rent.'
+                              },
+                              { 
+                                label: 'Predictive Timeline', 
+                                value: 'Next 7 days critical window',
+                                additional: 'Nora Model: Intervention success drops 23% after day 7. Optimal timing: Tuesday-Thursday 2-4 PM based on resident schedule analysis.'
                               }
                             ]
                           });
                           setShowKpiModal(true);
                         }}
                       >
+                        <div className="absolute top-2 right-2">
+                          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                        </div>
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-red-800">High Risk - Immediate Attention</h3>
-                            <p className="text-sm text-red-700 mt-2">3 residents likely to not renew (probability under 40%)</p>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <h3 className="text-lg font-bold text-red-800">🚨 Critical - AI Intervention Plan</h3>
+                              <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded-full font-bold">Nora Ready</span>
+                            </div>
+                            <p className="text-sm text-red-700 mt-2">3 residents need immediate action - Nora has specific intervention strategies</p>
                             <div className="mt-4 space-y-3">
                               <div className="flex items-center justify-between bg-white bg-opacity-60 p-3 rounded-lg hover:bg-white transition-colors">
-                                <span className="text-sm font-semibold text-red-800">Unit 4B - Sarah Chen</span>
-                                <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">25.3% renewal chance</span>
+                                <div className="flex-1">
+                                  <span className="text-sm font-semibold text-red-800">Sarah Chen (Unit 4B)</span>
+                                  <p className="text-xs text-red-600">Nora: Schedule meeting within 48hrs</p>
+                                </div>
+                                <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">25.3% → 89%</span>
                               </div>
                               <div className="flex items-center justify-between bg-white bg-opacity-60 p-3 rounded-lg hover:bg-white transition-colors">
-                                <span className="text-sm font-semibold text-red-800">Unit 12A - Mike Rodriguez</span>
-                                <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">34.7% renewal chance</span>
+                                <div className="flex-1">
+                                  <span className="text-sm font-semibold text-red-800">Mike Rodriguez (Unit 12A)</span>
+                                  <p className="text-xs text-red-600">Nora: Expedite maintenance orders</p>
+                                </div>
+                                <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">34.7% → 78%</span>
                               </div>
                             </div>
                           </div>
@@ -2289,27 +2496,18 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                         </div>
                       </div>
 
-                      {/* Medium Risk - Enhanced */}
-                      <div 
-                        className="border-l-4 border-yellow-400 bg-yellow-50 p-6 rounded-r-xl hover:bg-yellow-100 transition-colors cursor-pointer"
-                        onClick={() => {
-                          setSelectedKpi({
-                            type: 'medium-risk-detail',
-                            title: 'Medium Risk Residents - Monitoring',
-                            description: 'Residents showing concerning patterns that require proactive engagement.',
-                            details: [
-                              { label: 'Total residents in this category', value: '5 residents' },
-                              { label: 'Average renewal probability', value: '58.3%' },
-                              { label: 'Recommended action', value: 'Schedule check-in calls within 2 weeks' }
-                            ]
-                          });
-                          setShowKpiModal(true);
-                        }}
-                      >
+                      {/* Medium Risk with Nora Monitoring */}
+                      <div className="border-l-4 border-yellow-400 bg-yellow-50 p-6 rounded-r-xl hover:bg-yellow-100 transition-colors cursor-pointer">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-yellow-800">Medium Risk - Monitor Closely</h3>
-                            <p className="text-sm text-yellow-700 mt-2">5 residents showing concerning patterns (40-70% probability)</p>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <h3 className="text-lg font-bold text-yellow-800">⚠️ Medium Risk - Nora Monitoring</h3>
+                              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                            </div>
+                            <p className="text-sm text-yellow-700 mt-2">5 residents under AI surveillance - proactive engagement scheduled</p>
+                            <div className="mt-3 bg-yellow-100 p-3 rounded-lg">
+                              <p className="text-xs text-yellow-800 font-medium">🤖 Nora's Plan: Automated check-in calls this week + community event invitations</p>
+                            </div>
                           </div>
                           <div className="flex items-center space-x-3">
                             <span className="text-sm bg-yellow-200 text-yellow-800 px-4 py-2 rounded-full font-bold">5 residents</span>
@@ -2318,12 +2516,18 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                         </div>
                       </div>
 
-                      {/* Low Risk - Enhanced */}
+                      {/* Low Risk with Nora Success Story */}
                       <div className="border-l-4 border-green-400 bg-green-50 p-6 rounded-r-xl">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-green-800">Low Risk - Likely to Renew</h3>
-                            <p className="text-sm text-green-700 mt-2">47 residents with high renewal probability (over 70%)</p>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <h3 className="text-lg font-bold text-green-800">✅ Low Risk - Nora Success</h3>
+                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            </div>
+                            <p className="text-sm text-green-700 mt-2">47 residents likely to renew - Nora's engagement strategies working!</p>
+                            <div className="mt-3 bg-green-100 p-3 rounded-lg">
+                              <p className="text-xs text-green-800 font-medium">🎉 Recent Nora wins: Coffee hours (+15% satisfaction), personalized communications (+12% response)</p>
+                            </div>
                           </div>
                           <span className="text-sm bg-green-200 text-green-800 px-4 py-2 rounded-full font-bold">47 residents</span>
                         </div>
@@ -2331,34 +2535,21 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                     </div>
                   </div>
 
-                  {/* Interactive Safety & Engagement Metrics */}
+                  {/* Rest of the analytics sections with subtle Nora enhancements */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
                     {/* Enhanced Safety Heat Map */}
-                    <div 
-                      className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer"
-                      onClick={() => {
-                        setSelectedKpi({
-                          type: 'safety-heatmap',
-                          title: 'Safety Heat Map Analysis',
-                          description: 'Incident patterns and peak risk periods analysis.',
-                          details: [
-                            { label: 'Peak Incident Time', value: '6:00-8:00 PM', trend: 'Most active period' },
-                            { label: 'Highest Risk Area', value: 'Parking Garage', trend: 'Needs attention' },
-                            { label: 'Incident Trend', value: '↓ 12% reduction this month', trend: 'Improving' },
-                            { label: 'Security Effectiveness', value: '87.4%', trend: '↗ +5.2%' }
-                          ]
-                        });
-                        setShowKpiModal(true);
-                      }}
-                    >
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer">
                       <div className="mb-4">
-                        <h2 className="text-xl font-bold text-gray-900">Safety Heat Map</h2>
-                        <p className="text-sm text-gray-500 mt-1">Incident pattern analysis</p>
+                        <div className="flex items-center space-x-2">
+                          <h2 className="text-xl font-bold text-gray-900">Safety Heat Map</h2>
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                        </div>
+                        <p className="text-sm text-gray-500 mt-1">AI pattern analysis • Nora monitoring</p>
                       </div>
                       <div className="h-36 bg-gradient-to-br from-green-100 via-yellow-100 to-red-100 rounded-xl flex items-center justify-center border border-gray-100 relative">
                         
-                        {/* Simulated Heat Map Grid */}
+                        {/* Enhanced Heat Map Grid */}
                         <div className="absolute inset-4 grid grid-cols-8 grid-rows-4 gap-1">
                           {Array.from({length: 32}).map((_, index) => {
                             const intensity = Math.random();
@@ -2367,7 +2558,7 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                               <div
                                 key={index}
                                 className={`${bgColor} rounded-sm hover:scale-110 transition-transform cursor-pointer`}
-                                title={`Zone ${index + 1}: ${intensity > 0.7 ? 'High' : intensity > 0.4 ? 'Medium' : 'Low'} Risk`}
+                                title={`Zone ${index + 1}: ${intensity > 0.7 ? 'High' : intensity > 0.4 ? 'Medium' : 'Low'} Risk • Nora: ${intensity > 0.7 ? 'Increase patrols' : intensity > 0.4 ? 'Monitor' : 'Optimal'}`}
                               ></div>
                             );
                           })}
@@ -2376,7 +2567,7 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                         <div className="text-center relative z-10 bg-white bg-opacity-90 rounded-lg p-3">
                           <Shield className="w-8 h-8 mx-auto mb-1 text-green-600" />
                           <p className="text-sm font-semibold text-gray-700">Peak: 6-8 PM</p>
-                          <p className="text-xs text-gray-500">Click to explore</p>
+                          <p className="text-xs text-purple-600">Nora: Add patrols</p>
                         </div>
                       </div>
                     </div>
@@ -2384,28 +2575,18 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                     {/* Enhanced Event Impact */}
                     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                       <div className="mb-4">
-                        <h2 className="text-xl font-bold text-gray-900">Event Impact Score</h2>
-                        <p className="text-sm text-gray-500 mt-1">Community engagement metrics</p>
+                        <div className="flex items-center space-x-2">
+                          <h2 className="text-xl font-bold text-gray-900">Event Impact Score</h2>
+                          <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                        </div>
+                        <p className="text-sm text-gray-500 mt-1">Nora's optimization results</p>
                       </div>
                       <div className="space-y-4">
-                        <div 
-                          className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-                          onClick={() => {
-                            setSelectedKpi({
-                              type: 'event-detail',
-                              title: 'Coffee Hours - Event Analysis',
-                              description: 'Detailed performance metrics for coffee hour events.',
-                              details: [
-                                { label: 'Average Attendance', value: '23 residents', trend: '↗ +15%' },
-                                { label: 'Engagement Boost', value: '+12.1%', trend: 'Highest impact' },
-                                { label: 'Cost per Attendee', value: '$4.50', trend: '↓ -8%' },
-                                { label: 'Satisfaction Rating', value: '4.8/5', trend: '↗ +0.3' }
-                              ]
-                            });
-                            setShowKpiModal(true);
-                          }}
-                        >
-                          <span className="text-sm font-medium text-gray-700">Coffee Hours</span>
+                        <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-medium text-gray-700">Coffee Hours</span>
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Nora's pick!</span>
+                          </div>
                           <div className="flex items-center space-x-3">
                             <div className="w-20 bg-gray-200 rounded-full h-2.5">
                               <div className="w-16 bg-green-500 h-2.5 rounded-full"></div>
@@ -2438,159 +2619,218 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                   </div>
                 </div>
 
-                {/* Right Column - Enhanced AI Recommendations Panel */}
+                {/* Right Column - Advanced Nora AI Panel */}
                 <div className="space-y-6">
                   
-                  {/* Nora AI Header - Enhanced */}
-                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
-                        <span className="text-2xl">🤖</span>
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-bold">Nora AI Insights</h2>
-                        <p className="text-blue-100 text-sm">Smart recommendations • Confidence: 94%</p>
-                      </div>
+                  {/* Enhanced Nora AI Header */}
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 text-white relative overflow-hidden">
+                    {/* Animated background pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                      <div className="absolute w-32 h-32 bg-white rounded-full -top-16 -right-16 animate-pulse"></div>
+                      <div className="absolute w-20 h-20 bg-white rounded-full -bottom-10 -left-10 animate-pulse delay-1000"></div>
                     </div>
-                    <div className="bg-white bg-opacity-15 rounded-xl p-4">
-                      <p className="text-sm font-medium">Your community health improved 5.2% this month! Here's how to keep the momentum...</p>
-                      <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-blue-100">Last updated 2h ago</p>
-                        <div className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                          <span className="text-xs text-green-200">Live</span>
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                          <span className="text-2xl">🤖</span>
+                        </div>
+                        <div>
+                          <h2 className="text-xl font-bold">Nora AI Assistant</h2>
+                          <div className="flex items-center space-x-2">
+                            <p className="text-blue-100 text-sm">Smart recommendations</p>
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                              <span className="text-xs text-green-200">Active</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-white bg-opacity-15 rounded-xl p-4">
+                        <p className="text-sm font-medium">Your community health improved 5.2% this month! I've identified the key drivers and have new optimization strategies ready.</p>
+                        <div className="flex items-center justify-between mt-3">
+                          <p className="text-xs text-blue-100">Confidence: 96.7% • Last updated 2h ago</p>
+                          <button
+                            onClick={() => setShowNoraChat(true)}
+                            className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded-full text-xs font-bold transition-colors"
+                          >
+                            Chat with Nora
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Enhanced Priority Actions */}
+                  {/* Smart Priority Actions with AI Reasoning */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">🎯 Priority Actions</h2>
+                    <div className="flex items-center space-x-2 mb-6">
+                      <h2 className="text-xl font-bold text-gray-900">🎯 AI Priority Actions</h2>
+                      <div className="bg-purple-100 px-2 py-1 rounded-full">
+                        <span className="text-xs text-purple-700 font-bold">Smart Queue</span>
+                      </div>
+                    </div>
                     <div className="space-y-4">
                       
-                      {/* Urgent Action - Enhanced */}
+                      {/* Critical Action with Enhanced AI Context */}
                       <div className="border-l-4 border-red-400 bg-red-50 p-4 rounded-r-xl hover:bg-red-100 transition-colors">
                         <div className="flex items-start justify-between mb-3">
-                          <h3 className="font-bold text-red-800">🚨 Urgent</h3>
+                          <div className="flex items-center space-x-2">
+                            <h3 className="font-bold text-red-800">🚨 Critical Priority</h3>
+                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                          </div>
                           <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-bold">89% success rate</span>
                         </div>
-                        <p className="text-sm text-red-700 mb-2 font-medium">Schedule 1-on-1 with Sarah Chen (Unit 4B)</p>
-                        <p className="text-xs text-red-600 mb-4">AI reasoning: Low engagement + noise complaints = high move-out risk</p>
+                        <p className="text-sm text-red-700 mb-2 font-medium">Schedule urgent meeting with Sarah Chen (Unit 4B)</p>
+                        <div className="bg-red-100 p-3 rounded-lg mb-4">
+                          <p className="text-xs text-red-800 font-medium">🤖 Nora's Analysis:</p>
+                          <p className="text-xs text-red-700 mt-1">Behavioral pattern shows 3 noise complaints + 67% engagement drop + rent inquiry = 94% move-out probability. Intervention within 48hrs increases retention to 89%.</p>
+                        </div>
                         <button 
                           className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2"
                           onClick={() => {
-                            setSelectedKpi({
-                              type: 'action-detail',
-                              title: 'Schedule Meeting with Sarah Chen',
-                              description: 'AI-recommended intervention to prevent lease non-renewal.',
-                              details: [
-                                { label: 'Current Renewal Probability', value: '25.3%', trend: '↓ Declining' },
-                                { label: 'Key Issues', value: 'Noise complaints, low engagement', trend: 'Urgent' },
-                                { label: 'Recommended Timeline', value: 'Within 48 hours', trend: 'Critical' },
-                                { label: 'Success Rate if Addressed', value: '89%', trend: 'High confidence' }
-                              ]
-                            });
-                            setShowKpiModal(true);
+                            // Simulate Nora helping with meeting scheduling
+                            setNoraMessages(prev => [...prev, {
+                              id: Date.now(),
+                              type: 'nora',
+                              message: "Great choice! I'll help you prepare for Sarah's meeting. Based on her profile, she responds best to solution-focused conversations. I've drafted talking points about noise mitigation and community benefits. Should I also check her preferred meeting times?",
+                              timestamp: new Date(),
+                              context: 'meeting_assist'
+                            }]);
+                            setShowNoraChat(true);
                           }}
                         >
                           <Calendar className="w-4 h-4" />
-                          <span>Schedule Meeting</span>
+                          <span>Schedule with Nora's Help</span>
                         </button>
                       </div>
 
-                      {/* High Impact Action - Enhanced */}
+                      {/* High Impact Action with Smart Timing */}
                       <div className="border-l-4 border-blue-400 bg-blue-50 p-4 rounded-r-xl hover:bg-blue-100 transition-colors">
                         <div className="flex items-start justify-between mb-3">
                           <h3 className="font-bold text-blue-800">📈 High Impact</h3>
                           <span className="text-xs bg-blue-200 text-blue-800 px-3 py-1 rounded-full font-bold">67% success rate</span>
                         </div>
-                        <p className="text-sm text-blue-700 mb-2 font-medium">Host coffee hour this Thursday - 12 residents likely to attend</p>
-                        <p className="text-xs text-blue-600 mb-4">AI reasoning: Historical data shows +15% engagement boost from coffee hours</p>
+                        <p className="text-sm text-blue-700 mb-2 font-medium">Host coffee hour this Thursday at 6 PM</p>
+                        <div className="bg-blue-100 p-3 rounded-lg mb-4">
+                          <p className="text-xs text-blue-800 font-medium">🤖 Nora's Optimization:</p>
+                          <p className="text-xs text-blue-700 mt-1">Historical data shows Thursday 6 PM gets 23% higher attendance. 12 residents likely to attend based on calendar analysis. Budget impact: $75 cost, $890 engagement value.</p>
+                        </div>
                         <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2">
                           <Plus className="w-4 h-4" />
-                          <span>Create Event</span>
+                          <span>Create Optimized Event</span>
                         </button>
                       </div>
 
-                      {/* Opportunity Action - Enhanced */}
+                      {/* Smart Opportunity with Personalization */}
                       <div className="border-l-4 border-green-400 bg-green-50 p-4 rounded-r-xl hover:bg-green-100 transition-colors">
                         <div className="flex items-start justify-between mb-3">
-                          <h3 className="font-bold text-green-800">💡 Opportunity</h3>
+                          <h3 className="font-bold text-green-800">💡 Smart Opportunity</h3>
                           <span className="text-xs bg-green-200 text-green-800 px-3 py-1 rounded-full font-bold">45% success rate</span>
                         </div>
-                        <p className="text-sm text-green-700 mb-2 font-medium">Send appreciation gifts to 5 long-term residents</p>
-                        <p className="text-xs text-green-600 mb-4">AI reasoning: Long-term residents (3+ years) respond well to recognition</p>
+                        <p className="text-sm text-green-700 mb-2 font-medium">Send personalized appreciation gifts to 5 long-term residents</p>
+                        <div className="bg-green-100 p-3 rounded-lg mb-4">
+                          <p className="text-xs text-green-800 font-medium">🤖 Nora's Personalization:</p>
+                          <p className="text-xs text-green-700 mt-1">Target residents: 3+ years tenure, high satisfaction. Gift suggestions: Local coffee shop cards (matches coffee hour success). Cost: $150, retention value: $12,000.</p>
+                        </div>
                         <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2">
                           <Send className="w-4 h-4" />
-                          <span>Send Gifts</span>
+                          <span>Send Smart Gifts</span>
                         </button>
                       </div>
                     </div>
                   </div>
 
-                  {/* Enhanced Predictive Insights */}
+                  {/* Advanced Predictive Insights */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">🔮 Predictive Insights</h2>
+                    <div className="flex items-center space-x-2 mb-6">
+                      <h2 className="text-xl font-bold text-gray-900">🔮 Nora's Predictions</h2>
+                      <div className="bg-purple-100 px-2 py-1 rounded-full">
+                        <span className="text-xs text-purple-700 font-bold">96% Accuracy</span>
+                      </div>
+                    </div>
                     <div className="space-y-4">
                       
                       <div className="bg-purple-50 p-5 rounded-xl border border-purple-100 hover:bg-purple-100 transition-colors cursor-pointer"
                         onClick={() => {
                           setSelectedKpi({
-                            type: 'forecast-detail',
-                            title: 'Next Month Forecast - Detailed Analysis',
-                            description: 'AI predictions based on historical patterns and current trends.',
+                            type: 'ai-forecast',
+                            title: 'Nora\'s Advanced Forecast Model',
+                            description: 'Machine learning predictions based on 47 behavioral indicators and 2 years of historical data.',
                             details: [
-                              { label: 'Move-out Probability', value: '2 notices expected', trend: 'Based on seasonal patterns' },
-                              { label: 'Pool Party Impact', value: '+15.2% engagement boost', trend: 'Summer trend analysis' },
-                              { label: 'Maintenance Requests', value: '+23% increase likely', trend: 'Weather correlation' },
-                              { label: 'Overall Confidence', value: '87.3%', trend: 'High accuracy model' }
+                              { label: 'Move-out Predictions', value: '2 notices expected (Units 4B, 12A)', trend: 'High confidence (94.3%)' },
+                              { label: 'Pool Party Impact', value: '+15.2% engagement boost', trend: 'Summer correlation analysis' },
+                              { label: 'Maintenance Spike', value: '+23% requests in Week 3', trend: 'Weather pattern prediction' },
+                              { label: 'Optimal Interventions', value: '3 scheduled, 89% success rate', trend: 'AI-timed for maximum impact' }
                             ]
                           });
                           setShowKpiModal(true);
                         }}
                       >
-                        <h3 className="font-bold text-purple-800 mb-3">Next Month Forecast</h3>
+                        <h3 className="font-bold text-purple-800 mb-3">Next Month Intelligence</h3>
                         <ul className="text-sm text-purple-700 space-y-2 font-medium">
-                          <li>• 2 move-out notices expected</li>
+                          <li>• 2 move-out notices expected (94% confidence)</li>
                           <li>• Pool party will boost engagement +15.2%</li>
-                          <li>• Maintenance requests likely to increase</li>
+                          <li>• Maintenance requests spike predicted Week 3</li>
+                          <li>• 3 AI interventions scheduled for optimal timing</li>
                         </ul>
-                        <p className="text-xs text-purple-600 mt-2">Click for detailed analysis</p>
+                        <div className="flex items-center justify-between mt-3">
+                          <p className="text-xs text-purple-600">Click for detailed AI analysis</p>
+                          <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                        </div>
                       </div>
 
                       <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
-                        <h3 className="font-bold text-blue-800 mb-3">Optimal Actions</h3>
+                        <h3 className="font-bold text-blue-800 mb-3">Smart Recommendations</h3>
                         <ul className="text-sm text-blue-700 space-y-2 font-medium">
-                          <li>• Tuesday 6 PM: Best time for community events</li>
-                          <li>• Weekend newsletters get 73.4% open rate</li>
-                          <li>• Security patrols needed after 8 PM</li>
+                          <li>• Tuesday 6 PM: 78% better event attendance</li>
+                          <li>• Weekend newsletters: 73.4% open rate peak</li>
+                          <li>• Security patrols after 8 PM reduce incidents 34%</li>
+                          <li>• Personalized messages increase response 2.3x</li>
                         </ul>
                       </div>
                     </div>
                   </div>
 
-                  {/* Enhanced Community Sentiment */}
+                  {/* Enhanced Community Sentiment with AI Analysis */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">💭 Community Sentiment</h2>
+                    <div className="flex items-center space-x-2 mb-6">
+                      <h2 className="text-xl font-bold text-gray-900">💭 AI Sentiment Analysis</h2>
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    </div>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                         <span className="text-sm font-medium text-gray-700">Overall Mood</span>
                         <div className="flex items-center space-x-2">
                           <span className="text-2xl">😊</span>
-                          <span className="text-xs text-green-600 font-bold">Positive</span>
+                          <div className="text-right">
+                            <span className="text-xs text-green-600 font-bold">Positive</span>
+                            <p className="text-xs text-gray-500">↗ +12% this week</p>
+                          </div>
                         </div>
                       </div>
+                      
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                         <span className="text-sm font-medium text-gray-700">Trending Topics</span>
-                        <span className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Pool maintenance</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Pool maintenance</span>
+                          <span className="text-xs text-purple-600">AI tracked</span>
+                        </div>
                       </div>
+                      
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                        <span className="text-sm font-medium text-gray-700">Satisfaction</span>
+                        <span className="text-sm font-medium text-gray-700">Satisfaction Score</span>
                         <div className="flex items-center space-x-2">
                           <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                          <span className="text-sm font-bold text-gray-700">4.6/5</span>
+                          <div className="text-right">
+                            <span className="text-sm font-bold text-gray-700">4.6/5</span>
+                            <p className="text-xs text-green-600">↗ +0.2</p>
+                          </div>
                         </div>
+                      </div>
+                      
+                      <div className="bg-purple-50 p-3 rounded-lg">
+                        <p className="text-xs text-purple-800 font-medium">🤖 Nora's Insight:</p>
+                        <p className="text-xs text-purple-700 mt-1">Sentiment analysis shows coffee hours are creating positive social connections. Recommend increasing frequency to bi-weekly.</p>
                       </div>
                     </div>
                   </div>
@@ -2600,36 +2840,44 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
               {/* Enhanced Bottom Analytics Section */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
-                {/* Enhanced Communication Analytics */}
+                {/* Communication Analytics with AI Optimization */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
                   <div className="mb-6">
-                    <h2 className="text-xl font-bold text-gray-900">📱 Communication Analytics</h2>
-                    <p className="text-sm text-gray-500 mt-1">Channel performance and engagement metrics</p>
+                    <div className="flex items-center space-x-2">
+                      <h2 className="text-xl font-bold text-gray-900">📱 Communication Analytics</h2>
+                      <div className="bg-green-100 px-2 py-1 rounded-full">
+                        <span className="text-xs text-green-700 font-bold">AI Optimized</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Nora's timing and personalization improvements</p>
                   </div>
                   <div className="space-y-6">
                     <div className="grid grid-cols-3 gap-6 text-center">
                       <div className="p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-blue-600">87.3%</p>
                         <p className="text-sm text-gray-600 font-medium">Message Open Rate</p>
-                        <p className="text-xs text-blue-600 mt-1">↗ +2.1%</p>
+                        <p className="text-xs text-green-600 mt-1">↗ +2.1% (Nora timing)</p>
                       </div>
                       <div className="p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-green-600">73.1%</p>
                         <p className="text-sm text-gray-600 font-medium">Response Rate</p>
-                        <p className="text-xs text-green-600 mt-1">↗ +5.3%</p>
+                        <p className="text-xs text-green-600 mt-1">↗ +5.3% (AI personalization)</p>
                       </div>
                       <div className="p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-purple-600">4.2s</p>
                         <p className="text-sm text-gray-600 font-medium">Avg Response Time</p>
-                        <p className="text-xs text-purple-600 mt-1">↓ -0.8s</p>
+                        <p className="text-xs text-purple-600 mt-1">↓ -0.8s (Smart routing)</p>
                       </div>
                     </div>
                     
                     <div className="border-t pt-6">
-                      <h3 className="font-bold text-gray-900 mb-4">Channel Performance</h3>
+                      <h3 className="font-bold text-gray-900 mb-4">AI-Enhanced Channel Performance</h3>
                       <div className="space-y-4">
                         <div className="flex items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition-colors cursor-pointer">
-                          <span className="text-sm font-medium text-gray-700">App Notifications</span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-medium text-gray-700">App Notifications</span>
+                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Nora optimized</span>
+                          </div>
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-200 rounded-full h-3">
                               <div className="w-22 bg-blue-500 h-3 rounded-full"></div>
@@ -2660,58 +2908,84 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                   </div>
                 </div>
 
-                {/* Enhanced Resident Lifecycle Analytics */}
+                {/* Resident Lifecycle with AI Predictions */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
                   <div className="mb-6">
-                    <h2 className="text-xl font-bold text-gray-900">🏠 Resident Lifecycle</h2>
-                    <p className="text-sm text-gray-500 mt-1">Tenure and turnover analysis</p>
+                    <div className="flex items-center space-x-2">
+                      <h2 className="text-xl font-bold text-gray-900">🏠 Resident Lifecycle</h2>
+                      <div className="bg-purple-100 px-2 py-1 rounded-full">
+                        <span className="text-xs text-purple-700 font-bold">AI Insights</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Nora's predictive tenant analytics</p>
                   </div>
                   <div className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-blue-600">2.8 yrs</p>
                         <p className="text-sm text-gray-600 font-medium">Avg Lease Length</p>
-                        <p className="text-xs text-blue-600 mt-1">↗ +0.3 yrs</p>
+                        <p className="text-xs text-green-600 mt-1">↗ +0.3 yrs (AI retention)</p>
                       </div>
                       <div className="text-center p-5 bg-green-50 rounded-xl border border-green-100 hover:bg-green-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-green-600">18 days</p>
                         <p className="text-sm text-gray-600 font-medium">Avg Vacancy</p>
-                        <p className="text-xs text-green-600 mt-1">↓ -3 days</p>
+                        <p className="text-xs text-green-600 mt-1">↓ -3 days (Smart marketing)</p>
                       </div>
                     </div>
                     
                     <div className="border-t pt-6">
-                      <h3 className="font-bold text-gray-900 mb-4">Move-out Reasons (Last 6 months)</h3>
+                      <h3 className="font-bold text-gray-900 mb-4">AI-Analyzed Move-out Patterns</h3>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Job Relocation</span>
-                          <span className="text-sm font-bold text-gray-900">45%</span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-bold text-gray-900">45%</span>
+                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Predictable</span>
+                          </div>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Rent Increase</span>
-                          <span className="text-sm font-bold text-gray-900">25%</span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-bold text-gray-900">25%</span>
+                            <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">Preventable</span>
+                          </div>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Lifestyle Change</span>
-                          <span className="text-sm font-bold text-gray-900">20%</span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-bold text-gray-900">20%</span>
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Natural</span>
+                          </div>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Other</span>
                           <span className="text-sm font-bold text-gray-900">10%</span>
                         </div>
                       </div>
+                      
+                      <div className="bg-purple-50 p-4 rounded-lg mt-4">
+                        <p className="text-xs text-purple-800 font-medium">🤖 Nora's Pattern Recognition:</p>
+                        <p className="text-xs text-purple-700 mt-1">70% of "rent increase" departures are preventable with early engagement. AI suggests proactive conversations 60 days before lease renewal.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* KPI Detail Modal */}
+              {/* Enhanced KPI Detail Modal with AI Context */}
               {showKpiModal && selectedKpi && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                  <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
                     <div className="p-6 border-b border-gray-200">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-bold text-gray-900">{selectedKpi.title}</h3>
+                        <div className="flex items-center space-x-3">
+                          <h3 className="text-xl font-bold text-gray-900">{selectedKpi.title}</h3>
+                          {selectedKpi.type.includes('ai') || selectedKpi.type.includes('nora') ? (
+                            <div className="bg-purple-100 px-3 py-1 rounded-full">
+                              <span className="text-xs text-purple-700 font-bold">🤖 AI Powered</span>
+                            </div>
+                          ) : null}
+                        </div>
                         <button 
                           onClick={() => setShowKpiModal(false)}
                           className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -2725,7 +2999,7 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                       <div className="mb-6">
                         <p className="text-gray-600 mb-4">{selectedKpi.description}</p>
                         {selectedKpi.value && (
-                          <div className="bg-gray-50 p-4 rounded-lg">
+                          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-100">
                             <div className="flex items-center justify-between">
                               <span className="text-lg font-semibold text-gray-900">Current Value:</span>
                               <span className="text-2xl font-bold text-blue-600">{selectedKpi.value}</span>
@@ -2738,16 +3012,19 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                       </div>
                       
                       <div className="space-y-4">
-                        <h4 className="text-lg font-semibold text-gray-900">Detailed Breakdown</h4>
+                        <div className="flex items-center space-x-2">
+                          <h4 className="text-lg font-semibold text-gray-900">Detailed Analysis</h4>
+                          <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                        </div>
                         {selectedKpi.details.map((detail, index) => (
-                          <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                          <div key={index} className="flex items-start justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div className="flex-1">
                               <p className="font-medium text-gray-900">{detail.label}</p>
                               {detail.additional && (
-                                <p className="text-sm text-gray-600 mt-1">{detail.additional}</p>
+                                <p className="text-sm text-gray-600 mt-2 bg-white p-3 rounded-lg">{detail.additional}</p>
                               )}
                             </div>
-                            <div className="text-right">
+                            <div className="text-right ml-4">
                               <p className="font-bold text-gray-900">{detail.value}</p>
                               {detail.trend && (
                                 <p className="text-sm text-gray-600">{detail.trend}</p>
@@ -2767,16 +3044,122 @@ const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
                         <button
                           onClick={() => {
                             setShowKpiModal(false);
-                            // Add export functionality here
+                            setNoraMessages(prev => [...prev, {
+                              id: Date.now(),
+                              type: 'nora',
+                              message: `I've exported the ${selectedKpi.title} data to your dashboard. Would you like me to create an action plan based on these insights?`,
+                              timestamp: new Date(),
+                              context: 'export_followup'
+                            }]);
+                            setShowNoraChat(true);
                           }}
                           className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
                         >
-                          Export Data
+                          Export & Get AI Plan
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
+              )}
+
+              {/* Floating Nora Chat Widget */}
+              {showNoraChat && (
+                <div className="fixed bottom-4 right-4 w-96 h-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col">
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-xl">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                          <span className="text-lg">🤖</span>
+                        </div>
+                        <div>
+                          <h4 className="font-bold">Nora AI Assistant</h4>
+                          <div className="flex items-center space-x-1">
+                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <span className="text-xs text-green-200">Online</span>
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setShowNoraChat(false)}
+                        className="text-white hover:text-blue-200 transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 p-4 overflow-y-auto space-y-3">
+                    {noraMessages.map((message) => (
+                      <div key={message.id} className={`flex ${message.type === 'nora' ? 'justify-start' : 'justify-end'}`}>
+                        <div className={`max-w-xs p-3 rounded-lg ${
+                          message.type === 'nora' 
+                            ? 'bg-blue-100 text-blue-900' 
+                            : 'bg-gray-100 text-gray-900'
+                        }`}>
+                          <p className="text-sm">{message.message}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {message.timestamp.toLocaleTimeString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="p-4 border-t border-gray-200">
+                    <div className="flex space-x-2">
+                      <input
+                        type="text"
+                        placeholder="Ask Nora anything..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && e.target.value.trim()) {
+                            const userMessage = {
+                              id: Date.now(),
+                              type: 'user',
+                              message: e.target.value,
+                              timestamp: new Date(),
+                              context: 'user_input'
+                            };
+                            setNoraMessages(prev => [...prev, userMessage]);
+                            
+                            // Simulate Nora's intelligent response
+                            setTimeout(() => {
+                              const noraResponse = {
+                                id: Date.now() + 1,
+                                type: 'nora',
+                                message: "That's a great question! Based on your current analytics, I can see that you're focused on improving resident retention. Would you like me to create a personalized action plan for the 3 high-risk residents we identified?",
+                                timestamp: new Date(),
+                                context: 'ai_response'
+                              };
+                              setNoraMessages(prev => [...prev, noraResponse]);
+                            }, 1500);
+                            
+                            e.target.value = '';
+                          }
+                        }}
+                      />
+                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <Send className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Floating Nora Quick Actions Button */}
+              {!showNoraChat && (
+                <button
+                  onClick={() => setShowNoraChat(true)}
+                  className="fixed bottom-4 right-4 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 z-40 flex items-center justify-center"
+                >
+                  <span className="text-2xl">🤖</span>
+                  {noraNotifications.filter(n => !n.seen).length > 0 && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">{noraNotifications.filter(n => !n.seen).length}</span>
+                    </div>
+                  )}
+                </button>
               )}
             </>
           )}
