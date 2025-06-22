@@ -3914,6 +3914,96 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
           </div>
         </div>
       )}
+      {/* Incident Details Modal */}
+      {showIncidentModal && selectedIncident && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Incident Details</h3>
+                <button 
+                  onClick={() => setShowIncidentModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">{selectedIncident.title}</h4>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getIncidentTypeColor(selectedIncident.type)}`}>
+                      {selectedIncident.type}
+                    </span>
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor(selectedIncident.priority)}`}>
+                      {selectedIncident.priority} priority
+                    </span>
+                    <div className="flex items-center space-x-1 text-gray-600">
+                      {getIncidentStatusIcon(selectedIncident.status)}
+                      <span className="text-sm capitalize">{selectedIncident.status}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h5 className="font-medium text-gray-900 mb-2">Incident Details</h5>
+                  <div className="space-y-2 text-sm">
+                    <p><strong>Reported:</strong> {new Date(selectedIncident.reportedDate).toLocaleDateString()} at {new Date(selectedIncident.reportedDate).toLocaleTimeString()}</p>
+                    <p><strong>Location:</strong> {selectedIncident.location}</p>
+                    <p><strong>Reported by:</strong> {selectedIncident.reportedBy}</p>
+                    <p><strong>Assigned to:</strong> {selectedIncident.assignedTo}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <h5 className="font-medium text-gray-900 mb-2">Description</h5>
+                  <p className="text-gray-600 text-sm">{selectedIncident.description}</p>
+                </div>
+              </div>
+              
+              {selectedIncident.updates && selectedIncident.updates.length > 0 && (
+                <div>
+                  <h5 className="font-medium text-gray-900 mb-3">Updates Timeline</h5>
+                  <div className="space-y-3">
+                    {selectedIncident.updates.map((update, index) => (
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-900">{update.update}</p>
+                          <p className="text-xs text-gray-500 mt-1">by {update.by} • {update.timestamp}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowIncidentModal(false)}
+                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setShowIncidentModal(false);
+                    // Add edit incident logic here
+                  }}
+                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Edit Incident
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}      
     </div>
   );
 };
