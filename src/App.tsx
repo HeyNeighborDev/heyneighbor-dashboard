@@ -184,7 +184,12 @@ const [unitTypes, setUnitTypes] = useState([
 ]);
 const [amenities, setAmenities] = useState([
   { name: 'Swimming Pool', icon: '🏊', enabled: true },
-  { name: 'Fitness Center', icon: '💪', enabled: t
+  { name: 'Fitness Center', icon: '💪', enabled: true },
+  { name: 'Parking Garage', icon: '🚗', enabled: true },
+  { name: 'Pet Park', icon: '🐕', enabled: false },
+  { name: 'Business Center', icon: '💼', enabled: true },
+  { name: 'Rooftop Deck', icon: '🏙️', enabled: true }
+]);
   const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
@@ -193,19 +198,19 @@ const [amenities, setAmenities] = useState([
     content: ''
   });
 
-  // Dynamic greeting system
-  useEffect(() => {
-    const hour = new Date().getHours();
-    let newGreeting = 'Good morning, Sarah! ☀️';
-    
-    if (hour >= 12 && hour < 17) {
-      newGreeting = 'Hey there, Sarah! 👋';
-    } else if (hour >= 17) {
-      newGreeting = 'Good evening, Sarah! 🌙';
-    }
-    
-    setGreeting(newGreeting);
-  }, []);
+// Dynamic greeting system
+useEffect(() => {
+  const hour = new Date().getHours();
+  let newGreeting = 'Good morning, Sarah! ☀️';
+  
+  if (hour >= 12 && hour < 17) {
+    newGreeting = 'Hey there, Sarah! 👋';
+  } else if (hour >= 17) {
+    newGreeting = 'Good evening, Sarah! 🌙';
+  }
+  
+  setGreeting(newGreeting);
+}, []);
 
   // Mock data
   const communityStats = {
