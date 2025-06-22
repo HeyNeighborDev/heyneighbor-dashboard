@@ -162,6 +162,29 @@ const [noraLearning, setNoraLearning] = useState({
   lastContext: 'dashboard_view',
   userPersonality: 'data_driven'
 });
+// Settings Page States
+const [settingsTab, setSettingsTab] = useState('property');
+const [propertySettings, setPropertySettings] = useState({
+  name: 'Sunset Gardens Apartments',
+  type: 'apartment',
+  address: '123 Main Street, Atlanta, GA 30309',
+  totalUnits: '120',
+  yearBuilt: '2018',
+  officeHours: 'Monday-Friday 9AM-6PM, Saturday 10AM-4PM',
+  emergencyContact: '(555) 123-4567',
+  quietHours: '10:00 PM - 8:00 AM',
+  petPolicy: 'Pets welcome with deposit. 2 pet maximum, weight limit 50lbs each.',
+  guestPolicy: 'Guests welcome for up to 14 consecutive days. Overnight parking requires permit.'
+});
+const [unitTypes, setUnitTypes] = useState([
+  { type: 'Studio', sqft: 650, bedrooms: 0, bathrooms: 1, rent: 1200, available: 2, total: 15 },
+  { type: '1 Bedroom', sqft: 850, bedrooms: 1, bathrooms: 1, rent: 1450, available: 5, total: 45 },
+  { type: '2 Bedroom', sqft: 1200, bedrooms: 2, bathrooms: 2, rent: 1850, available: 3, total: 40 },
+  { type: '3 Bedroom', sqft: 1450, bedrooms: 3, bathrooms: 2, rent: 2200, available: 1, total: 20 }
+]);
+const [amenities, setAmenities] = useState([
+  { name: 'Swimming Pool', icon: '🏊', enabled: true },
+  { name: 'Fitness Center', icon: '💪', enabled: t
   const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
@@ -1146,6 +1169,22 @@ const [noraLearning, setNoraLearning] = useState({
         update: updateText,
         by: 'Property Manager'
       };
+      // Settings Helper Functions
+const toggleAmenity = (index) => {
+  const newAmenities = [...amenities];
+  newAmenities[index].enabled = !newAmenities[index].enabled;
+  setAmenities(newAmenities);
+};
+
+const toggleNoraAction = (actionKey) => {
+  setNoraSettings({
+    ...noraSettings,
+    autoActions: {
+      ...noraSettings.autoActions,
+      [actionKey]: !noraSettings.autoActions[actionKey]
+    }
+  });
+};
       
       // In real app, this would update the database
       console.log('Adding update:', newUpdate);
@@ -3180,6 +3219,440 @@ const [noraLearning, setNoraLearning] = useState({
               )}
             </>
           )}
+          {/* Settings Page */}
+{currentPage === 'settings' && (
+  <>
+    {/* Settings Header */}
+    <div className="mb-8">
+      <h1 className="text-3xl font-bold text-gray-900">Settings & Configuration</h1>
+      <p className="text-gray-600 mt-2">Manage your property settings, units, amenities, and AI preferences</p>
+    </div>
+
+    {/* Settings Navigation Tabs */}
+    <div className="mb-8">
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8">
+          <button
+            onClick={() => setSettingsTab('property')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+              settingsTab === 'property' 
+                ? 'border-blue-500 text-blue-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Property Details
+          </button>
+          <button
+            onClick={() => setSettingsTab('units')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+              settingsTab === 'units' 
+                ? 'border-blue-500 text-blue-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Unit Management
+          </button>
+          <button
+            onClick={() => setSettingsTab('amenities')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+              settingsTab === 'amenities' 
+                ? 'border-blue-500 text-blue-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Amenities & Policies
+          </button>
+          <button
+            onClick={() => setSettingsTab('nora')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+              settingsTab === 'nora' 
+                ? 'border-blue-500 text-blue-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            🤖 Nora AI
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    {/* Property Details Tab */}
+    {settingsTab === 'property' && (
+      <div className="space-y-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Property Information</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Property Name</label>
+              <input
+                type="text"
+                value={propertySettings.name}
+                onChange={(e) => setPropertySettings({...propertySettings, name: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Sunset Gardens Apartments"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
+              <select
+                value={propertySettings.type}
+                onChange={(e) => setPropertySettings({...propertySettings, type: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="apartment">Apartment Complex</option>
+                <option value="condo">Condominium</option>
+                <option value="townhouse">Townhouse Community</option>
+                <option value="single_family">Single Family Homes</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+              <input
+                type="text"
+                value={propertySettings.address}
+                onChange={(e) => setPropertySettings({...propertySettings, address: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="123 Main Street, Atlanta, GA 30309"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Total Units</label>
+              <input
+                type="number"
+                value={propertySettings.totalUnits}
+                onChange={(e) => setPropertySettings({...propertySettings, totalUnits: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="120"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Year Built</label>
+              <input
+                type="number"
+                value={propertySettings.yearBuilt}
+                onChange={(e) => setPropertySettings({...propertySettings, yearBuilt: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="2018"
+              />
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Operating Hours</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Office Hours</label>
+                <input
+                  type="text"
+                  value={propertySettings.officeHours}
+                  onChange={(e) => setPropertySettings({...propertySettings, officeHours: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Monday-Friday 9AM-6PM, Saturday 10AM-4PM"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Emergency Contact</label>
+                <input
+                  type="text"
+                  value={propertySettings.emergencyContact}
+                  onChange={(e) => setPropertySettings({...propertySettings, emergencyContact: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="(555) 123-4567"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Unit Management Tab */}
+    {settingsTab === 'units' && (
+      <div className="space-y-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">Unit Configuration</h2>
+            <button
+              onClick={() => setShowAddUnitModal(true)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+            >
+              <Plus size={16} />
+              <span>Add Unit Type</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {unitTypes.map((unit, index) => (
+              <div key={index} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{unit.type}</h3>
+                  <button className="text-gray-400 hover:text-gray-600">
+                    <MoreHorizontal size={20} />
+                  </button>
+                </div>
+                
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Square Feet:</span>
+                    <span className="font-medium">{unit.sqft} sq ft</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Bedrooms:</span>
+                    <span className="font-medium">{unit.bedrooms}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Bathrooms:</span>
+                    <span className="font-medium">{unit.bathrooms}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Base Rent:</span>
+                    <span className="font-medium text-green-600">${unit.rent}/month</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Available Units:</span>
+                    <span className="font-medium">{unit.available} of {unit.total}</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center space-x-2 text-xs text-gray-500">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span>92% occupied</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Amenities & Policies Tab */}
+    {settingsTab === 'amenities' && (
+      <div className="space-y-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Property Amenities</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {amenities.map((amenity, index) => (
+              <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${amenity.enabled ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                    {amenity.icon}
+                  </div>
+                  <span className="font-medium text-gray-900">{amenity.name}</span>
+                </div>
+                
+                <button
+                  onClick={() => toggleAmenity(index)}
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    amenity.enabled ? 'bg-blue-600' : 'bg-gray-200'
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      amenity.enabled ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Property Policies</h2>
+          
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Quiet Hours</label>
+              <input
+                type="text"
+                value={propertySettings.quietHours}
+                onChange={(e) => setPropertySettings({...propertySettings, quietHours: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="10:00 PM - 8:00 AM"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Pet Policy</label>
+              <textarea
+                value={propertySettings.petPolicy}
+                onChange={(e) => setPropertySettings({...propertySettings, petPolicy: e.target.value})}
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Pets welcome with deposit. 2 pet maximum, weight limit 50lbs each."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Guest Policy</label>
+              <textarea
+                value={propertySettings.guestPolicy}
+                onChange={(e) => setPropertySettings({...propertySettings, guestPolicy: e.target.value})}
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Guests welcome for up to 14 consecutive days. Overnight parking requires permit."
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Nora AI Tab */}
+    {settingsTab === 'nora' && (
+      <div className="space-y-8">
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-200 p-8">
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+              <span className="text-white text-xl">🤖</span>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Nora AI Configuration</h2>
+              <p className="text-purple-600 font-medium">Customize your AI assistant's behavior and preferences</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">AI Personality</label>
+                <div className="space-y-2">
+                  {['Professional & Formal', 'Friendly & Casual', 'Empathetic & Supportive'].map((personality) => (
+                    <label key={personality} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="aiPersonality"
+                        value={personality}
+                        checked={noraSettings.personality === personality}
+                        onChange={(e) => setNoraSettings({...noraSettings, personality: e.target.value})}
+                        className="w-4 h-4 text-purple-600 focus:ring-purple-500"
+                      />
+                      <span className="text-sm text-gray-700">{personality}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Response Speed</label>
+                <select
+                  value={noraSettings.responseSpeed}
+                  onChange={(e) => setNoraSettings({...noraSettings, responseSpeed: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                >
+                  <option value="instant">Instant Response</option>
+                  <option value="thoughtful">Thoughtful (2-3 seconds)</option>
+                  <option value="detailed">Detailed Analysis (5+ seconds)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Confidence Threshold</label>
+                <div className="px-3">
+                  <input
+                    type="range"
+                    min="50"
+                    max="95"
+                    value={noraSettings.confidenceThreshold}
+                    onChange={(e) => setNoraSettings({...noraSettings, confidenceThreshold: e.target.value})}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>50%</span>
+                    <span className="font-medium text-purple-600">{noraSettings.confidenceThreshold}%</span>
+                    <span>95%</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">Higher threshold = more conservative recommendations</p>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Auto-Actions Enabled</label>
+                <div className="space-y-3">
+                  {[
+                    { key: 'scheduleFollowups', label: 'Schedule Follow-up Meetings' },
+                    { key: 'sendReminders', label: 'Send Renewal Reminders' },
+                    { key: 'escalateIssues', label: 'Escalate Urgent Issues' },
+                    { key: 'generateReports', label: 'Generate Weekly Reports' }
+                  ].map((action) => (
+                    <div key={action.key} className="flex items-center justify-between">
+                      <span className="text-sm text-gray-700">{action.label}</span>
+                      <button
+                        onClick={() => toggleNoraAction(action.key)}
+                        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
+                          noraSettings.autoActions[action.key] ? 'bg-purple-600' : 'bg-gray-200'
+                        }`}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                            noraSettings.autoActions[action.key] ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-purple-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Nora Learning Mode</h3>
+                <p className="text-sm text-gray-600">Allow Nora to learn from your interactions and improve over time</p>
+              </div>
+              <button
+                onClick={() => setNoraSettings({...noraSettings, learningEnabled: !noraSettings.learningEnabled})}
+                className={`relative inline-flex h-8 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
+                  noraSettings.learningEnabled ? 'bg-purple-600' : 'bg-gray-200'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-7 w-7 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    noraSettings.learningEnabled ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Save Changes Button */}
+    <div className="flex justify-end space-x-4 pt-6">
+      <button
+        onClick={() => {
+          // Reset to defaults logic here
+        }}
+        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+      >
+        Reset to Defaults
+      </button>
+      <button
+        onClick={() => {
+          // Save settings logic here
+          alert('Settings saved successfully!');
+        }}
+        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Save Changes
+      </button>
+    </div>
+  </>
+)}
 
           {/* Safety Page */}
           {currentPage === 'safety' && (
