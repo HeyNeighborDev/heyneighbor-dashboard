@@ -129,6 +129,11 @@ const ManagementDashboard = () => {
 const [searchQuery, setSearchQuery] = useState('');
 const [showNotifications, setShowNotifications] = useState(false);
 const [showProfileMenu, setShowProfileMenu] = useState(false);
+// Analytics Interactive States  
+const [selectedKpi, setSelectedKpi] = useState(null);
+const [showKpiModal, setShowKpiModal] = useState(false);
+const [hoveredMetric, setHoveredMetric] = useState(null);
+const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30d');
   const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
@@ -1941,67 +1946,205 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
           {/* Analytics Page */}
           {currentPage === 'analytics' && (
             <>
-              {/* Analytics Stats */}
+              {/* Analytics Stats with Sparklines */}
               <div className="flex flex-wrap gap-4 mb-8">
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-shadow">
+                
+                {/* Community Health KPI */}
+                <div 
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  onClick={() => {
+                    setSelectedKpi({
+                      type: 'health',
+                      title: 'Community Health',
+                      value: '91.7%',
+                      trend: '+5.2%',
+                      description: 'Overall community wellbeing score based on engagement, safety, and satisfaction metrics.',
+                      details: [
+                        { label: 'Resident Satisfaction', value: '94.2%', trend: '+3.1%' },
+                        { label: 'Safety Score', value: '89.5%', trend: '+7.2%' },
+                        { label: 'Engagement Rate', value: '91.3%', trend: '+5.8%' },
+                        { label: 'Community Events', value: '88.9%', trend: '+4.5%' }
+                      ]
+                    });
+                    setShowKpiModal(true);
+                  }}
+                  onMouseEnter={() => setHoveredMetric('health')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
                   <div className="flex items-center justify-between">
-                    <div>
+                    <div className="flex-1">
                       <p className="text-gray-500 text-sm font-medium">Community Health</p>
                       <p className="text-3xl font-bold text-green-600 mt-1">91.7%</p>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-green-600 font-medium">↗ +5.2% this month</p>
                         <p className="text-xs text-gray-400">Updated 2h ago</p>
                       </div>
+                      
+                      {/* Sparkline Chart */}
+                      <div className="mt-3">
+                        <div className="flex items-end space-x-1 h-8">
+                          {[65, 68, 72, 75, 78, 82, 85, 87, 89, 91.7].map((value, index) => (
+                            <div
+                              key={index}
+                              className="bg-green-200 rounded-sm flex-1 transition-all duration-300 hover:bg-green-400"
+                              style={{ height: `${(value / 100) * 32}px` }}
+                            ></div>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">30-day trend</p>
+                      </div>
                     </div>
-                    <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center ml-4">
                       <BarChart3 className="w-7 h-7 text-green-600" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-shadow">
+                {/* Renewal Probability KPI */}
+                <div 
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  onClick={() => {
+                    setSelectedKpi({
+                      type: 'renewal',
+                      title: 'Renewal Probability',
+                      value: '86.3%',
+                      trend: '+3.1%',
+                      description: 'AI-predicted likelihood of lease renewals based on resident behavior patterns.',
+                      details: [
+                        { label: 'High Confidence (>80%)', value: '47 residents', trend: '+2' },
+                        { label: 'Medium Confidence (60-80%)', value: '8 residents', trend: '+1' },
+                        { label: 'Low Confidence (<60%)', value: '5 residents', trend: '0' },
+                        { label: 'At Risk (<40%)', value: '3 residents', trend: '-1' }
+                      ]
+                    });
+                    setShowKpiModal(true);
+                  }}
+                  onMouseEnter={() => setHoveredMetric('renewal')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
                   <div className="flex items-center justify-between">
-                    <div>
+                    <div className="flex-1">
                       <p className="text-gray-500 text-sm font-medium">Renewal Probability</p>
                       <p className="text-3xl font-bold text-blue-600 mt-1">86.3%</p>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-blue-600 font-medium">↗ +3.1% this quarter</p>
                         <p className="text-xs text-gray-400">Updated 2h ago</p>
                       </div>
+                      
+                      {/* Sparkline Chart */}
+                      <div className="mt-3">
+                        <div className="flex items-end space-x-1 h-8">
+                          {[78, 79, 81, 82, 80, 83, 84, 85, 85.1, 86.3].map((value, index) => (
+                            <div
+                              key={index}
+                              className="bg-blue-200 rounded-sm flex-1 transition-all duration-300 hover:bg-blue-400"
+                              style={{ height: `${(value / 100) * 32}px` }}
+                            ></div>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">Quarterly trend</p>
+                      </div>
                     </div>
-                    <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center ml-4">
                       <Users className="w-7 h-7 text-blue-600" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-shadow">
+                {/* At-Risk Residents KPI */}
+                <div 
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  onClick={() => {
+                    setSelectedKpi({
+                      type: 'risk',
+                      title: 'At-Risk Residents',
+                      value: '3',
+                      trend: 'Same as last month',
+                      description: 'Residents with high probability of not renewing, requiring immediate attention.',
+                      details: [
+                        { label: 'Sarah Chen (Unit 4B)', value: '25.3% renewal chance', trend: '↓ High Risk' },
+                        { label: 'Mike Rodriguez (Unit 12A)', value: '34.7% renewal chance', trend: '↓ High Risk' },
+                        { label: 'Lisa Park (Unit 8C)', value: '38.9% renewal chance', trend: '↓ Medium Risk' }
+                      ]
+                    });
+                    setShowKpiModal(true);
+                  }}
+                  onMouseEnter={() => setHoveredMetric('risk')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
                   <div className="flex items-center justify-between">
-                    <div>
+                    <div className="flex-1">
                       <p className="text-gray-500 text-sm font-medium">At-Risk Residents</p>
                       <p className="text-3xl font-bold text-yellow-600 mt-1">3</p>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-yellow-600 font-medium">→ Same as last month</p>
                         <p className="text-xs text-gray-400">Updated 2h ago</p>
                       </div>
+                      
+                      {/* Risk Level Indicator */}
+                      <div className="mt-3">
+                        <div className="flex space-x-1">
+                          <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                          <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                          <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                          <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
+                          <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">Risk distribution</p>
+                      </div>
                     </div>
-                    <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center ml-4">
                       <AlertTriangle className="w-7 h-7 text-yellow-600" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-shadow">
+                {/* Engagement Score KPI */}
+                <div 
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+                  onClick={() => {
+                    setSelectedKpi({
+                      type: 'engagement',
+                      title: 'Engagement Score',
+                      value: '84.2%',
+                      trend: '+8.4%',
+                      description: 'Community participation and interaction levels across events and communications.',
+                      details: [
+                        { label: 'Event Attendance', value: '87.3%', trend: '+12.1%' },
+                        { label: 'Message Response Rate', value: '82.1%', trend: '+6.8%' },
+                        { label: 'Community App Usage', value: '91.7%', trend: '+15.2%' },
+                        { label: 'Neighbor Interactions', value: '75.8%', trend: '+4.3%' }
+                      ]
+                    });
+                    setShowKpiModal(true);
+                  }}
+                  onMouseEnter={() => setHoveredMetric('engagement')}
+                  onMouseLeave={() => setHoveredMetric(null)}
+                >
                   <div className="flex items-center justify-between">
-                    <div>
+                    <div className="flex-1">
                       <p className="text-gray-500 text-sm font-medium">Engagement Score</p>
                       <p className="text-3xl font-bold text-purple-600 mt-1">84.2%</p>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-purple-600 font-medium">↗ +8.4% this month</p>
                         <p className="text-xs text-gray-400">Updated 2h ago</p>
                       </div>
+                      
+                      {/* Sparkline Chart */}
+                      <div className="mt-3">
+                        <div className="flex items-end space-x-1 h-8">
+                          {[68, 71, 69, 74, 76, 78, 79, 81, 82, 84.2].map((value, index) => (
+                            <div
+                              key={index}
+                              className="bg-purple-200 rounded-sm flex-1 transition-all duration-300 hover:bg-purple-400"
+                              style={{ height: `${(value / 100) * 32}px` }}
+                            ></div>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">30-day trend</p>
+                      </div>
                     </div>
-                    <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center ml-4">
                       <MessageSquare className="w-7 h-7 text-purple-600" />
                     </div>
                   </div>
@@ -2019,64 +2162,163 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h2 className="text-xl font-bold text-gray-900">Community Health Trends</h2>
-                        <p className="text-sm text-gray-500 mt-1">30-day performance overview</p>
+                        <p className="text-sm text-gray-500 mt-1">Performance overview and patterns</p>
                       </div>
                       <div className="flex space-x-2">
-                        <button className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg font-medium">30d</button>
-                        <button className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors">90d</button>
-                        <button className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors">1y</button>
+                        <button 
+                          onClick={() => setAnalyticsTimeRange('30d')}
+                          className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
+                            analyticsTimeRange === '30d' 
+                              ? 'bg-blue-100 text-blue-700' 
+                              : 'text-gray-600 hover:bg-gray-100'
+                          }`}
+                        >
+                          30d
+                        </button>
+                        <button 
+                          onClick={() => setAnalyticsTimeRange('90d')}
+                          className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
+                            analyticsTimeRange === '90d' 
+                              ? 'bg-blue-100 text-blue-700' 
+                              : 'text-gray-600 hover:bg-gray-100'
+                          }`}
+                        >
+                          90d
+                        </button>
+                        <button 
+                          onClick={() => setAnalyticsTimeRange('1y')}
+                          className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
+                            analyticsTimeRange === '1y' 
+                              ? 'bg-blue-100 text-blue-700' 
+                              : 'text-gray-600 hover:bg-gray-100'
+                          }`}
+                        >
+                          1y
+                        </button>
                       </div>
                     </div>
-                    <div className="h-52 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl flex items-center justify-center border border-gray-100">
-                      <div className="text-center">
-                        <BarChart3 className="w-16 h-16 mx-auto mb-3 text-blue-500" />
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">Interactive Health Score Chart</h3>
-                        <p className="text-sm text-gray-600">Trending upward +12.3% over 30 days</p>
-                        <p className="text-xs text-gray-400 mt-1">Chart visualization coming in Phase 2</p>
+                    
+                    {/* Interactive Chart Area */}
+                    <div className="h-52 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl flex items-center justify-center border border-gray-100 relative overflow-hidden">
+                      
+                      {/* Simulated Chart Data */}
+                      <div className="absolute inset-4">
+                        <div className="flex items-end justify-between h-full">
+                          {Array.from({length: analyticsTimeRange === '30d' ? 30 : analyticsTimeRange === '90d' ? 12 : 12}).map((_, index) => {
+                            const height = Math.random() * 60 + 30;
+                            return (
+                              <div
+                                key={index}
+                                className="bg-blue-400 opacity-70 rounded-t-sm hover:opacity-100 transition-opacity cursor-pointer"
+                                style={{ 
+                                  width: analyticsTimeRange === '30d' ? '8px' : '16px',
+                                  height: `${height}%`,
+                                  marginRight: '2px'
+                                }}
+                                title={`${analyticsTimeRange === '30d' ? 'Day' : 'Period'} ${index + 1}: ${(70 + height/3).toFixed(1)}%`}
+                              ></div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      
+                      {/* Chart Label Overlay */}
+                      <div className="text-center relative z-10 bg-white bg-opacity-90 rounded-lg p-4">
+                        <BarChart3 className="w-12 h-12 mx-auto mb-2 text-blue-500" />
+                        <h3 className="text-lg font-semibold text-gray-800 mb-1">Health Score Trending</h3>
+                        <p className="text-sm text-gray-600">
+                          {analyticsTimeRange === '30d' && 'Daily tracking +12.3% over 30 days'}
+                          {analyticsTimeRange === '90d' && 'Weekly averages +18.7% over 90 days'}
+                          {analyticsTimeRange === '1y' && 'Monthly growth +34.2% over 1 year'}
+                        </p>
+                        <p className="text-xs text-blue-600 mt-1 font-medium">Click time range to explore</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Renewal Risk Analysis */}
+                  {/* Enhanced Renewal Risk Analysis */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
                     <div className="mb-6">
                       <h2 className="text-xl font-bold text-gray-900">Renewal Risk Analysis</h2>
-                      <p className="text-sm text-gray-500 mt-1">Predictive insights for lease renewals</p>
+                      <p className="text-sm text-gray-500 mt-1">AI-powered predictive insights for lease renewals</p>
                     </div>
                     <div className="space-y-6">
                       
-                      {/* High Risk Residents */}
-                      <div className="border-l-4 border-red-400 bg-red-50 p-6 rounded-r-xl">
+                      {/* High Risk Residents - Enhanced */}
+                      <div 
+                        className="border-l-4 border-red-400 bg-red-50 p-6 rounded-r-xl hover:bg-red-100 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setSelectedKpi({
+                            type: 'high-risk-detail',
+                            title: 'High Risk Residents - Detailed Analysis',
+                            description: 'Residents requiring immediate intervention to prevent move-outs.',
+                            details: [
+                              { 
+                                label: 'Sarah Chen (Unit 4B)', 
+                                value: '25.3% renewal chance',
+                                additional: 'Last contact: 2 weeks ago, Complaint: Noise issues, Suggested action: Schedule 1-on-1 meeting'
+                              },
+                              { 
+                                label: 'Mike Rodriguez (Unit 12A)', 
+                                value: '34.7% renewal chance',
+                                additional: 'Last contact: 1 week ago, Complaint: Maintenance delays, Suggested action: Expedite work orders'
+                              }
+                            ]
+                          });
+                          setShowKpiModal(true);
+                        }}
+                      >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <h3 className="text-lg font-bold text-red-800">High Risk - Immediate Attention</h3>
                             <p className="text-sm text-red-700 mt-2">3 residents likely to not renew (probability under 40%)</p>
                             <div className="mt-4 space-y-3">
-                              <div className="flex items-center justify-between bg-white bg-opacity-60 p-3 rounded-lg">
+                              <div className="flex items-center justify-between bg-white bg-opacity-60 p-3 rounded-lg hover:bg-white transition-colors">
                                 <span className="text-sm font-semibold text-red-800">Unit 4B - Sarah Chen</span>
                                 <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">25.3% renewal chance</span>
                               </div>
-                              <div className="flex items-center justify-between bg-white bg-opacity-60 p-3 rounded-lg">
+                              <div className="flex items-center justify-between bg-white bg-opacity-60 p-3 rounded-lg hover:bg-white transition-colors">
                                 <span className="text-sm font-semibold text-red-800">Unit 12A - Mike Rodriguez</span>
                                 <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">34.7% renewal chance</span>
                               </div>
                             </div>
                           </div>
+                          <div className="ml-4 text-red-600">
+                            <Eye className="w-5 h-5" />
+                          </div>
                         </div>
                       </div>
 
-                      {/* Medium Risk */}
-                      <div className="border-l-4 border-yellow-400 bg-yellow-50 p-6 rounded-r-xl">
+                      {/* Medium Risk - Enhanced */}
+                      <div 
+                        className="border-l-4 border-yellow-400 bg-yellow-50 p-6 rounded-r-xl hover:bg-yellow-100 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setSelectedKpi({
+                            type: 'medium-risk-detail',
+                            title: 'Medium Risk Residents - Monitoring',
+                            description: 'Residents showing concerning patterns that require proactive engagement.',
+                            details: [
+                              { label: 'Total residents in this category', value: '5 residents' },
+                              { label: 'Average renewal probability', value: '58.3%' },
+                              { label: 'Recommended action', value: 'Schedule check-in calls within 2 weeks' }
+                            ]
+                          });
+                          setShowKpiModal(true);
+                        }}
+                      >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <h3 className="text-lg font-bold text-yellow-800">Medium Risk - Monitor Closely</h3>
                             <p className="text-sm text-yellow-700 mt-2">5 residents showing concerning patterns (40-70% probability)</p>
                           </div>
-                          <span className="text-sm bg-yellow-200 text-yellow-800 px-4 py-2 rounded-full font-bold">5 residents</span>
+                          <div className="flex items-center space-x-3">
+                            <span className="text-sm bg-yellow-200 text-yellow-800 px-4 py-2 rounded-full font-bold">5 residents</span>
+                            <Eye className="w-5 h-5 text-yellow-600" />
+                          </div>
                         </div>
                       </div>
 
-                      {/* Low Risk */}
+                      {/* Low Risk - Enhanced */}
                       <div className="border-l-4 border-green-400 bg-green-50 p-6 rounded-r-xl">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -2089,32 +2331,80 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                     </div>
                   </div>
 
-                  {/* Safety & Engagement Metrics */}
+                  {/* Interactive Safety & Engagement Metrics */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
-                    {/* Safety Heat Map */}
-                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+                    {/* Enhanced Safety Heat Map */}
+                    <div 
+                      className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer"
+                      onClick={() => {
+                        setSelectedKpi({
+                          type: 'safety-heatmap',
+                          title: 'Safety Heat Map Analysis',
+                          description: 'Incident patterns and peak risk periods analysis.',
+                          details: [
+                            { label: 'Peak Incident Time', value: '6:00-8:00 PM', trend: 'Most active period' },
+                            { label: 'Highest Risk Area', value: 'Parking Garage', trend: 'Needs attention' },
+                            { label: 'Incident Trend', value: '↓ 12% reduction this month', trend: 'Improving' },
+                            { label: 'Security Effectiveness', value: '87.4%', trend: '↗ +5.2%' }
+                          ]
+                        });
+                        setShowKpiModal(true);
+                      }}
+                    >
                       <div className="mb-4">
                         <h2 className="text-xl font-bold text-gray-900">Safety Heat Map</h2>
                         <p className="text-sm text-gray-500 mt-1">Incident pattern analysis</p>
                       </div>
-                      <div className="h-36 bg-gradient-to-br from-green-100 via-yellow-100 to-red-100 rounded-xl flex items-center justify-center border border-gray-100">
-                        <div className="text-center">
-                          <Shield className="w-12 h-12 mx-auto mb-2 text-green-600" />
-                          <p className="text-sm font-semibold text-gray-700">Peak incidents: 6-8 PM</p>
-                          <p className="text-xs text-gray-500 mt-1">Parking garage needs attention</p>
+                      <div className="h-36 bg-gradient-to-br from-green-100 via-yellow-100 to-red-100 rounded-xl flex items-center justify-center border border-gray-100 relative">
+                        
+                        {/* Simulated Heat Map Grid */}
+                        <div className="absolute inset-4 grid grid-cols-8 grid-rows-4 gap-1">
+                          {Array.from({length: 32}).map((_, index) => {
+                            const intensity = Math.random();
+                            const bgColor = intensity > 0.7 ? 'bg-red-300' : intensity > 0.4 ? 'bg-yellow-300' : 'bg-green-300';
+                            return (
+                              <div
+                                key={index}
+                                className={`${bgColor} rounded-sm hover:scale-110 transition-transform cursor-pointer`}
+                                title={`Zone ${index + 1}: ${intensity > 0.7 ? 'High' : intensity > 0.4 ? 'Medium' : 'Low'} Risk`}
+                              ></div>
+                            );
+                          })}
+                        </div>
+                        
+                        <div className="text-center relative z-10 bg-white bg-opacity-90 rounded-lg p-3">
+                          <Shield className="w-8 h-8 mx-auto mb-1 text-green-600" />
+                          <p className="text-sm font-semibold text-gray-700">Peak: 6-8 PM</p>
+                          <p className="text-xs text-gray-500">Click to explore</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Event Impact */}
+                    {/* Enhanced Event Impact */}
                     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                       <div className="mb-4">
                         <h2 className="text-xl font-bold text-gray-900">Event Impact Score</h2>
                         <p className="text-sm text-gray-500 mt-1">Community engagement metrics</p>
                       </div>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
+                        <div 
+                          className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                          onClick={() => {
+                            setSelectedKpi({
+                              type: 'event-detail',
+                              title: 'Coffee Hours - Event Analysis',
+                              description: 'Detailed performance metrics for coffee hour events.',
+                              details: [
+                                { label: 'Average Attendance', value: '23 residents', trend: '↗ +15%' },
+                                { label: 'Engagement Boost', value: '+12.1%', trend: 'Highest impact' },
+                                { label: 'Cost per Attendee', value: '$4.50', trend: '↓ -8%' },
+                                { label: 'Satisfaction Rating', value: '4.8/5', trend: '↗ +0.3' }
+                              ]
+                            });
+                            setShowKpiModal(true);
+                          }}
+                        >
                           <span className="text-sm font-medium text-gray-700">Coffee Hours</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-20 bg-gray-200 rounded-full h-2.5">
@@ -2123,7 +2413,8 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                             <span className="text-sm font-bold text-green-600">+12.1%</span>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between">
+                        
+                        <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors">
                           <span className="text-sm font-medium text-gray-700">Pool Parties</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-20 bg-gray-200 rounded-full h-2.5">
@@ -2132,7 +2423,8 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                             <span className="text-sm font-bold text-blue-600">+8.7%</span>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between">
+                        
+                        <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors">
                           <span className="text-sm font-medium text-gray-700">Game Nights</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-20 bg-gray-200 rounded-full h-2.5">
@@ -2146,10 +2438,10 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                   </div>
                 </div>
 
-                {/* Right Column - AI Recommendations Panel (1/3 width) */}
+                {/* Right Column - Enhanced AI Recommendations Panel */}
                 <div className="space-y-6">
                   
-                  {/* AI Recommendations Header */}
+                  {/* Nora AI Header - Enhanced */}
                   <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
                     <div className="flex items-center space-x-3 mb-4">
                       <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
@@ -2157,70 +2449,114 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                       </div>
                       <div>
                         <h2 className="text-xl font-bold">Nora AI Insights</h2>
-                        <p className="text-blue-100 text-sm">Smart recommendations</p>
+                        <p className="text-blue-100 text-sm">Smart recommendations • Confidence: 94%</p>
                       </div>
                     </div>
                     <div className="bg-white bg-opacity-15 rounded-xl p-4">
                       <p className="text-sm font-medium">Your community health improved 5.2% this month! Here's how to keep the momentum...</p>
-                      <p className="text-xs text-blue-100 mt-2">Last updated 2h ago</p>
+                      <div className="flex items-center justify-between mt-2">
+                        <p className="text-xs text-blue-100">Last updated 2h ago</p>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-xs text-green-200">Live</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Priority Actions */}
+                  {/* Enhanced Priority Actions */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-6">🎯 Priority Actions</h2>
                     <div className="space-y-4">
                       
-                      {/* High Priority */}
-                      <div className="border-l-4 border-red-400 bg-red-50 p-4 rounded-r-xl">
+                      {/* Urgent Action - Enhanced */}
+                      <div className="border-l-4 border-red-400 bg-red-50 p-4 rounded-r-xl hover:bg-red-100 transition-colors">
                         <div className="flex items-start justify-between mb-3">
                           <h3 className="font-bold text-red-800">🚨 Urgent</h3>
                           <span className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded-full font-bold">89% success rate</span>
                         </div>
-                        <p className="text-sm text-red-700 mb-4 font-medium">Schedule 1-on-1 with Sarah Chen (Unit 4B)</p>
-                        <button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors">
-                          Schedule Meeting
+                        <p className="text-sm text-red-700 mb-2 font-medium">Schedule 1-on-1 with Sarah Chen (Unit 4B)</p>
+                        <p className="text-xs text-red-600 mb-4">AI reasoning: Low engagement + noise complaints = high move-out risk</p>
+                        <button 
+                          className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2"
+                          onClick={() => {
+                            setSelectedKpi({
+                              type: 'action-detail',
+                              title: 'Schedule Meeting with Sarah Chen',
+                              description: 'AI-recommended intervention to prevent lease non-renewal.',
+                              details: [
+                                { label: 'Current Renewal Probability', value: '25.3%', trend: '↓ Declining' },
+                                { label: 'Key Issues', value: 'Noise complaints, low engagement', trend: 'Urgent' },
+                                { label: 'Recommended Timeline', value: 'Within 48 hours', trend: 'Critical' },
+                                { label: 'Success Rate if Addressed', value: '89%', trend: 'High confidence' }
+                              ]
+                            });
+                            setShowKpiModal(true);
+                          }}
+                        >
+                          <Calendar className="w-4 h-4" />
+                          <span>Schedule Meeting</span>
                         </button>
                       </div>
 
-                      {/* Medium Priority */}
-                      <div className="border-l-4 border-blue-400 bg-blue-50 p-4 rounded-r-xl">
+                      {/* High Impact Action - Enhanced */}
+                      <div className="border-l-4 border-blue-400 bg-blue-50 p-4 rounded-r-xl hover:bg-blue-100 transition-colors">
                         <div className="flex items-start justify-between mb-3">
                           <h3 className="font-bold text-blue-800">📈 High Impact</h3>
                           <span className="text-xs bg-blue-200 text-blue-800 px-3 py-1 rounded-full font-bold">67% success rate</span>
                         </div>
-                        <p className="text-sm text-blue-700 mb-4 font-medium">Host coffee hour this Thursday - 12 residents likely to attend</p>
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors">
-                          Create Event
+                        <p className="text-sm text-blue-700 mb-2 font-medium">Host coffee hour this Thursday - 12 residents likely to attend</p>
+                        <p className="text-xs text-blue-600 mb-4">AI reasoning: Historical data shows +15% engagement boost from coffee hours</p>
+                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2">
+                          <Plus className="w-4 h-4" />
+                          <span>Create Event</span>
                         </button>
                       </div>
 
-                      {/* Lower Priority */}
-                      <div className="border-l-4 border-green-400 bg-green-50 p-4 rounded-r-xl">
+                      {/* Opportunity Action - Enhanced */}
+                      <div className="border-l-4 border-green-400 bg-green-50 p-4 rounded-r-xl hover:bg-green-100 transition-colors">
                         <div className="flex items-start justify-between mb-3">
                           <h3 className="font-bold text-green-800">💡 Opportunity</h3>
                           <span className="text-xs bg-green-200 text-green-800 px-3 py-1 rounded-full font-bold">45% success rate</span>
                         </div>
-                        <p className="text-sm text-green-700 mb-4 font-medium">Send appreciation gifts to 5 long-term residents</p>
-                        <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors">
-                          Send Gifts
+                        <p className="text-sm text-green-700 mb-2 font-medium">Send appreciation gifts to 5 long-term residents</p>
+                        <p className="text-xs text-green-600 mb-4">AI reasoning: Long-term residents (3+ years) respond well to recognition</p>
+                        <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2">
+                          <Send className="w-4 h-4" />
+                          <span>Send Gifts</span>
                         </button>
                       </div>
                     </div>
                   </div>
 
-                  {/* Predictive Insights */}
+                  {/* Enhanced Predictive Insights */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-6">🔮 Predictive Insights</h2>
                     <div className="space-y-4">
                       
-                      <div className="bg-purple-50 p-5 rounded-xl border border-purple-100">
+                      <div className="bg-purple-50 p-5 rounded-xl border border-purple-100 hover:bg-purple-100 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setSelectedKpi({
+                            type: 'forecast-detail',
+                            title: 'Next Month Forecast - Detailed Analysis',
+                            description: 'AI predictions based on historical patterns and current trends.',
+                            details: [
+                              { label: 'Move-out Probability', value: '2 notices expected', trend: 'Based on seasonal patterns' },
+                              { label: 'Pool Party Impact', value: '+15.2% engagement boost', trend: 'Summer trend analysis' },
+                              { label: 'Maintenance Requests', value: '+23% increase likely', trend: 'Weather correlation' },
+                              { label: 'Overall Confidence', value: '87.3%', trend: 'High accuracy model' }
+                            ]
+                          });
+                          setShowKpiModal(true);
+                        }}
+                      >
                         <h3 className="font-bold text-purple-800 mb-3">Next Month Forecast</h3>
                         <ul className="text-sm text-purple-700 space-y-2 font-medium">
                           <li>• 2 move-out notices expected</li>
                           <li>• Pool party will boost engagement +15.2%</li>
                           <li>• Maintenance requests likely to increase</li>
                         </ul>
+                        <p className="text-xs text-purple-600 mt-2">Click for detailed analysis</p>
                       </div>
 
                       <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
@@ -2234,19 +2570,22 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                     </div>
                   </div>
 
-                  {/* Community Sentiment */}
+                  {/* Enhanced Community Sentiment */}
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-6">💭 Community Sentiment</h2>
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                         <span className="text-sm font-medium text-gray-700">Overall Mood</span>
-                        <span className="text-2xl">😊</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-2xl">😊</span>
+                          <span className="text-xs text-green-600 font-bold">Positive</span>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                         <span className="text-sm font-medium text-gray-700">Trending Topics</span>
                         <span className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Pool maintenance</span>
                       </div>
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                         <span className="text-sm font-medium text-gray-700">Satisfaction</span>
                         <div className="flex items-center space-x-2">
                           <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
@@ -2258,10 +2597,10 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                 </div>
               </div>
 
-              {/* Bottom Analytics Section */}
+              {/* Enhanced Bottom Analytics Section */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
-                {/* Communication Analytics */}
+                {/* Enhanced Communication Analytics */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
                   <div className="mb-6">
                     <h2 className="text-xl font-bold text-gray-900">📱 Communication Analytics</h2>
@@ -2269,24 +2608,27 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                   </div>
                   <div className="space-y-6">
                     <div className="grid grid-cols-3 gap-6 text-center">
-                      <div className="p-4 bg-blue-50 rounded-xl">
+                      <div className="p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-blue-600">87.3%</p>
                         <p className="text-sm text-gray-600 font-medium">Message Open Rate</p>
+                        <p className="text-xs text-blue-600 mt-1">↗ +2.1%</p>
                       </div>
-                      <div className="p-4 bg-green-50 rounded-xl">
+                      <div className="p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-green-600">73.1%</p>
                         <p className="text-sm text-gray-600 font-medium">Response Rate</p>
+                        <p className="text-xs text-green-600 mt-1">↗ +5.3%</p>
                       </div>
-                      <div className="p-4 bg-purple-50 rounded-xl">
+                      <div className="p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-purple-600">4.2s</p>
                         <p className="text-sm text-gray-600 font-medium">Avg Response Time</p>
+                        <p className="text-xs text-purple-600 mt-1">↓ -0.8s</p>
                       </div>
                     </div>
                     
                     <div className="border-t pt-6">
                       <h3 className="font-bold text-gray-900 mb-4">Channel Performance</h3>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">App Notifications</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-200 rounded-full h-3">
@@ -2295,7 +2637,7 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                             <span className="text-sm font-bold text-gray-900">92.1%</span>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Email</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-200 rounded-full h-3">
@@ -2304,7 +2646,7 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                             <span className="text-sm font-bold text-gray-900">73.4%</span>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">SMS</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-200 rounded-full h-3">
@@ -2318,7 +2660,7 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                   </div>
                 </div>
 
-                {/* Resident Lifecycle Analytics */}
+                {/* Enhanced Resident Lifecycle Analytics */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
                   <div className="mb-6">
                     <h2 className="text-xl font-bold text-gray-900">🏠 Resident Lifecycle</h2>
@@ -2326,32 +2668,34 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                   </div>
                   <div className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-100">
+                      <div className="text-center p-5 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-blue-600">2.8 yrs</p>
                         <p className="text-sm text-gray-600 font-medium">Avg Lease Length</p>
+                        <p className="text-xs text-blue-600 mt-1">↗ +0.3 yrs</p>
                       </div>
-                      <div className="text-center p-5 bg-green-50 rounded-xl border border-green-100">
+                      <div className="text-center p-5 bg-green-50 rounded-xl border border-green-100 hover:bg-green-100 transition-colors cursor-pointer">
                         <p className="text-2xl font-bold text-green-600">18 days</p>
                         <p className="text-sm text-gray-600 font-medium">Avg Vacancy</p>
+                        <p className="text-xs text-green-600 mt-1">↓ -3 days</p>
                       </div>
                     </div>
                     
                     <div className="border-t pt-6">
                       <h3 className="font-bold text-gray-900 mb-4">Move-out Reasons (Last 6 months)</h3>
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Job Relocation</span>
                           <span className="text-sm font-bold text-gray-900">45%</span>
                         </div>
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Rent Increase</span>
                           <span className="text-sm font-bold text-gray-900">25%</span>
                         </div>
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Lifestyle Change</span>
                           <span className="text-sm font-bold text-gray-900">20%</span>
                         </div>
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                           <span className="text-sm font-medium text-gray-700">Other</span>
                           <span className="text-sm font-bold text-gray-900">10%</span>
                         </div>
@@ -2360,6 +2704,80 @@ const [showProfileMenu, setShowProfileMenu] = useState(false);
                   </div>
                 </div>
               </div>
+
+              {/* KPI Detail Modal */}
+              {showKpiModal && selectedKpi && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="p-6 border-b border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xl font-bold text-gray-900">{selectedKpi.title}</h3>
+                        <button 
+                          onClick={() => setShowKpiModal(false)}
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          <X className="w-6 h-6" />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6">
+                      <div className="mb-6">
+                        <p className="text-gray-600 mb-4">{selectedKpi.description}</p>
+                        {selectedKpi.value && (
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <div className="flex items-center justify-between">
+                              <span className="text-lg font-semibold text-gray-900">Current Value:</span>
+                              <span className="text-2xl font-bold text-blue-600">{selectedKpi.value}</span>
+                            </div>
+                            {selectedKpi.trend && (
+                              <p className="text-sm text-gray-600 mt-2">Trend: {selectedKpi.trend}</p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold text-gray-900">Detailed Breakdown</h4>
+                        {selectedKpi.details.map((detail, index) => (
+                          <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div className="flex-1">
+                              <p className="font-medium text-gray-900">{detail.label}</p>
+                              {detail.additional && (
+                                <p className="text-sm text-gray-600 mt-1">{detail.additional}</p>
+                              )}
+                            </div>
+                            <div className="text-right">
+                              <p className="font-bold text-gray-900">{detail.value}</p>
+                              {detail.trend && (
+                                <p className="text-sm text-gray-600">{detail.trend}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="flex space-x-3 mt-6">
+                        <button
+                          onClick={() => setShowKpiModal(false)}
+                          className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                        >
+                          Close
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowKpiModal(false);
+                            // Add export functionality here
+                          }}
+                          className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                        >
+                          Export Data
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
 
