@@ -3813,7 +3813,7 @@ useEffect(() => {
 )}
 {/* Social Feed Page */}
 {currentPage === 'social' && (
-  <div className="space-y-6">
+  <div className="max-w-2xl mx-auto space-y-4">
     {/* Stories Section */}
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Community Stories</h3>
