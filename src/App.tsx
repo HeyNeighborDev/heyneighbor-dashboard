@@ -206,6 +206,10 @@ const [noraSettings, setNoraSettings] = useState({
     generateReports: true
   }
 });
+const [showAddUnitModal, setShowAddUnitModal] = useState(false);
+
+// User Role State (for management vs resident features)  
+const [userRole, setUserRole] = useState('management'); // 'management' or 'resident'
   const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
@@ -3904,7 +3908,21 @@ const toggleNoraAction = (actionKey) => {
                         <h4 className="font-semibold text-gray-900">Community Team</h4>
                         <p className="text-sm text-gray-600">2 hours ago • Unit Management</p>
                       </div>
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <div className="flex items-center space-x-2">
+  {userRole === 'management' && (
+    <>
+      <button className="text-blue-500 hover:text-blue-700 p-1 rounded" title="Pin Post">
+        📌
+      </button>
+      <button className="text-red-500 hover:text-red-700 p-1 rounded" title="Delete Post">
+        🗑️
+      </button>
+      <button className="text-yellow-500 hover:text-yellow-700 p-1 rounded" title="Flag for Review">
+        ⚠️
+      </button>
+    </>
+  )}
+  <button className="text-gray-400 hover:text-gray-600">
                         <MoreHorizontal className="w-5 h-5" />
                       </button>
                     </div>
