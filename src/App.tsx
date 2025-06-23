@@ -37,7 +37,8 @@ import {
   Trash2,
   TrendingUp, 
   Brain, 
-  Zap
+  Zap,
+  ChevronLeft,
 } from 'lucide-react';
 
 const ManagementDashboard = () => {
@@ -1617,7 +1618,10 @@ const toggleNoraAction = (actionKey) => {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <button className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+            <button 
+  onClick={() => setCurrentPage('system-health')}
+  className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+>
               View Details
             </button>
           </div>
@@ -1853,6 +1857,17 @@ const toggleNoraAction = (actionKey) => {
           {/* Activity Page */}
           {currentPage === 'activity' && (
             <>
+            {/* Back Button */}
+      <div className="flex items-center justify-between mb-6">
+        <button 
+          onClick={() => setCurrentPage('dashboard')}
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span className="font-medium">Back to Dashboard</span>
+        </button>
+        <h1 className="text-2xl font-bold text-gray-900">All Recent Activity</h1>
+      </div>
               <div className="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div className="p-4 border-b border-gray-200">
                   <div className="flex items-center justify-between">
