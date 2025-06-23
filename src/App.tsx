@@ -1055,6 +1055,22 @@ useEffect(() => {
     
     return filtered;
   };
+  // Settings Helper Functions
+  const toggleAmenity = (index) => {
+    const newAmenities = [...amenities];
+    newAmenities[index].enabled = !newAmenities[index].enabled;
+    setAmenities(newAmenities);
+  };
+
+  const toggleNoraAction = (actionKey) => {
+    setNoraSettings({
+      ...noraSettings,
+      autoActions: {
+        ...noraSettings.autoActions,
+        [actionKey]: !noraSettings.autoActions[actionKey]
+      }
+    });
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -1194,22 +1210,7 @@ useEffect(() => {
         update: updateText,
         by: 'Property Manager'
       };
-      // Settings Helper Functions
-const toggleAmenity = (index) => {
-  const newAmenities = [...amenities];
-  newAmenities[index].enabled = !newAmenities[index].enabled;
-  setAmenities(newAmenities);
-};
-
-const toggleNoraAction = (actionKey) => {
-  setNoraSettings({
-    ...noraSettings,
-    autoActions: {
-      ...noraSettings.autoActions,
-      [actionKey]: !noraSettings.autoActions[actionKey]
-    }
-  });
-};
+      
       
       // In real app, this would update the database
       console.log('Adding update:', newUpdate);
