@@ -190,6 +190,18 @@ const [amenities, setAmenities] = useState([
   { name: 'Business Center', icon: '💼', enabled: true },
   { name: 'Rooftop Deck', icon: '🏙️', enabled: true }
 ]);
+const [noraSettings, setNoraSettings] = useState({
+  personality: 'Friendly & Casual',
+  responseSpeed: 'thoughtful',
+  confidenceThreshold: 75,
+  learningEnabled: true,
+  autoActions: {
+    scheduleFollowups: true,
+    sendReminders: true,
+    escalateIssues: false,
+    generateReports: true
+  }
+});
   const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
