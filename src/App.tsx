@@ -3811,338 +3811,330 @@ const toggleNoraAction = (actionKey) => {
   </>
 )}
 {/* Social Feed Page */}
-          {currentPage === 'social' && (
-            <div className="space-y-6">
-              {/* Stories Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Community Stories</h3>
-                <div className="flex space-x-4 overflow-x-auto pb-2">
-                  <div className="flex-shrink-0 text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-0.5">
-                      <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                        <Plus className="w-6 h-6 text-gray-600" />
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-1">Your Story</p>
-                  </div>
-                  <div className="flex-shrink-0 text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-0.5">
-                      <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                        <span className="text-sm font-bold">🏊</span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-1">Pool Party</p>
-                  </div>
-                  <div className="flex-shrink-0 text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full p-0.5">
-                      <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                        <span className="text-sm font-bold">🎉</span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-1">BBQ Event</p>
-                  </div>
-                  <div className="flex-shrink-0 text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-red-400 to-pink-500 rounded-full p-0.5">
-                      <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                        <span className="text-sm font-bold">👋</span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-1">New Neighbors</p>
-                  </div>
-                </div>
+{currentPage === 'social' && (
+  <div className="space-y-6">
+    {/* Stories Section */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Community Stories</h3>
+      <div className="flex space-x-4 overflow-x-auto pb-2">
+        <div className="flex-shrink-0 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center mb-2">
+            <span className="text-white text-xl">🏊‍♀️</span>
+          </div>
+          <p className="text-xs text-gray-600">Pool Party</p>
+        </div>
+        <div className="flex-shrink-0 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mb-2">
+            <span className="text-white text-xl">🍖</span>
+          </div>
+          <p className="text-xs text-gray-600">BBQ Event</p>
+        </div>
+        <div className="flex-shrink-0 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mb-2">
+            <span className="text-white text-xl">👋</span>
+          </div>
+          <p className="text-xs text-gray-600">New Neighbors</p>
+        </div>
+        <div className="flex-shrink-0 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mb-2">
+            <span className="text-white text-xl">🛡️</span>
+          </div>
+          <p className="text-xs text-gray-600">Safety Updates</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Create Post Section */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <div className="flex items-center space-x-3 mb-4">
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+          <span className="text-white font-semibold">S</span>
+        </div>
+        <input 
+          type="text" 
+          placeholder="Share something with your neighbors..."
+          className="flex-1 px-4 py-2 bg-gray-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+            <Camera className="w-5 h-5" />
+            <span className="text-sm">Photo</span>
+          </button>
+          <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+            <Calendar className="w-5 h-5" />
+            <span className="text-sm">Event</span>
+          </button>
+          <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+            <AlertTriangle className="w-5 h-5" />
+            <span className="text-sm">Safety Alert</span>
+          </button>
+        </div>
+        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          Share
+        </button>
+      </div>
+    </div>
+
+    {/* Filter Tabs */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-1">
+      <div className="flex space-x-2">
+        <button className="flex-1 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg font-medium">
+          All Posts
+        </button>
+        <button className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+          Events
+        </button>
+        <button className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+          Recommendations
+        </button>
+        <button className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+          Safety
+        </button>
+        <button className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+          Marketplace
+        </button>
+      </div>
+    </div>
+
+    {/* Social Feed Posts */}
+    <div className="space-y-4">
+      {/* Community Event Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">CT</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Community Team</h4>
+              <p className="text-sm text-gray-600">2 hours ago • Unit Management</p>
+            </div>
+            <div className="flex items-center space-x-2">
+              {userRole === 'management' && (
+                <>
+                  <button className="text-blue-500 hover:text-blue-700 p-1 rounded" title="Pin Post">
+                    📌
+                  </button>
+                  <button className="text-red-500 hover:text-red-700 p-1 rounded" title="Delete Post">
+                    🗑️
+                  </button>
+                  <button className="text-yellow-500 hover:text-yellow-700 p-1 rounded" title="Flag for Review">
+                    ⚠️
+                  </button>
+                </>
+              )}
+              <button className="text-gray-400 hover:text-gray-600">
+                <MoreHorizontal className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <p className="text-gray-800 mb-3">
+            🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! #CommunityEvent #PoolParty
+          </p>
+        </div>
+        <div className="bg-gradient-to-r from-blue-400 to-cyan-500 h-64 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-6xl mb-2">🏊‍♀️</div>
+            <p className="text-xl font-semibold">Saturday Pool Party</p>
+            <p className="text-sm opacity-90">Join us for community fun!</p>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">24</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+                <MessageSquare className="w-5 h-5" />
+                <span className="text-sm font-medium">8</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                <CheckCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">Going</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">24 likes • 8 comments</span>
+          </div>
+          <div className="border-t pt-3">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-semibold">S</span>
               </div>
-
-              {/* Create Post Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold">S</span>
-                  </div>
-                  <div className="flex-1">
-                    <button className="w-full text-left px-4 py-2 bg-gray-50 rounded-full text-gray-600 hover:bg-gray-100 transition-colors">
-                      What's happening in the community, Sarah?
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
-                  <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors">
-                    <Camera className="w-5 h-5" />
-                    <span className="text-sm font-medium">Photo</span>
-                  </button>
-                  <button className="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors">
-                    <Calendar className="w-5 h-5" />
-                    <span className="text-sm font-medium">Event</span>
-                  </button>
-                  <button className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors">
-                    <AlertTriangle className="w-5 h-5" />
-                    <span className="text-sm font-medium">Safety Alert</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Filter Tabs */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                <div className="flex items-center space-x-1 p-2 overflow-x-auto">
-                  <button className="px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-medium whitespace-nowrap">
-                    All Posts
-                  </button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full text-sm font-medium whitespace-nowrap">
-                    Events
-                  </button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full text-sm font-medium whitespace-nowrap">
-                    Recommendations
-                  </button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full text-sm font-medium whitespace-nowrap">
-                    General
-                  </button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full text-sm font-medium whitespace-nowrap">
-                    Safety
-                  </button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full text-sm font-medium whitespace-nowrap">
-                    Marketplace
-                  </button>
-                </div>
-              </div>
-
-              {/* Social Feed */}
-              <div className="space-y-4">
-                {/* Community Event Post */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-4">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-semibold">CT</span>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">Community Team</h4>
-                        <p className="text-sm text-gray-600">2 hours ago • Unit Management</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-  <div className="flex items-center space-x-2">
-  {userRole === 'management' && (
-    <>
-      <button className="text-blue-500 hover:text-blue-700 p-1 rounded" title="Pin Post">
-        📌
-      </button>
-      <button className="text-red-500 hover:text-red-700 p-1 rounded" title="Delete Post">
-        🗑️
-      </button>
-      <button className="text-yellow-500 hover:text-yellow-700 p-1 rounded" title="Flag for Review">
-        ⚠️
-      </button>
-    </>
-  )}
-  <button className="text-gray-400 hover:text-gray-600">
-    <MoreHorizontal className="w-5 h-5" />
-  </button>
-</div>
-                    </div>
-                    <p className="text-gray-800 mb-3">
-                      🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! 
-                      #CommunityEvent #PoolParty
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-r from-blue-400 to-cyan-500 h-64 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <div className="text-6xl mb-2">🏊‍♀️</div>
-                      <p className="text-xl font-semibold">Saturday Pool Party</p>
-                      <p className="text-sm opacity-90">Join us for community fun!</p>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                          <Heart className="w-5 h-5" />
-                          <span className="text-sm font-medium">24</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
-                          <MessageSquare className="w-5 h-5" />
-                          <span className="text-sm font-medium">8</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
-                          <CheckCircle className="w-5 h-5" />
-                          <span className="text-sm font-medium">Going</span>
-                        </button>
-                      </div>
-                      <span className="text-sm text-gray-500">24 likes • 8 comments</span>
-                    </div>
-                    <div className="border-t pt-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm font-semibold">S</span>
-                        </div>
-                        <div className="flex-1">
-                          <input 
-                            type="text" 
-                            placeholder="Add a comment..." 
-                            className="w-full px-3 py-2 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Safety Alert Post */}
-                <div className="bg-white rounded-xl shadow-sm border border-red-200">
-                  <div className="p-4">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
-                        <AlertTriangle className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">Safety Alert</h4>
-                        <p className="text-sm text-gray-600">1 hour ago • Management</p>
-                      </div>
-                      <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
-                        URGENT
-                      </span>
-                    </div>
-                    <p className="text-gray-800 mb-3">
-                      ⚠️ <strong>Slippery conditions at pool deck</strong> - Maintenance is addressing the issue. Please use caution when walking in the area. Expected to be resolved by 3 PM today.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
-                          <Eye className="w-5 h-5" />
-                          <span className="text-sm font-medium">Seen by 47</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
-                          <CheckCircle className="w-5 h-5" />
-                          <span className="text-sm font-medium">Acknowledged</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Neighbor Recommendation Post */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-4">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-semibold">MR</span>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">Mike Rodriguez</h4>
-                        <p className="text-sm text-gray-600">3 hours ago • Unit 7A</p>
-                      </div>
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                        Recommendation
-                      </span>
-                    </div>
-                    <p className="text-gray-800 mb-3">
-                      🍕 Just tried Tony's Pizza for delivery - amazing! They deliver to our building in under 30 minutes. Highly recommend the pepperoni! Anyone else tried them?
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                          <Heart className="w-5 h-5" />
-                          <span className="text-sm font-medium">12</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
-                          <MessageSquare className="w-5 h-5" />
-                          <span className="text-sm font-medium">5</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
-                          <span className="text-sm font-medium">👍 Helpful</span>
-                        </button>
-                      </div>
-                      <span className="text-sm text-gray-500">12 likes • 5 comments</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* New Neighbor Welcome Post */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-4">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-semibold">LB</span>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">Lisa Brown</h4>
-                        <p className="text-sm text-gray-600">5 hours ago • Unit 3C</p>
-                      </div>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                        New Neighbor
-                      </span>
-                    </div>
-                    <p className="text-gray-800 mb-3">
-                      👋 Hi everyone! Just moved into Unit 3C with my family. Excited to be part of this community! Any recommendations for the best coffee shops nearby? ☕
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                          <Heart className="w-5 h-5" />
-                          <span className="text-sm font-medium">18</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
-                          <MessageSquare className="w-5 h-5" />
-                          <span className="text-sm font-medium">12</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors">
-                          <span className="text-sm font-medium">🏠 Welcome</span>
-                        </button>
-                      </div>
-                      <span className="text-sm text-gray-500">18 likes • 12 comments</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Marketplace Post */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-4">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-semibold">JM</span>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">Jessica Martinez</h4>
-                        <p className="text-sm text-gray-600">8 hours ago • Unit 4B</p>
-                      </div>
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                        For Sale
-                      </span>
-                    </div>
-                    <p className="text-gray-800 mb-3">
-                      🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
-                    </p>
-                    <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-3">
-                      <div className="text-center text-gray-500">
-                        <Camera className="w-12 h-12 mx-auto mb-2" />
-                        <p className="text-sm">Photo of navy blue sofa</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                          <Heart className="w-5 h-5" />
-                          <span className="text-sm font-medium">6</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
-                          <MessageSquare className="w-5 h-5" />
-                          <span className="text-sm font-medium">3</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
-                          <span className="text-sm font-medium">💰 Interested</span>
-                        </button>
-                      </div>
-                      <span className="text-sm text-gray-500">$400</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Load More */}
-              <div className="text-center py-6">
-                <button className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
-                  Load More Posts
-                </button>
+              <div className="flex-1">
+                <input 
+                  type="text" 
+                  placeholder="Add a comment..." 
+                  className="w-full px-3 py-2 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
             </div>
-          )}
+          </div>
+        </div>
+      </div>
+
+      {/* Safety Alert Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-red-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+              <AlertTriangle className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Safety Alert</h4>
+              <p className="text-sm text-gray-600">1 hour ago • Management</p>
+            </div>
+            <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
+              URGENT
+            </span>
+          </div>
+          <p className="text-gray-800 mb-3">
+            ⚠️ <strong>Slippery conditions at pool deck</strong> - Maintenance is addressing the issue. Please use caution when walking in the area. Expected to be resolved by 3 PM today.
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+                <Eye className="w-5 h-5" />
+                <span className="text-sm font-medium">Seen by 47</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                <CheckCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">Acknowledged</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Neighbor Recommendation Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">MR</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Mike Rodriguez</h4>
+              <p className="text-sm text-gray-600">3 hours ago • Unit 7A</p>
+            </div>
+            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+              Recommendation
+            </span>
+          </div>
+          <p className="text-gray-800 mb-3">
+            🍕 Just tried Tony's Pizza for delivery - amazing! They deliver to our building in under 30 minutes. Highly recommend the pepperoni! Anyone else tried them?
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">12</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+                <MessageSquare className="w-5 h-5" />
+                <span className="text-sm font-medium">5</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                <span className="text-sm font-medium">👍 Helpful</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">12 likes • 5 comments</span>
+          </div>
+        </div>
+      </div>
+
+      {/* New Neighbor Welcome Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">LB</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Lisa Brown</h4>
+              <p className="text-sm text-gray-600">5 hours ago • Unit 3C</p>
+            </div>
+            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              New Neighbor
+            </span>
+          </div>
+          <p className="text-gray-800 mb-3">
+            👋 Hi everyone! Just moved into Unit 3C with my family. Excited to be part of this community! Any recommendations for the best coffee shops nearby? ☕
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">18</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+                <MessageSquare className="w-5 h-5" />
+                <span className="text-sm font-medium">12</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors">
+                <span className="text-sm font-medium">🏠 Welcome</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">18 likes • 12 comments</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Marketplace Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">JM</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Jessica Martinez</h4>
+              <p className="text-sm text-gray-600">8 hours ago • Unit 4B</p>
+            </div>
+            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+              For Sale
+            </span>
+          </div>
+          <p className="text-gray-800 mb-3">
+            🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
+          </p>
+          <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-3">
+            <div className="text-center text-gray-500">
+              <Camera className="w-12 h-12 mx-auto mb-2" />
+              <p className="text-sm">Photo of navy blue sofa</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">6</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+                <MessageSquare className="w-5 h-5" />
+                <span className="text-sm font-medium">3</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                <span className="text-sm font-medium">💰 Interested</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">$400</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Load More */}
+    <div className="text-center py-6">
+      <button className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+        Load More Posts
+      </button>
+    </div>
+  </div>
+)}
           {/* Safety Page */}
           {currentPage === 'safety' && (
             <>
