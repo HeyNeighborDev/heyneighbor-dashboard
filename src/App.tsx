@@ -6498,7 +6498,6 @@ useEffect(() => {
           </div>
         </div>
       )}
-      </div> {/* Main Content */}      
     </div>
   );
 };
