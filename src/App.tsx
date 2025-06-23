@@ -1619,7 +1619,7 @@ const toggleNoraAction = (actionKey) => {
           </div>
           <div className="flex items-center space-x-2">
             <button 
-  onClick={() => setCurrentPage('system-health')}
+  onClick={() => setCurrentPage('analytics')}
   className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
 >
               View Details
