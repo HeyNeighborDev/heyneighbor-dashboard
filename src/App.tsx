@@ -1466,11 +1466,11 @@ const toggleNoraAction = (actionKey) => {
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-center">
-  <img 
-    src={HeyNeighborLogo} 
-    alt="HeyNeighbor Logo" 
-    className="h-10 w-auto"
-  />
+<img 
+  src={HeyNeighborLogo} 
+  alt="HeyNeighbor Logo" 
+  className="h-10 w-auto"
+/>
 </div>
         </div>
 
@@ -1511,6 +1511,15 @@ const toggleNoraAction = (actionKey) => {
           >
             <MessageSquare className="w-5 h-5" />
             <span>Communications</span>
+          </button>
+          <button 
+            onClick={() => setCurrentPage('social')}
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+              currentPage === 'social' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <Heart className="w-5 h-5" />
+            <span>Social Feed</span>
           </button>
           <button 
             onClick={() => setCurrentPage('events')}
@@ -3909,6 +3918,7 @@ const toggleNoraAction = (actionKey) => {
                         <p className="text-sm text-gray-600">2 hours ago • Unit Management</p>
                       </div>
                       <div className="flex items-center space-x-2">
+  <div className="flex items-center space-x-2">
   {userRole === 'management' && (
     <>
       <button className="text-blue-500 hover:text-blue-700 p-1 rounded" title="Pin Post">
@@ -3923,8 +3933,9 @@ const toggleNoraAction = (actionKey) => {
     </>
   )}
   <button className="text-gray-400 hover:text-gray-600">
-                        <MoreHorizontal className="w-5 h-5" />
-                      </button>
+    <MoreHorizontal className="w-5 h-5" />
+  </button>
+</div>
                     </div>
                     <p className="text-gray-800 mb-3">
                       🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! 
@@ -6493,7 +6504,8 @@ const toggleNoraAction = (actionKey) => {
             </div>
           </div>
         </div>
-      )}      
+      )}
+      </div> {/* Main Content */}      
     </div>
   );
 };
