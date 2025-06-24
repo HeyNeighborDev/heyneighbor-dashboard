@@ -1475,6 +1475,10 @@ useEffect(() => {
     }
   };
 
+  if (currentPage === 'resident-home') {
+    return <ResidentPlatform onBackToManagement={() => setCurrentPage('dashboard')} />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
@@ -5217,10 +5221,7 @@ useEffect(() => {
               )}
             </>
           )}
-          {/* Resident Platform */}
-          {currentPage === 'resident-home' && (
-            <ResidentPlatform />
-          )}
+          
 
         </div>
       </div>
