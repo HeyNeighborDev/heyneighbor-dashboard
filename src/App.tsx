@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
+import ResidentPlatform from './ResidentPlatform'; // Adjust path as needed
 import HeyNeighborLogo from './Assets/heyneighbor-logo.svg';
 import PoolPartyImage from './Assets/pool-party.png';
 import NavySofaImage from './Assets/navy-sofa.png';
@@ -1562,6 +1563,15 @@ useEffect(() => {
           >
             <Settings className="w-5 h-5" />
             <span>Settings</span>
+          </button>
+          <button
+          onClick={() => setCurrentPage('resident-home')}
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+              currentPage === 'resident-home' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <Users className="w-5 h-5" />
+            <span>Resident View</span>
           </button>
         </nav>
 
@@ -5207,6 +5217,11 @@ useEffect(() => {
               )}
             </>
           )}
+          {/* Resident Platform */}
+          {currentPage === 'resident-home' && (
+            <ResidentPlatform />
+          )}
+
         </div>
       </div>
 
