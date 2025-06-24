@@ -3981,7 +3981,7 @@ useEffect(() => {
               🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! #CommunityEvent #PoolParty
             </p>
           </div>
-          <div className="h-64 overflow-hidden">
+          <div className="aspect-square overflow-hidden rounded-lg">
   <img 
     src={PoolPartyImage} 
     alt="Community Pool Party"
@@ -4186,7 +4186,7 @@ useEffect(() => {
             <p className="text-gray-800 mb-3">
               🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
             </p>
-            <div className="rounded-lg h-48 overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
+            <div className="aspect-square rounded-lg overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
   <img 
     src={NavySofaImage} 
     alt="Navy Blue Sofa for Sale"
