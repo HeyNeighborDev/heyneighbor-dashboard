@@ -6,6 +6,7 @@ import {
   AlertTriangle, 
   Calendar,
   MessageSquare,
+  MessageCircle,
   Shield,
   Bell,
   Search,
@@ -39,6 +40,7 @@ import {
   Brain, 
   Zap,
   ChevronLeft,
+  Share2,
 } from 'lucide-react';
 
 const ManagementDashboard = () => {
@@ -210,6 +212,16 @@ const [showAddUnitModal, setShowAddUnitModal] = useState(false);
 
 // User Role State (for management vs resident features)  
 const [userRole, setUserRole] = useState('management'); // 'management' or 'resident'
+
+// Social Feed States
+const [activeCategory, setActiveCategory] = useState('All Posts');
+const [showStoryModal, setShowStoryModal] = useState(false);
+const [currentStory, setCurrentStory] = useState(null);
+const [showPostComposer, setShowPostComposer] = useState(false);
+const [composerType, setComposerType] = useState('');
+const [showComments, setShowComments] = useState({});
+const [newComment, setNewComment] = useState('');
+
   const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
@@ -3818,46 +3830,30 @@ useEffect(() => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Community Stories</h3>
         <div className="flex space-x-4 overflow-x-auto pb-2">
-          <button
-            onClick={() => alert('📱 Opening Pool Party story...')}
-            className="flex-shrink-0 text-center group cursor-pointer"
-          >
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-              <span className="text-white text-xl">🏊‍♀️</span>
-            </div>
-            <p className="text-xs text-gray-600 group-hover:text-blue-500">Pool Party</p>
-          </button>
-          <button
-            onClick={() => alert('📱 Opening BBQ Event story...')}
-            className="flex-shrink-0 text-center group cursor-pointer"
-          >
-            <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-              <span className="text-white text-xl">🍖</span>
-            </div>
-            <p className="text-xs text-gray-600 group-hover:text-blue-500">BBQ Event</p>
-          </button>
-          <button
-            onClick={() => alert('📱 Opening New Neighbors story...')}
-            className="flex-shrink-0 text-center group cursor-pointer"
-          >
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-              <span className="text-white text-xl">👋</span>
-            </div>
-            <p className="text-xs text-gray-600 group-hover:text-blue-500">New Neighbors</p>
-          </button>
-          <button
-            onClick={() => alert('📱 Opening Safety Updates story...')}
-            className="flex-shrink-0 text-center group cursor-pointer"
-          >
-            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-              <span className="text-white text-xl">🛡️</span>
-            </div>
-            <p className="text-xs text-gray-600 group-hover:text-blue-500">Safety Updates</p>
-          </button>
+          {[
+            { id: 1, title: 'Pool Party', emoji: '🏊‍♀️', gradient: 'from-blue-400 to-cyan-500', content: 'Get ready for our amazing pool party this Saturday!' },
+            { id: 2, title: 'BBQ Event', emoji: '🍖', gradient: 'from-green-400 to-emerald-500', content: 'Community BBQ was a huge success! Thanks to everyone who came.' },
+            { id: 3, title: 'New Neighbors', emoji: '👋', gradient: 'from-purple-400 to-pink-500', content: 'Welcome to all our new residents who joined us this month!' },
+            { id: 4, title: 'Safety Updates', emoji: '🛡️', gradient: 'from-orange-400 to-red-500', content: 'Important safety updates and emergency procedures for all residents.' }
+          ].map((story) => (
+            <button
+              key={story.id}
+              onClick={() => {
+                setCurrentStory(story);
+                setShowStoryModal(true);
+              }}
+              className="flex-shrink-0 text-center group cursor-pointer"
+            >
+              <div className={`w-16 h-16 bg-gradient-to-br ${story.gradient} rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform`}>
+                <span className="text-white text-xl">{story.emoji}</span>
+              </div>
+              <p className="text-xs text-gray-600 group-hover:text-blue-500">{story.title}</p>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Create Post Section */}
+      {/* Create Post Section - Sarah's Composer */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <div className="flex items-center space-x-3 mb-4">
           <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
@@ -3866,34 +3862,41 @@ useEffect(() => {
           <input 
             type="text" 
             placeholder="Share something with your neighbors..."
-            className="flex-1 px-4 py-2 bg-gray-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={() => alert('✍️ Post composer opened!')}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter' && e.target.value.trim()) {
-                alert(`📝 New post created: "${e.target.value}"`);
-                e.target.value = '';
-              }
+            className="flex-1 px-4 py-2 bg-gray-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            onClick={() => {
+              setComposerType('text');
+              setShowPostComposer(true);
             }}
+            readOnly
           />
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button 
-              onClick={() => alert('📸 Photo upload opened!')}
+              onClick={() => {
+                setComposerType('photo');
+                setShowPostComposer(true);
+              }}
               className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
             >
               <Camera className="w-5 h-5" />
               <span className="text-sm">Photo</span>
             </button>
             <button 
-              onClick={() => alert('📅 Event creation opened!')}
+              onClick={() => {
+                setComposerType('event');
+                setShowPostComposer(true);
+              }}
               className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors"
             >
               <Calendar className="w-5 h-5" />
               <span className="text-sm">Event</span>
             </button>
             <button 
-              onClick={() => alert('🚨 Safety alert composer opened!')}
+              onClick={() => {
+                setComposerType('safety');
+                setShowPostComposer(true);
+              }}
               className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors"
             >
               <AlertTriangle className="w-5 h-5" />
@@ -3901,7 +3904,10 @@ useEffect(() => {
             </button>
           </div>
           <button 
-            onClick={() => alert('🔗 Share options opened!')}
+            onClick={() => {
+              setComposerType('share');
+              setShowPostComposer(true);
+            }}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Share
@@ -3912,36 +3918,19 @@ useEffect(() => {
       {/* Filter Tabs */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-1">
         <div className="flex space-x-2">
-          <button 
-            onClick={() => alert('📂 Switched to All Posts view!')}
-            className="flex-1 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg font-medium"
-          >
-            All Posts
-          </button>
-          <button 
-            onClick={() => alert('📂 Switched to Events view!')}
-            className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
-          >
-            Events
-          </button>
-          <button 
-            onClick={() => alert('📂 Switched to Recommendations view!')}
-            className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
-          >
-            Recommendations
-          </button>
-          <button 
-            onClick={() => alert('📂 Switched to Safety view!')}
-            className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
-          >
-            Safety
-          </button>
-          <button 
-            onClick={() => alert('📂 Switched to Marketplace view!')}
-            className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
-          >
-            Marketplace
-          </button>
+          {['All Posts', 'Events', 'Recommendations', 'Safety', 'Marketplace'].map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
+                activeCategory === category
+                  ? 'bg-blue-50 text-blue-700'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -3960,34 +3949,28 @@ useEffect(() => {
               </div>
               <div className="flex items-center space-x-2">
                 {userRole === 'management' && (
-                  <>
+                  <div className="flex space-x-1">
                     <button 
-                      onClick={() => alert('📌 Post pinned!')}
-                      className="text-blue-500 hover:text-blue-700 p-1 rounded" 
+                      className="text-gray-400 hover:text-blue-500 p-1 rounded transition-colors" 
                       title="Pin Post"
                     >
                       📌
                     </button>
                     <button 
-                      onClick={() => alert('🗑️ Post deleted!')}
-                      className="text-red-500 hover:text-red-700 p-1 rounded" 
+                      className="text-gray-400 hover:text-red-500 p-1 rounded transition-colors" 
                       title="Delete Post"
                     >
                       🗑️
                     </button>
                     <button 
-                      onClick={() => alert('⚠️ Post flagged for review!')}
-                      className="text-yellow-500 hover:text-yellow-700 p-1 rounded" 
-                      title="Flag for Review"
+                      className="text-gray-400 hover:text-yellow-500 p-1 rounded transition-colors" 
+                      title="Flag Post"
                     >
                       ⚠️
                     </button>
-                  </>
+                  </div>
                 )}
-                <button 
-                  onClick={() => alert('⋯ More options opened!')}
-                  className="text-gray-400 hover:text-gray-600"
-                >
+                <button className="text-gray-400 hover:text-gray-600">
                   <MoreHorizontal className="w-5 h-5" />
                 </button>
               </div>
@@ -4006,50 +3989,67 @@ useEffect(() => {
           <div className="p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-4">
-                <button 
-                  onClick={() => alert('❤️ Liked the pool party!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
                   <Heart className="w-5 h-5" />
                   <span className="text-sm font-medium">24</span>
                 </button>
                 <button 
-                  onClick={() => alert('💬 Opening pool party comments...')}
+                  onClick={() => setShowComments(prev => ({ ...prev, 1: !prev[1] }))}
                   className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
                 >
-                  <MessageSquare className="w-5 h-5" />
+                  <MessageCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">8</span>
                 </button>
-                <button 
-                  onClick={() => alert('✅ Attending pool party!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
                   <CheckCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">Going</span>
                 </button>
               </div>
               <span className="text-sm text-gray-500">24 likes • 8 comments</span>
             </div>
-            <div className="border-t pt-3">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm font-semibold">S</span>
+            
+            {/* Comments Section */}
+            {showComments[1] && (
+              <div className="border-t pt-3 space-y-3">
+                <div className="flex space-x-3">
+                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                    <span className="text-gray-600 text-xs font-semibold">SM</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="bg-gray-50 rounded-lg px-3 py-2">
+                      <p className="text-sm font-medium text-gray-900">Sarah M</p>
+                      <p className="text-sm text-gray-700">Can't wait! Should I bring anything?</p>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">1 hour ago</p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <input 
-                    type="text" 
-                    placeholder="Add a comment..." 
-                    className="w-full px-3 py-2 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter' && e.target.value.trim()) {
-                        alert(`💬 Comment added: "${e.target.value}"`);
-                        e.target.value = '';
-                      }
-                    }}
-                  />
+                
+                {/* Add Comment */}
+                <div className="flex items-center space-x-3 pt-2">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm font-semibold">S</span>
+                  </div>
+                  <div className="flex-1 flex space-x-2">
+                    <input
+                      type="text"
+                      placeholder="Add a comment..."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      className="flex-1 px-3 py-2 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && newComment.trim()) {
+                          // Add comment logic here
+                          setNewComment('');
+                        }
+                      }}
+                    />
+                    <button className="px-3 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -4073,17 +4073,11 @@ useEffect(() => {
             </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <button 
-                  onClick={() => alert('👁️ Seen by 47 residents')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
                   <Eye className="w-5 h-5" />
                   <span className="text-sm font-medium">Seen by 47</span>
                 </button>
-                <button 
-                  onClick={() => alert('✅ Acknowledged the safety alert')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
                   <CheckCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">Acknowledged</span>
                 </button>
@@ -4112,24 +4106,18 @@ useEffect(() => {
             </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <button 
-                  onClick={() => alert('❤️ Liked the pizza recommendation!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
                   <Heart className="w-5 h-5" />
                   <span className="text-sm font-medium">12</span>
                 </button>
                 <button 
-                  onClick={() => alert('💬 Opening comments about pizza...')}
+                  onClick={() => setShowComments(prev => ({ ...prev, 3: !prev[3] }))}
                   className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
                 >
-                  <MessageSquare className="w-5 h-5" />
+                  <MessageCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">5</span>
                 </button>
-                <button 
-                  onClick={() => alert('👍 Marked as helpful recommendation!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
                   <span className="text-sm font-medium">👍 Helpful</span>
                 </button>
               </div>
@@ -4158,24 +4146,18 @@ useEffect(() => {
             </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <button 
-                  onClick={() => alert('❤️ Welcomed new neighbor Lisa!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
                   <Heart className="w-5 h-5" />
                   <span className="text-sm font-medium">18</span>
                 </button>
                 <button 
-                  onClick={() => alert('💬 Opening comments about coffee shops...')}
+                  onClick={() => setShowComments(prev => ({ ...prev, 4: !prev[4] }))}
                   className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
                 >
-                  <MessageSquare className="w-5 h-5" />
+                  <MessageCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">12</span>
                 </button>
-                <button 
-                  onClick={() => alert('🏠 Sent welcome message to Lisa!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors">
                   <span className="text-sm font-medium">🏠 Welcome</span>
                 </button>
               </div>
@@ -4202,10 +4184,7 @@ useEffect(() => {
             <p className="text-gray-800 mb-3">
               🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
             </p>
-            <div 
-              className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-3 cursor-pointer hover:bg-gray-200 transition-colors"
-              onClick={() => alert('📸 Opening sofa photo gallery...')}
-            >
+            <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-3 cursor-pointer hover:bg-gray-200 transition-colors">
               <div className="text-center text-gray-500">
                 <Camera className="w-12 h-12 mx-auto mb-2" />
                 <p className="text-sm">Photo of navy blue sofa</p>
@@ -4213,24 +4192,18 @@ useEffect(() => {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <button 
-                  onClick={() => alert('❤️ Liked the sofa listing!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
                   <Heart className="w-5 h-5" />
                   <span className="text-sm font-medium">6</span>
                 </button>
                 <button 
-                  onClick={() => alert('💬 Opening comments about the sofa...')}
+                  onClick={() => setShowComments(prev => ({ ...prev, 5: !prev[5] }))}
                   className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
                 >
-                  <MessageSquare className="w-5 h-5" />
+                  <MessageCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">3</span>
                 </button>
-                <button 
-                  onClick={() => alert('💰 Expressed interest in the sofa!')}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors"
-                >
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
                   <span className="text-sm font-medium">💰 Interested</span>
                 </button>
               </div>
@@ -4242,13 +4215,146 @@ useEffect(() => {
 
       {/* Load More */}
       <div className="text-center py-6">
-        <button 
-          onClick={() => alert('🔄 Loading more posts from the community...')}
-          className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
-        >
+        <button className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
           Load More Posts
         </button>
       </div>
+
+      {/* Story Modal */}
+      {showStoryModal && currentStory && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+          <div className="relative max-w-md w-full mx-4">
+            <button
+              onClick={() => setShowStoryModal(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className={`bg-gradient-to-br ${currentStory.gradient} rounded-2xl p-8 text-center text-white`}>
+              <div className="text-6xl mb-4">{currentStory.emoji}</div>
+              <h3 className="text-2xl font-bold mb-4">{currentStory.title}</h3>
+              <p className="text-lg opacity-90">{currentStory.content}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Post Composer Modal */}
+      {showPostComposer && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">
+                {composerType === 'photo' && '📸 Share Photo'}
+                {composerType === 'event' && '📅 Create Event'}
+                {composerType === 'safety' && '🚨 Safety Alert'}
+                {composerType === 'share' && '🔗 Share Content'}
+                {composerType === 'text' && '✍️ Create Post'}
+              </h3>
+              <button
+                onClick={() => setShowPostComposer(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="p-4">
+              {composerType === 'photo' && (
+                <div className="text-center">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 mb-4">
+                    <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                    <p className="text-gray-500">Drop photos here or click to upload</p>
+                  </div>
+                  <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Upload Photos
+                  </button>
+                </div>
+              )}
+              
+              {composerType === 'event' && (
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Event title"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="date"
+                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <input
+                      type="time"
+                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Location"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <textarea
+                    placeholder="Event description"
+                    rows="3"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  ></textarea>
+                  <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    Create Event
+                  </button>
+                </div>
+              )}
+              
+              {composerType === 'safety' && (
+                <div className="space-y-4">
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                    <option>Select Priority Level</option>
+                    <option>🟢 Low Priority</option>
+                    <option>🟡 Medium Priority</option>
+                    <option>🔴 High Priority</option>
+                    <option>🚨 URGENT</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Alert title"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                  <textarea
+                    placeholder="Describe the safety issue or alert"
+                    rows="4"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  ></textarea>
+                  <button className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    Send Safety Alert
+                  </button>
+                </div>
+              )}
+              
+              {(composerType === 'share' || composerType === 'text') && (
+                <div className="space-y-4">
+                  <textarea
+                    placeholder="What's on your mind?"
+                    rows="4"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  ></textarea>
+                  <div className="flex space-x-2">
+                    <button className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                      <Camera className="w-4 h-4" />
+                      <span className="text-sm">Photos</span>
+                    </button>
+                    <button className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-sm">Location</span>
+                    </button>
+                  </div>
+                  <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Share Post
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
 )}
           {/* Safety Page */}
