@@ -1,6 +1,8 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import HeyNeighborLogo from './Assets/heyneighbor-logo.svg';
+import PoolPartyImage from './Assets/pool-party.jpg';
+import NavySofaImage from './Assets/navy-sofa.jpg';
 import { 
   Users, 
   AlertTriangle, 
@@ -3979,13 +3981,13 @@ useEffect(() => {
               🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! #CommunityEvent #PoolParty
             </p>
           </div>
-          <div className="bg-gradient-to-r from-blue-400 to-cyan-500 h-64 flex items-center justify-center">
-            <div className="text-center text-white">
-              <div className="text-6xl mb-2">🏊‍♀️</div>
-              <p className="text-xl font-semibold">Saturday Pool Party</p>
-              <p className="text-sm opacity-90">Join us for community fun!</p>
-            </div>
-          </div>
+          <div className="h-64 overflow-hidden">
+  <img 
+    src={PoolPartyImage} 
+    alt="Community Pool Party"
+    className="w-full h-full object-cover"
+  />
+</div>
           <div className="p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-4">
@@ -4184,12 +4186,13 @@ useEffect(() => {
             <p className="text-gray-800 mb-3">
               🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
             </p>
-            <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-3 cursor-pointer hover:bg-gray-200 transition-colors">
-              <div className="text-center text-gray-500">
-                <Camera className="w-12 h-12 mx-auto mb-2" />
-                <p className="text-sm">Photo of navy blue sofa</p>
-              </div>
-            </div>
+            <div className="rounded-lg h-48 overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
+  <img 
+    src={NavySofaImage} 
+    alt="Navy Blue Sofa for Sale"
+    className="w-full h-full object-cover"
+  />
+</div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
