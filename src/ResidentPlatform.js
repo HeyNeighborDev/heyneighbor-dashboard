@@ -24,6 +24,12 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   const [composerType, setComposerType] = useState('');
   const [showComments, setShowComments] = useState({});
   const [newComment, setNewComment] = useState('');
+  const [showNeighborProfile, setShowNeighborProfile] = useState(false);
+  const [selectedNeighbor, setSelectedNeighbor] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [neighborFilter, setNeighborFilter] = useState('All Neighbors');
+  const [friendRequests, setFriendRequests] = useState(['mike_r', 'lisa_b']);
+  const [friends, setFriends] = useState(['sarah_m', 'jessica_m']);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1327,7 +1333,306 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   </div>
 )}
 
-{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && (
+{activeTab === 'neighbors' && (
+  <div className="space-y-6">
+    {/* Neighbors Header */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Neighbors</h1>
+          <p className="text-gray-600">Connect with your community</p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors">
+            <UserPlus className="w-4 h-4" />
+            <span>Privacy Settings</span>
+          </button>
+        </div>
+      </div>
+      
+      {/* Friend Requests */}
+      {friendRequests.length > 0 && (
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center space-x-2 mb-3">
+            <Bell className="w-5 h-5 text-blue-600" />
+            <h3 className="font-semibold text-blue-900">Friend Requests ({friendRequests.length})</h3>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between bg-white p-3 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold">MR</span>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">Mike Rodriguez</h4>
+                  <p className="text-sm text-gray-600">Wants to connect</p>
+                </div>
+              </div>
+              <div className="flex space-x-2">
+                <button className="px-3 py-1 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                  Accept
+                </button>
+                <button className="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors">
+                  Decline
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Filter Tabs */}
+      <div className="mt-6 flex flex-wrap gap-2">
+        {['All Neighbors', 'Friends', 'New Residents', 'Active'].map((filter) => (
+          <button
+            key={filter}
+            onClick={() => setNeighborFilter(filter)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              neighborFilter === filter
+                ? 'bg-blue-100 text-blue-700'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Neighbors Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Friend - Sarah (Unit Visible) */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+              <span className="text-gray-600 font-semibold">SM</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Sarah Martinez</h3>
+              <p className="text-sm text-gray-600">Unit 2B</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+            <span className="text-xs text-green-600">Friends</span>
+          </div>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Dog lover, yoga enthusiast. Always happy to help neighbors!</p>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedNeighbor({
+                name: 'Sarah Martinez',
+                unit: 'Unit 2B',
+                bio: 'Dog lover, yoga enthusiast. Always happy to help neighbors!',
+                isFriend: true,
+                avatar: 'SM'
+              });
+              setShowNeighborProfile(true);
+            }}
+            className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+          >
+            View Profile
+          </button>
+          <button className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+            Message
+          </button>
+        </div>
+      </div>
+
+      {/* Friend - Jessica (Unit Visible) */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">JM</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Jessica Martinez</h3>
+              <p className="text-sm text-gray-600">Unit 4B</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+            <span className="text-xs text-green-600">Friends</span>
+          </div>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Moving soon. Selling furniture and looking for new friendships!</p>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedNeighbor({
+                name: 'Jessica Martinez',
+                unit: 'Unit 4B',
+                bio: 'Moving soon. Selling furniture and looking for new friendships!',
+                isFriend: true,
+                avatar: 'JM'
+              });
+              setShowNeighborProfile(true);
+            }}
+            className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+          >
+            View Profile
+          </button>
+          <button className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+            Message
+          </button>
+        </div>
+      </div>
+
+      {/* Not Friend - Mike (Unit Hidden) */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">MR</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Mike Rodriguez</h3>
+              <p className="text-sm text-gray-500">Unit Hidden</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+            <span className="text-xs text-yellow-600">Pending</span>
+          </div>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Pizza enthusiast and friendly neighbor. Just moved in!</p>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedNeighbor({
+                name: 'Mike Rodriguez',
+                unit: 'Unit Hidden',
+                bio: 'Pizza enthusiast and friendly neighbor. Just moved in!',
+                isFriend: false,
+                avatar: 'MR'
+              });
+              setShowNeighborProfile(true);
+            }}
+            className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+          >
+            View Profile
+          </button>
+          <button className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+            Friend Request Sent
+          </button>
+        </div>
+      </div>
+
+      {/* Not Friend - Lisa (Unit Hidden) */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">LB</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Lisa Brown</h3>
+              <p className="text-sm text-gray-500">Unit Hidden</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+            <span className="text-xs text-blue-600">New</span>
+          </div>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Coffee lover seeking local recommendations. New to the area!</p>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedNeighbor({
+                name: 'Lisa Brown',
+                unit: 'Unit Hidden',
+                bio: 'Coffee lover seeking local recommendations. New to the area!',
+                isFriend: false,
+                avatar: 'LB'
+              });
+              setShowNeighborProfile(true);
+            }}
+            className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+          >
+            View Profile
+          </button>
+          <button className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+            Send Request
+          </button>
+        </div>
+      </div>
+
+      {/* Private Profile - Tom */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow opacity-75">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center">
+              <Shield className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Private Profile</h3>
+              <p className="text-sm text-gray-500">Unit Hidden</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
+            <span className="text-xs text-gray-600">Private</span>
+          </div>
+        </div>
+        
+        <p className="text-sm text-gray-500 mb-4 italic">This neighbor has chosen to keep their profile private.</p>
+        
+        <div className="flex items-center justify-between">
+          <button className="px-3 py-2 bg-gray-100 text-gray-500 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+            Profile Hidden
+          </button>
+          <button className="px-3 py-2 bg-gray-100 text-gray-500 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+            Unavailable
+          </button>
+        </div>
+      </div>
+
+      {/* Current User (You) */}
+      <div className="bg-white rounded-xl shadow-sm border-2 border-blue-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">S</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Sarah Johnson (You)</h3>
+              <p className="text-sm text-gray-600">Unit 3B</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+            <span className="text-xs text-green-600">Online</span>
+          </div>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Your profile is currently public. You have 2 friends.</p>
+        
+        <div className="flex items-center justify-between">
+          <button className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+            Edit Profile
+          </button>
+          <button className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+            Privacy Settings
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && activeTab !== 'neighbors' && (
   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
     <div className="text-gray-400 mb-4">
       <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
@@ -1338,7 +1643,6 @@ const ResidentPlatform = ({ onBackToManagement }) => {
     <p className="text-gray-600">This feature is currently in development.</p>
   </div>
 )}
-
           {/* Share Photo Modal */}
         {showSharePhotoModal && (
           <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowSharePhotoModal(false)}>
@@ -1789,6 +2093,178 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                     </button>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Neighbor Profile Modal */}
+        {showNeighborProfile && selectedNeighbor && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowNeighborProfile(false)}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto" onClick={e => e.stopPropagation()}>
+              <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Neighbor Profile</h3>
+                <button
+                  onClick={() => setShowNeighborProfile(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                    selectedNeighbor.avatar === 'SM' ? 'bg-gray-300' :
+                    selectedNeighbor.avatar === 'JM' ? 'bg-orange-500' :
+                    selectedNeighbor.avatar === 'MR' ? 'bg-purple-500' :
+                    selectedNeighbor.avatar === 'LB' ? 'bg-pink-500' : 'bg-gray-400'
+                  }`}>
+                    <span className={`font-semibold text-xl ${
+                      selectedNeighbor.avatar === 'SM' ? 'text-gray-600' : 'text-white'
+                    }`}>
+                      {selectedNeighbor.avatar}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-semibold text-gray-900">{selectedNeighbor.name}</h4>
+                    <p className="text-gray-600">{selectedNeighbor.unit}</p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <span className={`w-2 h-2 rounded-full ${
+                        selectedNeighbor.isFriend ? 'bg-green-500' : 'bg-yellow-500'
+                      }`}></span>
+                      <span className={`text-xs ${
+                        selectedNeighbor.isFriend ? 'text-green-600' : 'text-yellow-600'
+                      }`}>
+                        {selectedNeighbor.isFriend ? 'Friends' : 'Not Connected'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mb-6">
+                  <h5 className="font-medium text-gray-900 mb-2">About</h5>
+                  <p className="text-gray-600">{selectedNeighbor.bio}</p>
+                </div>
+                
+                {selectedNeighbor.isFriend && (
+                  <div className="mb-6">
+                    <h5 className="font-medium text-gray-900 mb-3">Contact Options</h5>
+                    <div className="space-y-2">
+                      <button className="w-full flex items-center space-x-3 p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors">
+                        <MessageCircle className="w-5 h-5" />
+                        <span>Send Message</span>
+                      </button>
+                      <button className="w-full flex items-center space-x-3 p-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors">
+                        <Phone className="w-5 h-5" />
+                        <span>Request Phone Number</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex space-x-3">
+                  {selectedNeighbor.isFriend ? (
+                    <button className="flex-1 px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium hover:bg-green-200 transition-colors">
+                      ✓ Friends
+                    </button>
+                  ) : (
+                    <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                      Send Friend Request
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => {
+                      setShowNeighborProfile(false);
+                      setShowReportModal(true);
+                    }}
+                    className="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-medium hover:bg-red-200 transition-colors"
+                  >
+                    Report
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Report Neighbor Modal */}
+        {showReportModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowReportModal(false)}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto" onClick={e => e.stopPropagation()}>
+              <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-red-700">Report Neighbor</h3>
+                <button
+                  onClick={() => setShowReportModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <AlertTriangle className="w-5 h-5 text-red-600" />
+                    <h4 className="font-semibold text-red-800">Safety First</h4>
+                  </div>
+                  <p className="text-sm text-red-700">
+                    Reports are taken seriously and will be reviewed by management. Please only report genuine safety concerns or policy violations.
+                  </p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Reason for Report</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="">Select reason...</option>
+                    <option value="harassment">Harassment or Inappropriate Behavior</option>
+                    <option value="threats">Threats or Intimidation</option>
+                    <option value="noise">Excessive Noise Complaints</option>
+                    <option value="safety">Safety Concerns</option>
+                    <option value="spam">Spam or Inappropriate Content</option>
+                    <option value="violation">Community Policy Violation</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Details</label>
+                  <textarea 
+                    placeholder="Please provide specific details about the incident..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+                    rows="4"
+                  />
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <h5 className="font-medium text-gray-900 mb-1">Your Privacy</h5>
+                      <p className="text-sm text-gray-600">
+                        Your report will be handled confidentially by management. The reported neighbor will not know who submitted the report.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <input type="checkbox" id="block-neighbor" className="rounded border-gray-300 text-red-600 focus:ring-red-500" />
+                  <label htmlFor="block-neighbor" className="text-sm text-gray-700">
+                    Also block this neighbor from contacting me
+                  </label>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    onClick={() => setShowReportModal(false)}
+                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                    Submit Report
+                  </button>
+                </div>
               </div>
             </div>
           </div>
