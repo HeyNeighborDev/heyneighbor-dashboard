@@ -14,6 +14,13 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
   const [showReportIssueModal, setShowReportIssueModal] = useState(false);
   const [showSellItemModal, setShowSellItemModal] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('All Posts');
+  const [showStoryModal, setShowStoryModal] = useState(false);
+  const [currentStory, setCurrentStory] = useState(null);
+  const [showPostComposer, setShowPostComposer] = useState(false);
+  const [composerType, setComposerType] = useState('');
+  const [showComments, setShowComments] = useState({});
+  const [newComment, setNewComment] = useState('');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -761,7 +768,347 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   </div>
 )}
 
-{activeTab !== 'home' && activeTab !== 'marketplace' && (
+{activeTab === 'feed' && (
+  <div className="max-w-2xl mx-auto space-y-4">
+    {/* Stories Section */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Community Stories</h3>
+      <div className="flex space-x-4 overflow-x-auto pb-2">
+        {[
+          { id: 1, title: 'Pool Party', emoji: '🏊‍♀️', gradient: 'from-blue-400 to-cyan-500', content: 'Get ready for our amazing pool party this Saturday!' },
+          { id: 2, title: 'BBQ Event', emoji: '🍖', gradient: 'from-green-400 to-emerald-500', content: 'Community BBQ was a huge success! Thanks to everyone who came.' },
+          { id: 3, title: 'New Neighbors', emoji: '👋', gradient: 'from-purple-400 to-pink-500', content: 'Welcome to all our new residents who joined us this month!' },
+          { id: 4, title: 'Recommendations', emoji: '⭐', gradient: 'from-orange-400 to-red-500', content: 'Check out the latest neighbor recommendations and reviews!' }
+        ].map((story) => (
+          <button
+            key={story.id}
+            onClick={() => {
+              setCurrentStory(story);
+              setShowStoryModal(true);
+            }}
+            className="flex-shrink-0 text-center group cursor-pointer"
+          >
+            <div className={`w-16 h-16 bg-gradient-to-br ${story.gradient} rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform`}>
+              <span className="text-white text-xl">{story.emoji}</span>
+            </div>
+            <p className="text-xs text-gray-600 group-hover:text-blue-500">{story.title}</p>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Create Post Section */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <div className="flex items-center space-x-3 mb-4">
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+          <span className="text-white font-semibold">S</span>
+        </div>
+        <input 
+          type="text" 
+          placeholder="Share something with your neighbors..."
+          className="flex-1 px-4 py-2 bg-gray-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          onClick={() => {
+            setComposerType('text');
+            setShowPostComposer(true);
+          }}
+          readOnly
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={() => {
+              setComposerType('photo');
+              setShowPostComposer(true);
+            }}
+            className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+          >
+            <Camera className="w-5 h-5" />
+            <span className="text-sm">Photo</span>
+          </button>
+          <button 
+            onClick={() => {
+              setComposerType('event');
+              setShowPostComposer(true);
+            }}
+            className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors"
+          >
+            <Calendar className="w-5 h-5" />
+            <span className="text-sm">Event</span>
+          </button>
+          <button 
+            onClick={() => setShowSellItemModal(true)}
+            className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors"
+          >
+            <ShoppingBag className="w-5 h-5" />
+            <span className="text-sm">Sell Item</span>
+          </button>
+        </div>
+        <button 
+          onClick={() => {
+            setComposerType('share');
+            setShowPostComposer(true);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Share
+        </button>
+      </div>
+    </div>
+
+    {/* Filter Tabs */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-1">
+      <div className="flex space-x-2">
+        {['All Posts', 'Events', 'Recommendations', 'Marketplace', 'Welcome'].map((category) => (
+          <button
+            key={category}
+            onClick={() => setActiveCategory(category)}
+            className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeCategory === category
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Social Feed Posts */}
+    <div className="space-y-4">
+      {/* Community Event Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">CT</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Community Team</h4>
+              <p className="text-sm text-gray-600">2 hours ago • Unit Management</p>
+            </div>
+            <button className="text-gray-400 hover:text-gray-600">
+              <MoreHorizontal className="w-5 h-5" />
+            </button>
+          </div>
+          <p className="text-gray-800 mb-3">
+            🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! #CommunityEvent #PoolParty
+          </p>
+        </div>
+        <div className="aspect-video overflow-hidden">
+          <div className="w-full h-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
+            <div className="text-center text-white">
+              <div className="text-6xl mb-4">🏊‍♀️</div>
+              <p className="text-xl font-semibold">Pool Party Image</p>
+            </div>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">24</span>
+              </button>
+              <button 
+                onClick={() => setShowComments(prev => ({ ...prev, 1: !prev[1] }))}
+                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">8</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                <CheckCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">Going</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">24 likes • 8 comments</span>
+          </div>
+          
+          {/* Comments Section */}
+          {showComments[1] && (
+            <div className="border-t pt-3 space-y-3">
+              <div className="flex space-x-3">
+                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                  <span className="text-gray-600 text-xs font-semibold">SM</span>
+                </div>
+                <div className="flex-1">
+                  <div className="bg-gray-50 rounded-lg px-3 py-2">
+                    <p className="text-sm font-medium text-gray-900">Sarah M</p>
+                    <p className="text-sm text-gray-700">Can't wait! Should I bring anything?</p>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">1 hour ago</p>
+                </div>
+              </div>
+              
+              {/* Add Comment */}
+              <div className="flex items-center space-x-3 pt-2">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-semibold">S</span>
+                </div>
+                <div className="flex-1 flex space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Add a comment..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    className="flex-1 px-3 py-2 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && newComment.trim()) {
+                        setNewComment('');
+                      }
+                    }}
+                  />
+                  <button className="px-3 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Neighbor Recommendation Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">MR</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Mike Rodriguez</h4>
+              <p className="text-sm text-gray-600">3 hours ago • Unit 7A</p>
+            </div>
+            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+              Recommendation
+            </span>
+          </div>
+          <p className="text-gray-800 mb-3">
+            🍕 Just tried Tony's Pizza for delivery - amazing! They deliver to our building in under 30 minutes. Highly recommend the pepperoni! Anyone else tried them?
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">12</span>
+              </button>
+              <button 
+                onClick={() => setShowComments(prev => ({ ...prev, 3: !prev[3] }))}
+                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">5</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                <span className="text-sm font-medium">👍 Helpful</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">12 likes • 5 comments</span>
+          </div>
+        </div>
+      </div>
+
+      {/* New Neighbor Welcome Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">LB</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Lisa Brown</h4>
+              <p className="text-sm text-gray-600">5 hours ago • Unit 3C</p>
+            </div>
+            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              New Neighbor
+            </span>
+          </div>
+          <p className="text-gray-800 mb-3">
+            👋 Hi everyone! Just moved into Unit 3C with my family. Excited to be part of this community! Any recommendations for the best coffee shops nearby? ☕
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">18</span>
+              </button>
+              <button 
+                onClick={() => setShowComments(prev => ({ ...prev, 4: !prev[4] }))}
+                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">12</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors">
+                <span className="text-sm font-medium">🏠 Welcome</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">18 likes • 12 comments</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Marketplace Post */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">JM</span>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Jessica Martinez</h4>
+              <p className="text-sm text-gray-600">8 hours ago • Unit 4B</p>
+            </div>
+            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+              For Sale
+            </span>
+          </div>
+          <p className="text-gray-800 mb-3">
+            🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
+          </p>
+          <div className="aspect-video rounded-lg overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
+            <div className="w-full h-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
+              <div className="text-center text-white">
+                <div className="text-4xl mb-2">🛋️</div>
+                <p className="text-lg font-semibold">Navy Blue Sofa</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-medium">6</span>
+              </button>
+              <button 
+                onClick={() => setShowComments(prev => ({ ...prev, 5: !prev[5] }))}
+                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">3</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                <span className="text-sm font-medium">💰 Interested</span>
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">$400</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Load More */}
+    <div className="text-center py-6">
+      <button className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+        Load More Posts
+      </button>
+    </div>
+  </div>
+)}
+
+{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && (
   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
     <div className="text-gray-400 mb-4">
       <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
@@ -1105,6 +1452,124 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                     Post Item
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Story Modal */}
+        {showStoryModal && currentStory && (
+          <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+            <div className="relative max-w-md w-full mx-4">
+              <button
+                onClick={() => setShowStoryModal(false)}
+                className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div className={`bg-gradient-to-br ${currentStory.gradient} rounded-2xl p-8 text-center text-white`}>
+                <div className="text-6xl mb-4">{currentStory.emoji}</div>
+                <h3 className="text-2xl font-bold mb-4">{currentStory.title}</h3>
+                <p className="text-lg opacity-90">{currentStory.content}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Post Composer Modal */}
+        {showPostComposer && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowPostComposer(false)}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto" onClick={e => e.stopPropagation()}>
+              <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold">
+                  {composerType === 'photo' && '📸 Share Photo'}
+                  {composerType === 'event' && '📅 Create Event'}
+                  {composerType === 'share' && '🔗 Share Content'}
+                  {composerType === 'text' && '✍️ Create Post'}
+                </h3>
+                <button
+                  onClick={() => setShowPostComposer(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="p-4">
+                {composerType === 'photo' && (
+                  <div className="space-y-4">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                      <Camera className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                      <p className="text-gray-500 mb-2">Drop photos here or click to upload</p>
+                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        Choose Photos
+                      </button>
+                    </div>
+                    <textarea
+                      placeholder="What's happening in your community?"
+                      rows="3"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    ></textarea>
+                    <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                      Share Photo
+                    </button>
+                  </div>
+                )}
+                
+                {composerType === 'event' && (
+                  <div className="space-y-4">
+                    <input
+                      type="text"
+                      placeholder="Event title"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <input
+                        type="date"
+                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                      <input
+                        type="time"
+                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Location"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <textarea
+                      placeholder="Event description"
+                      rows="3"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    ></textarea>
+                    <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                      Create Event
+                    </button>
+                  </div>
+                )}
+                
+                {(composerType === 'share' || composerType === 'text') && (
+                  <div className="space-y-4">
+                    <textarea
+                      placeholder="What's on your mind?"
+                      rows="4"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    ></textarea>
+                    <div className="flex space-x-2">
+                      <button className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                        <Camera className="w-4 h-4" />
+                        <span className="text-sm">Photos</span>
+                      </button>
+                      <button className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                        <MapPin className="w-4 h-4" />
+                        <span className="text-sm">Location</span>
+                      </button>
+                    </div>
+                    <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                      Share Post
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
