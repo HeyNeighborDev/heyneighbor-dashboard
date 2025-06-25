@@ -12,6 +12,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showSharePhotoModal, setShowSharePhotoModal] = useState(false);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
+  const [showReportIssueModal, setShowReportIssueModal] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -289,7 +290,10 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                           <span className="text-sm font-medium text-gray-900">Create Event</span>
                         </button>
                         
-                        <button className="flex flex-col items-center p-4 bg-red-50 hover:bg-red-100 rounded-xl transition-colors">
+                        <button 
+                            onClick={() => setShowReportIssueModal(true)}
+                            className="flex flex-col items-center p-4 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
+                        >
                           <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center mb-2">
                             <AlertTriangle className="w-6 h-6 text-white" />
                           </div>
@@ -734,6 +738,94 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                   </button>
                   <button className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
                     Create Event
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Report Issue Modal */}
+        {showReportIssueModal && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowReportIssueModal(false)}>
+            <div 
+              className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Report Issue</h3>
+                <button 
+                  onClick={() => setShowReportIssueModal(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Issue Type</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="">Select issue type...</option>
+                    <option value="maintenance">Maintenance Request</option>
+                    <option value="noise">Noise Complaint</option>
+                    <option value="amenity">Broken Amenity</option>
+                    <option value="safety">Safety Concern</option>
+                    <option value="parking">Parking Issue</option>
+                    <option value="plumbing">Plumbing Problem</option>
+                    <option value="electrical">Electrical Issue</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Priority Level</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="low">Low - Can wait a few days</option>
+                    <option value="medium">Medium - Should be addressed soon</option>
+                    <option value="high">High - Needs immediate attention</option>
+                    <option value="emergency">Emergency - Urgent safety issue</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                  <input 
+                    type="text"
+                    placeholder="Unit 3B, Pool Area, Lobby, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                  <textarea 
+                    placeholder="Please describe the issue in detail..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+                    rows="4"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Best Time to Contact</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="anytime">Anytime</option>
+                    <option value="morning">Morning (8 AM - 12 PM)</option>
+                    <option value="afternoon">Afternoon (12 PM - 5 PM)</option>
+                    <option value="evening">Evening (5 PM - 8 PM)</option>
+                    <option value="weekend">Weekends only</option>
+                  </select>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    onClick={() => setShowReportIssueModal(false)}
+                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                    Submit Report
                   </button>
                 </div>
               </div>
