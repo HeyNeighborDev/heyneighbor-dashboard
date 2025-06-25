@@ -10,6 +10,7 @@ import {
 const ResidentPlatform = ({ onBackToManagement }) => {
   const [activeTab, setActiveTab] = useState('home');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showSharePhotoModal, setShowSharePhotoModal] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -131,7 +132,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
         </div>
 
         {/* Mobile Header */}
-        <div className="md:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 fixed top-0 left-0 right-0 z-40">
+        <div className="md:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">
           <div className="flex items-center justify-between">
             <button 
               onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -155,128 +156,83 @@ const ResidentPlatform = ({ onBackToManagement }) => {
         {/* Mobile Menu Overlay */}
         {showMobileMenu && (
           <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowMobileMenu(false)}>
-            <div 
-              className="fixed inset-y-0 left-0 w-80 bg-white shadow-xl transform transition-transform ease-in-out duration-300" 
-              onClick={e => e.stopPropagation()}
-              style={{ maxWidth: '85vw' }}
-            >
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-blue-50">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold">S</span>
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900">Sarah Johnson</h2>
-                    <p className="text-sm text-gray-600">Unit 3B</p>
-                  </div>
-                </div>
+            <div className="fixed inset-y-0 right-0 w-64 bg-white shadow-lg" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
                 <button 
                   onClick={() => setShowMobileMenu(false)}
-                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-600 hover:text-blue-600 rounded-lg transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              
-              <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+              <nav className="p-4 space-y-2">
                 <button
                   onClick={() => { onBackToManagement(); setShowMobileMenu(false); }}
-                  className="w-full flex items-center px-4 py-3 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-colors border border-blue-200 bg-blue-50 mb-4"
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
                 >
                   <ChevronLeft className="w-5 h-5 mr-3" />
                   Back to Management
                 </button>
-                
-                <div className="border-t border-gray-200 my-4"></div>
-                
+                <div className="border-t border-gray-200 my-2"></div>
                 <button
                   onClick={() => { setActiveTab('home'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'home' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Home className="w-5 h-5 mr-3" />
                   Home
                 </button>
-                
                 <button
                   onClick={() => { setActiveTab('feed'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'feed' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Heart className="w-5 h-5 mr-3" />
                   Feed
                 </button>
-                
                 <button
                   onClick={() => { setActiveTab('neighbors'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'neighbors' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Users className="w-5 h-5 mr-3" />
                   Neighbors
                 </button>
-                
                 <button
                   onClick={() => { setActiveTab('events'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'events' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Calendar className="w-5 h-5 mr-3" />
                   Events
                 </button>
-                
                 <button
                   onClick={() => { setActiveTab('groups'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'groups' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Building className="w-5 h-5 mr-3" />
                   Groups
                 </button>
-                
                 <button
                   onClick={() => { setActiveTab('marketplace'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'marketplace' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <ShoppingBag className="w-5 h-5 mr-3" />
                   Marketplace
                 </button>
-                
                 <button
                   onClick={() => { setActiveTab('amenities'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'amenities' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Waves className="w-5 h-5 mr-3" />
                   Amenities
                 </button>
-                
                 <button
                   onClick={() => { setActiveTab('messages'); setShowMobileMenu(false); }}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
-                    activeTab === 'messages' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <MessageCircle className="w-5 h-5 mr-3" />
                   Messages
                 </button>
-                
-                <div className="border-t border-gray-200 my-4"></div>
-                
-                <button className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors">
-                  <Settings className="w-5 h-5 mr-3" />
-                  Settings
-                </button>
-                
-                <button className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors">
+                <div className="border-t border-gray-200 my-2"></div>
+                <button className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                   <LogOut className="w-5 h-5 mr-3" />
                   Sign Out
                 </button>
@@ -286,8 +242,8 @@ const ResidentPlatform = ({ onBackToManagement }) => {
         )}
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col min-w-0 bg-gray-50 md:ml-0 mt-16 md:mt-0">
-          <div className="flex-1 relative overflow-y-auto md:pb-0 pb-20">
+        <div className="flex-1 flex flex-col min-w-0 bg-gray-50 md:ml-0">
+          <div className="flex-1 relative overflow-y-auto md:pb-0 pb-16">
             <div className="py-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 
@@ -312,7 +268,10 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                       <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <button className="flex flex-col items-center p-4 bg-pink-50 hover:bg-pink-100 rounded-xl transition-colors">
+                        <button 
+                            onClick={() => setShowSharePhotoModal(true)}
+                            className="flex flex-col items-center p-4 bg-pink-50 hover:bg-pink-100 rounded-xl transition-colors"
+                        >   
                           <div className="w-12 h-12 bg-pink-500 rounded-xl flex items-center justify-center mb-2">
                             <Camera className="w-6 h-6 text-white" />
                           </div>
@@ -635,6 +594,57 @@ const ResidentPlatform = ({ onBackToManagement }) => {
             </div>
           </div>
 
+          {/* Share Photo Modal */}
+        {showSharePhotoModal && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4" onClick={() => setShowSharePhotoModal(false)}>
+            <div 
+              className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-96 overflow-hidden"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Share Photo</h3>
+                <button 
+                  onClick={() => setShowSharePhotoModal(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-sm text-gray-600 mb-2">Click to upload or drag and drop</p>
+                  <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+                  <button className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    Choose File
+                  </button>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Caption</label>
+                  <textarea 
+                    placeholder="What's happening in your community?"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    rows="3"
+                  />
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    onClick={() => setShowSharePhotoModal(false)}
+                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button className="flex-1 px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-medium transition-colors">
+                    Share Photo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
           {/* Mobile Bottom Navigation */}
           <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
             <div className="flex justify-around">
