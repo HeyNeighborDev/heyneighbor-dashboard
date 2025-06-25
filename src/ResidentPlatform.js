@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PoolPartyImage from './Assets/pool-party.png';
+import NavySofaImage from './Assets/navy-sofa.png';
 import { 
   Home, Heart, MessageCircle, Users, Calendar, Building, 
   ShoppingBag, Phone, AlertTriangle, Bell, Search, Plus,
@@ -897,14 +899,13 @@ const ResidentPlatform = ({ onBackToManagement }) => {
             🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! #CommunityEvent #PoolParty
           </p>
         </div>
-        <div className="aspect-video overflow-hidden">
-          <div className="w-full h-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
-            <div className="text-center text-white">
-              <div className="text-6xl mb-4">🏊‍♀️</div>
-              <p className="text-xl font-semibold">Pool Party Image</p>
-            </div>
-          </div>
-        </div>
+<div className="aspect-video overflow-hidden">
+  <img 
+    src={PoolPartyImage} 
+    alt="Community Pool Party"
+    className="w-full h-full object-cover"
+  />
+</div>
         <div className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-4">
@@ -1069,14 +1070,13 @@ const ResidentPlatform = ({ onBackToManagement }) => {
           <p className="text-gray-800 mb-3">
             🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
           </p>
-          <div className="aspect-video rounded-lg overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
-            <div className="w-full h-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
-              <div className="text-center text-white">
-                <div className="text-4xl mb-2">🛋️</div>
-                <p className="text-lg font-semibold">Navy Blue Sofa</p>
-              </div>
-            </div>
-          </div>
+<div className="aspect-video rounded-lg overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
+  <img 
+    src={NavySofaImage} 
+    alt="Navy Blue Sofa for Sale"
+    className="w-full h-full object-cover"
+  />
+</div>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
