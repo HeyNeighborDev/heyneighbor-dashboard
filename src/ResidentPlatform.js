@@ -2601,6 +2601,245 @@ const ResidentPlatform = ({ onBackToManagement }) => {
           </div>
         )}
 
+        {/* Group Details Modal */}
+        {showGroupDetails && selectedGroup && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowGroupDetails(false)}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto" onClick={e => e.stopPropagation()}>
+              <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Group Details</h3>
+                <button
+                  onClick={() => setShowGroupDetails(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-3xl">{selectedGroup.emoji}</span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-semibold text-gray-900">{selectedGroup.name}</h4>
+                    <p className="text-gray-600">{selectedGroup.members} members</p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <span className={`w-2 h-2 rounded-full ${
+                        selectedGroup.isMember ? 'bg-purple-500' : 'bg-gray-400'
+                      }`}></span>
+                      <span className={`text-xs ${
+                        selectedGroup.isMember ? 'text-purple-600' : 'text-gray-600'
+                      }`}>
+                        {selectedGroup.isMember ? 'Member' : 'Not a Member'}
+                      </span>
+                      {selectedGroup.isPrivate && (
+                        <>
+                          <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
+                          <span className="text-xs text-gray-600">Private Group</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mb-6">
+                  <h5 className="font-medium text-gray-900 mb-2">About This Group</h5>
+                  <p className="text-gray-600">{selectedGroup.description}</p>
+                </div>
+                
+                {selectedGroup.isMember && (
+                  <div className="mb-6">
+                    <h5 className="font-medium text-gray-900 mb-3">Member Benefits</h5>
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-3 p-3 bg-purple-50 text-purple-700 rounded-lg">
+                        <MessageCircle className="w-5 h-5" />
+                        <span className="text-sm">Access to group chat</span>
+                      </div>
+                      <div className="flex items-center space-x-3 p-3 bg-blue-50 text-blue-700 rounded-lg">
+                        <Calendar className="w-5 h-5" />
+                        <span className="text-sm">Event notifications</span>
+                      </div>
+                      <div className="flex items-center space-x-3 p-3 bg-green-50 text-green-700 rounded-lg">
+                        <Users className="w-5 h-5" />
+                        <span className="text-sm">Meet other members</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="mb-6">
+                  <h5 className="font-medium text-gray-900 mb-3">Recent Activity</h5>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3 text-sm">
+                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span className="text-gray-600 text-xs">SM</span>
+                      </div>
+                      <div>
+                        <p className="text-gray-900">Sarah shared a new post</p>
+                        <p className="text-gray-500">2 hours ago</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 text-sm">
+                      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">MR</span>
+                      </div>
+                      <div>
+                        <p className="text-gray-900">Mike joined the group</p>
+                        <p className="text-gray-500">1 day ago</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3">
+                  {selectedGroup.isMember ? (
+                    <>
+                      <button className="flex-1 px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-medium hover:bg-purple-200 transition-colors">
+                        Open Group Chat
+                      </button>
+                      <button className="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-medium hover:bg-red-200 transition-colors">
+                        Leave Group
+                      </button>
+                    </>
+                  ) : selectedGroup.isPrivate ? (
+                    <>
+                      <button className="flex-1 px-4 py-2 bg-gray-100 text-gray-500 rounded-lg font-medium cursor-not-allowed" disabled>
+                        Private Group
+                      </button>
+                      <button className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium hover:bg-blue-200 transition-colors">
+                        Request to Join
+                      </button>
+                    </>
+                  ) : (
+                    <button className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
+                      Join Group
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Create Group Modal */}
+        {showCreateGroupModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto" onClick={() => setShowCreateGroupModal(false)}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto" onClick={e => e.stopPropagation()}>
+              <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-purple-700">Create New Group</h3>
+                <button
+                  onClick={() => setShowCreateGroupModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Users className="w-5 h-5 text-purple-600" />
+                    <h4 className="font-semibold text-purple-800">Build Community</h4>
+                  </div>
+                  <p className="text-sm text-purple-700">
+                    Create a group to connect neighbors with shared interests and organize activities together.
+                  </p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Group Name</label>
+                  <input 
+                    type="text"
+                    placeholder="Walking Club, Book Lovers, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Group Type</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                    <option value="">Select group type...</option>
+                    <option value="social">Social & Entertainment</option>
+                    <option value="fitness">Fitness & Wellness</option>
+                    <option value="hobbies">Hobbies & Interests</option>
+                    <option value="professional">Professional & Networking</option>
+                    <option value="family">Family & Kids</option>
+                    <option value="volunteer">Volunteer & Community Service</option>
+                    <option value="committee">Building Committee</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                  <textarea 
+                    placeholder="Describe your group's purpose, activities, and what members can expect..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
+                    rows="3"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Meeting Frequency</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="asneeded">As needed</option>
+                    <option value="irregular">Irregular schedule</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Privacy Setting</label>
+                  <div className="space-y-3">
+                    <label className="flex items-center space-x-3">
+                      <input type="radio" name="privacy" value="public" className="text-purple-600 focus:ring-purple-500" defaultChecked />
+                      <div>
+                        <p className="font-medium text-gray-900">Public Group</p>
+                        <p className="text-sm text-gray-600">Anyone in the community can join</p>
+                      </div>
+                    </label>
+                    <label className="flex items-center space-x-3">
+                      <input type="radio" name="privacy" value="private" className="text-purple-600 focus:ring-purple-500" />
+                      <div>
+                        <p className="font-medium text-gray-900">Private Group</p>
+                        <p className="text-sm text-gray-600">Members must be approved to join</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Group Icon</label>
+                  <div className="grid grid-cols-6 gap-2">
+                    {['📚', '🏃‍♀️', '🎮', '🍳', '🎨', '🎵', '🐕', '🌱', '💪', '🍷', '⚽', '🧘‍♀️'].map((emoji) => (
+                      <button
+                        key={emoji}
+                        className="w-10 h-10 bg-gray-100 hover:bg-purple-100 rounded-lg flex items-center justify-center text-lg transition-colors"
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    onClick={() => setShowCreateGroupModal(false)}
+                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors">
+                    Create Group
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
               </div>
             </div>
           </div>
