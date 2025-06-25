@@ -14,7 +14,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen">
-        {/* Desktop Sidebar */}
+        {/* Desktop Sidebar - Hidden on Mobile */}
         <div className="hidden md:flex md:w-64 md:flex-col">
           <div className="flex flex-col flex-1 bg-white border-r border-gray-200">
             {/* Profile Section */}
@@ -133,29 +133,21 @@ const ResidentPlatform = ({ onBackToManagement }) => {
         {/* Mobile Header */}
         <div className="md:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <button 
-                onClick={onBackToManagement}
-                className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                title="Back to Management Dashboard"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <h1 className="text-lg font-semibold text-gray-900">HeyNeighbor</h1>
-            </div>
-            <div className="flex items-center space-x-3">
-              <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+            <button 
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <h1 className="text-lg font-semibold text-gray-900">HeyNeighbor</h1>
+            <div className="flex items-center space-x-2">
+              <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors relative">
                 <Bell className="w-5 h-5" />
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
               </button>
-              <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                <Search className="w-5 h-5" />
-              </button>
-              <button 
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-semibold text-sm">S</span>
+              </div>
             </div>
           </div>
         </div>
@@ -174,6 +166,14 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                 </button>
               </div>
               <nav className="p-4 space-y-2">
+                <button
+                  onClick={() => { onBackToManagement(); setShowMobileMenu(false); }}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                >
+                  <ChevronLeft className="w-5 h-5 mr-3" />
+                  Back to Management
+                </button>
+                <div className="border-t border-gray-200 my-2"></div>
                 <button
                   onClick={() => { setActiveTab('home'); setShowMobileMenu(false); }}
                   className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
@@ -202,14 +202,47 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                   <Calendar className="w-5 h-5 mr-3" />
                   Events
                 </button>
+                <button
+                  onClick={() => { setActiveTab('groups'); setShowMobileMenu(false); }}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <Building className="w-5 h-5 mr-3" />
+                  Groups
+                </button>
+                <button
+                  onClick={() => { setActiveTab('marketplace'); setShowMobileMenu(false); }}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <ShoppingBag className="w-5 h-5 mr-3" />
+                  Marketplace
+                </button>
+                <button
+                  onClick={() => { setActiveTab('amenities'); setShowMobileMenu(false); }}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <Waves className="w-5 h-5 mr-3" />
+                  Amenities
+                </button>
+                <button
+                  onClick={() => { setActiveTab('messages'); setShowMobileMenu(false); }}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <MessageCircle className="w-5 h-5 mr-3" />
+                  Messages
+                </button>
+                <div className="border-t border-gray-200 my-2"></div>
+                <button className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                  <LogOut className="w-5 h-5 mr-3" />
+                  Sign Out
+                </button>
               </nav>
             </div>
           </div>
         )}
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col min-w-0 bg-gray-50">
-          <div className="flex-1 relative overflow-y-auto">
+        <div className="flex-1 flex flex-col min-w-0 bg-gray-50 md:ml-0">
+          <div className="flex-1 relative overflow-y-auto md:pb-0 pb-16">
             <div className="py-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 
@@ -558,7 +591,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
           </div>
 
           {/* Mobile Bottom Navigation */}
-          <div className="md:hidden bg-white border-t border-gray-200 px-4 py-2">
+          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
             <div className="flex justify-around">
               <button
                 onClick={() => setActiveTab('home')}
@@ -601,13 +634,13 @@ const ResidentPlatform = ({ onBackToManagement }) => {
               </button>
               
               <button
-                onClick={() => setActiveTab('messages')}
+                onClick={() => setActiveTab('create')}
                 className={`flex flex-col items-center py-2 px-3 ${
-                  activeTab === 'messages' ? 'text-blue-600' : 'text-gray-600'
+                  activeTab === 'create' ? 'text-blue-600' : 'text-gray-600'
                 }`}
               >
-                <MessageCircle className="w-5 h-5" />
-                <span className="text-xs mt-1">Messages</span>
+                <Plus className="w-5 h-5" />
+                <span className="text-xs mt-1">Create</span>
               </button>
             </div>
           </div>
