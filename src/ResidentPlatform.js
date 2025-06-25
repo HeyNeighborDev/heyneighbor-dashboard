@@ -11,6 +11,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   const [activeTab, setActiveTab] = useState('home');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showSharePhotoModal, setShowSharePhotoModal] = useState(false);
+  const [showCreateEventModal, setShowCreateEventModal] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -278,7 +279,10 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                           <span className="text-sm font-medium text-gray-900">Share Photo</span>
                         </button>
                         
-                        <button className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors">
+                        <button 
+                            onClick={() => setShowCreateEventModal(true)}
+                            className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+                        >
                           <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-2">
                             <Calendar className="w-6 h-6 text-white" />
                           </div>
@@ -645,6 +649,98 @@ const ResidentPlatform = ({ onBackToManagement }) => {
             </div>
           </div>
         )}
+
+        {/* Create Event Modal */}
+        {showCreateEventModal && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowCreateEventModal(false)}>
+            <div 
+              className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Create Event</h3>
+                <button 
+                  onClick={() => setShowCreateEventModal(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Event Title</label>
+                  <input 
+                    type="text"
+                    placeholder="Pool Party, Yoga Class, Game Night..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input 
+                      type="date"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                    <input 
+                      type="time"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Select location...</option>
+                    <option value="pool">Pool Deck</option>
+                    <option value="rooftop">Rooftop</option>
+                    <option value="lounge">Community Lounge</option>
+                    <option value="gym">Fitness Center</option>
+                    <option value="courtyard">Courtyard</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                  <textarea 
+                    placeholder="Tell your neighbors about this event..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    rows="3"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Max Attendees (Optional)</label>
+                  <input 
+                    type="number"
+                    placeholder="Leave blank for unlimited"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    onClick={() => setShowCreateEventModal(false)}
+                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                    Create Event
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
           {/* Mobile Bottom Navigation */}
           <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
             <div className="flex justify-around">
