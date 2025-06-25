@@ -590,21 +590,188 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                   </div>
                 )}
 
-                {/* Other tab contents would go here */}
-                {activeTab !== 'home' && (
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-                    <div className="text-gray-400 mb-4">
-                      <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
-                        <Clock className="w-8 h-8" />
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">Coming Soon</h3>
-                    <p className="text-gray-600">This feature is currently in development.</p>
-                  </div>
-                )}
-              </div>
-            </div>
+                {activeTab === 'marketplace' && (
+  <div className="space-y-6">
+    {/* Marketplace Header */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Community Marketplace</h1>
+          <p className="text-gray-600">Buy and sell with your neighbors</p>
+        </div>
+        <button 
+          onClick={() => setShowSellItemModal(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Sell Item</span>
+        </button>
+      </div>
+      
+      {/* Search and Filters */}
+      <div className="mt-6 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input 
+            type="text" 
+            placeholder="Search marketplace..."
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+          />
+        </div>
+        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+          <option value="">All Categories</option>
+          <option value="furniture">Furniture</option>
+          <option value="electronics">Electronics</option>
+          <option value="appliances">Appliances</option>
+          <option value="books">Books</option>
+          <option value="clothing">Clothing</option>
+          <option value="sports">Sports & Recreation</option>
+        </select>
+      </div>
+    </div>
+
+    {/* Marketplace Items Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Sample Item 1 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div className="text-center text-gray-500">
+            <Package className="w-12 h-12 mx-auto mb-2" />
+            <p className="text-sm">Navy Blue Sectional</p>
           </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-gray-900 mb-1">Navy Blue Sectional Sofa</h3>
+          <p className="text-sm text-gray-600 mb-2">Like new condition • Unit 4B</p>
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Comfortable sectional sofa, perfect for a living room. Barely used, moving out of state.</p>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-green-600">$450</span>
+            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+              Contact Seller
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sample Item 2 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div className="text-center text-gray-500">
+            <Package className="w-12 h-12 mx-auto mb-2" />
+            <p className="text-sm">Mountain Bike</p>
+          </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-gray-900 mb-1">Trek Mountain Bike</h3>
+          <p className="text-sm text-gray-600 mb-2">Good condition • Unit 2A</p>
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">21-speed mountain bike, great for trails. Well maintained, some wear on tires.</p>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-green-600">$280</span>
+            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+              Contact Seller
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sample Item 3 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div className="text-center text-gray-500">
+            <Package className="w-12 h-12 mx-auto mb-2" />
+            <p className="text-sm">Coffee Table</p>
+          </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-gray-900 mb-1">Glass Coffee Table</h3>
+          <p className="text-sm text-gray-600 mb-2">Fair condition • Unit 1C</p>
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Modern glass coffee table with metal legs. Small scratch on surface but very functional.</p>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-green-600">$85</span>
+            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+              Contact Seller
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sample Item 4 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div className="text-center text-gray-500">
+            <Package className="w-12 h-12 mx-auto mb-2" />
+            <p className="text-sm">Air Fryer</p>
+          </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-gray-900 mb-1">Ninja Air Fryer</h3>
+          <p className="text-sm text-gray-600 mb-2">Brand new • Unit 3A</p>
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Never used air fryer, still in box. Received as gift but already have one.</p>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-green-600">$120</span>
+            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+              Contact Seller
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sample Item 5 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div className="text-center text-gray-500">
+            <Package className="w-12 h-12 mx-auto mb-2" />
+            <p className="text-sm">Textbooks</p>
+          </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-gray-900 mb-1">College Textbooks (Set of 4)</h3>
+          <p className="text-sm text-gray-600 mb-2">Good condition • Unit 5A</p>
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Business and economics textbooks from Georgia Tech. Some highlighting but great condition.</p>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-green-600">$75</span>
+            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+              Contact Seller
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sample Item 6 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div className="text-center text-gray-500">
+            <Package className="w-12 h-12 mx-auto mb-2" />
+            <p className="text-sm">Plant Stand</p>
+          </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-gray-900 mb-1">Wooden Plant Stand</h3>
+          <p className="text-sm text-gray-600 mb-2">Like new • Unit 2C</p>
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Beautiful wooden plant stand with 3 tiers. Perfect for displaying plants indoors.</p>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-green-600">$35</span>
+            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+              Contact Seller
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{activeTab !== 'home' && activeTab !== 'marketplace' && (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+    <div className="text-gray-400 mb-4">
+      <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
+        <Clock className="w-8 h-8" />
+      </div>
+    </div>
+    <h3 className="text-lg font-medium text-gray-900 mb-2">Coming Soon</h3>
+    <p className="text-gray-600">This feature is currently in development.</p>
+  </div>
+)}
 
           {/* Share Photo Modal */}
         {showSharePhotoModal && (
@@ -942,8 +1109,10 @@ const ResidentPlatform = ({ onBackToManagement }) => {
             </div>
           </div>
         )}
-        
-        
+
+              </div>
+            </div>
+          </div>
           {/* Mobile Bottom Navigation */}
           <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
             <div className="flex justify-around">
