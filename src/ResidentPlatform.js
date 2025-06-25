@@ -40,9 +40,55 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   const [selectedTime, setSelectedTime] = useState('');
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [myBookings, setMyBookings] = useState([
-  { id: 1, amenity: 'Pool Deck', date: 'Dec 28', time: '2:00 PM - 4:00 PM', status: 'confirmed' },
-  { id: 2, amenity: 'Fitness Center', date: 'Dec 30', time: '7:00 AM - 8:00 AM', status: 'confirmed' }
-]);
+    { id: 1, amenity: 'Pool Deck', date: 'Dec 28', time: '2:00 PM - 4:00 PM', status: 'confirmed' },
+    { id: 2, amenity: 'Fitness Center', date: 'Dec 30', time: '7:00 AM - 8:00 AM', status: 'confirmed' }
+  ]);
+  const [activeConversation, setActiveConversation] = useState(null);
+  const [newMessage, setNewMessage] = useState('');
+  const [messageSearch, setMessageSearch] = useState('');
+  const [showNewMessageModal, setShowNewMessageModal] = useState(false);
+  const [conversations, setConversations] = useState([
+    {
+      id: 1,
+      type: 'direct',
+      name: 'Sarah Martinez',
+      avatar: 'SM',
+      lastMessage: 'Thanks for the yoga class recommendation!',
+      timestamp: '2m ago',
+      unread: 2,
+      online: true
+    },
+    {
+      id: 2, 
+      type: 'group',
+      name: 'Book Club',
+      avatar: '📚',
+      lastMessage: 'Jessica: What did everyone think of chapter 5?',
+      timestamp: '15m ago',
+      unread: 0,
+      online: false
+    },
+    {
+      id: 3,
+      type: 'announcement',
+      name: 'Community Management',
+      avatar: 'CT',
+      lastMessage: 'Pool maintenance scheduled for tomorrow',
+      timestamp: '1h ago',
+      unread: 1,
+      online: false
+    },
+    {
+      id: 4,
+      type: 'direct',
+      name: 'Mike Rodriguez', 
+      avatar: 'MR',
+      lastMessage: 'Hey! Are you going to the pool party?',
+      timestamp: '2h ago',
+      unread: 0,
+      online: true
+    }
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -2325,18 +2371,235 @@ const ResidentPlatform = ({ onBackToManagement }) => {
       </div>
     </div>)}
 
-{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && activeTab !== 'neighbors' && activeTab !== 'groups' && activeTab !== 'amenities' && (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-        <div className="text-gray-400 mb-4">
-            <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
-                <Clock className="w-8 h-8" />
+{activeTab === 'messages' && (
+  <div className="space-y-6">
+    {/* Messages Header */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
+          <p className="text-gray-600">Stay connected with your community</p>
+        </div>
+        <button 
+          onClick={() => setShowNewMessageModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          <span>New Message</span>
+        </button>
+      </div>
+      
+      {/* Search */}
+      <div className="mt-6 relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <input 
+          type="text"
+          placeholder="Search conversations..."
+          value={messageSearch}
+          onChange={(e) => setMessageSearch(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Conversations List */}
+      <div className="lg:col-span-1">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="p-4 border-b border-gray-200">
+            <h3 className="font-semibold text-gray-900">Conversations</h3>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {conversations
+              .filter(conv => 
+                messageSearch === '' || 
+                conv.name.toLowerCase().includes(messageSearch.toLowerCase()) ||
+                conv.lastMessage.toLowerCase().includes(messageSearch.toLowerCase())
+              )
+              .map((conversation) => (
+              <div 
+                key={conversation.id}
+                onClick={() => setActiveConversation(conversation)}
+                className={`p-4 hover:bg-gray-50 cursor-pointer transition-colors ${
+                  activeConversation?.id === conversation.id ? 'bg-blue-50 border-r-2 border-blue-500' : ''
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="relative">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                      conversation.avatar === 'SM' ? 'bg-gray-300' :
+                      conversation.avatar === 'MR' ? 'bg-purple-500' :
+                      conversation.avatar === 'CT' ? 'bg-blue-600' :
+                      conversation.type === 'group' ? 'bg-purple-500' : 'bg-gray-400'
+                    }`}>
+                      <span className={`font-semibold text-sm ${
+                        conversation.avatar === 'SM' ? 'text-gray-600' : 
+                        conversation.type === 'group' ? 'text-white text-lg' : 'text-white'
+                      }`}>
+                        {conversation.type === 'group' ? conversation.avatar : conversation.avatar}
+                      </span>
+                    </div>
+                    {conversation.online && conversation.type === 'direct' && (
+                      <div className="absolute -bottom-0 -right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                    )}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-gray-900 truncate">{conversation.name}</h4>
+                      <div className="flex items-center space-x-2">
+                        {conversation.unread > 0 && (
+                          <span className="w-5 h-5 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">
+                            {conversation.unread}
+                          </span>
+                        )}
+                        <span className="text-xs text-gray-500">{conversation.timestamp}</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 truncate mt-1">{conversation.lastMessage}</p>
+                    {conversation.type === 'announcement' && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mt-1">
+                        📢 Announcement
+                      </span>
+                    )}
+                    {conversation.type === 'group' && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1">
+                        👥 Group Chat
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Active Conversation */}
+      <div className="lg:col-span-2">
+        {activeConversation ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 h-96 flex flex-col">
+            {/* Conversation Header */}
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    activeConversation.avatar === 'SM' ? 'bg-gray-300' :
+                    activeConversation.avatar === 'MR' ? 'bg-purple-500' :
+                    activeConversation.avatar === 'CT' ? 'bg-blue-600' :
+                    activeConversation.type === 'group' ? 'bg-purple-500' : 'bg-gray-400'
+                  }`}>
+                    <span className={`font-semibold text-sm ${
+                      activeConversation.avatar === 'SM' ? 'text-gray-600' : 
+                      activeConversation.type === 'group' ? 'text-white text-lg' : 'text-white'
+                    }`}>
+                      {activeConversation.type === 'group' ? activeConversation.avatar : activeConversation.avatar}
+                    </span>
+                  </div>
+                  {activeConversation.online && activeConversation.type === 'direct' && (
+                    <div className="absolute -bottom-0 -right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                  )}
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">{activeConversation.name}</h4>
+                  {activeConversation.online && activeConversation.type === 'direct' && (
+                    <p className="text-xs text-green-600">Online</p>
+                  )}
+                </div>
+              </div>
+              <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+                <MoreHorizontal className="w-5 h-5" />
+              </button>
             </div>
-        </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Coming Soon</h3>
-        <p className="text-gray-600">This feature is currently in development.</p>
-        </div>
-    )}
-                
+
+            {/* Messages Area */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+              {/* Sample Messages */}
+              <div className="flex space-x-3">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  activeConversation.avatar === 'SM' ? 'bg-gray-300' :
+                  activeConversation.avatar === 'MR' ? 'bg-purple-500' :
+                  activeConversation.avatar === 'CT' ? 'bg-blue-600' : 'bg-gray-400'
+                }`}>
+                  <span className={`font-semibold text-xs ${
+                    activeConversation.avatar === 'SM' ? 'text-gray-600' : 'text-white'
+                  }`}>
+                    {activeConversation.avatar}
+                  </span>
+                </div>
+                <div className="flex-1">
+                  <div className="bg-gray-100 rounded-lg px-3 py-2 max-w-xs">
+                    <p className="text-sm text-gray-900">{activeConversation.lastMessage}</p>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">{activeConversation.timestamp}</p>
+                </div>
+              </div>
+
+              <div className="flex space-x-3 justify-end">
+                <div className="flex-1"></div>
+                <div>
+                  <div className="bg-blue-500 rounded-lg px-3 py-2 max-w-xs">
+                    <p className="text-sm text-white">
+                      {activeConversation.type === 'direct' && activeConversation.name === 'Sarah Martinez' && "You're welcome! Let me know how it goes 😊"}
+                      {activeConversation.type === 'direct' && activeConversation.name === 'Mike Rodriguez' && "Yes! Looking forward to it 🏊‍♀️"}
+                      {activeConversation.type === 'group' && "I loved the character development!"}
+                      {activeConversation.type === 'announcement' && "Thanks for the heads up!"}
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1 text-right">Just now</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Message Input */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex items-center space-x-3">
+                <input
+                  type="text"
+                  placeholder="Type a message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && newMessage.trim()) {
+                      setNewMessage('');
+                    }
+                  }}
+                />
+                <button 
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  disabled={!newMessage.trim()}
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 h-96 flex items-center justify-center">
+            <div className="text-center">
+              <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Select a conversation</h3>
+              <p className="text-gray-600">Choose a conversation from the list to start messaging</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && activeTab !== 'neighbors' && activeTab !== 'groups' && activeTab !== 'amenities' && activeTab !== 'messages' && (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+    <div className="text-gray-400 mb-4">
+      <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
+        <Clock className="w-8 h-8" />
+      </div>
+    </div>
+    <h3 className="text-lg font-medium text-gray-900 mb-2">Coming Soon</h3>
+    <p className="text-gray-600">This feature is currently in development.</p>
+  </div>
+)}
 
               </div>
             </div>
@@ -3361,6 +3624,100 @@ const ResidentPlatform = ({ onBackToManagement }) => {
             </div>
           </div>
         )}
+
+        {/* New Message Modal */}
+        {showNewMessageModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowNewMessageModal(false)}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto" onClick={e => e.stopPropagation()}>
+              <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-blue-700">New Message</h3>
+                <button
+                  onClick={() => setShowNewMessageModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <MessageCircle className="w-5 h-5 text-blue-600" />
+                    <h4 className="font-semibold text-blue-800">Start a Conversation</h4>
+                  </div>
+                  <p className="text-sm text-blue-700">
+                    Send a message to a neighbor or create a group conversation.
+                  </p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Message Type</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="direct">Direct Message</option>
+                    <option value="group">Group Message</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Select recipient...</option>
+                    <option value="sarah_m">Sarah Martinez (Unit 2B)</option>
+                    <option value="jessica_m">Jessica Martinez (Unit 4B)</option>
+                    <option value="mike_r">Mike Rodriguez</option>
+                    <option value="lisa_b">Lisa Brown</option>
+                    <option value="book_club">📚 Book Club</option>
+                    <option value="dog_owners">🐕 Dog Owners</option>
+                    <option value="fitness_group">💪 Fitness Group</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Subject (Optional)</label>
+                  <input 
+                    type="text"
+                    placeholder="What's this message about?"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                  <textarea 
+                    placeholder="Type your message here..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    rows="4"
+                  />
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <Shield className="w-5 h-5 text-green-600 mt-0.5" />
+                    <div>
+                      <h5 className="font-medium text-gray-900 mb-1">Safe Messaging</h5>
+                      <p className="text-sm text-gray-600">
+                        All messages are monitored for community safety. Be respectful and follow community guidelines.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    onClick={() => setShowNewMessageModal(false)}
+                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                    Send Message
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
           {/* Mobile Bottom Navigation */}
           <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
             <div className="flex justify-around">
