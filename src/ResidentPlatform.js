@@ -944,233 +944,264 @@ const ResidentPlatform = ({ onBackToManagement }) => {
     </div>
 
     {/* Social Feed Posts */}
-    <div className="space-y-4">
-      {/* Community Event Post */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-        <div className="p-4">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-semibold">CT</span>
-            </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">Community Team</h4>
-              <p className="text-sm text-gray-600">2 hours ago • Unit Management</p>
-            </div>
-            <button className="text-gray-400 hover:text-gray-600">
-              <MoreHorizontal className="w-5 h-5" />
-            </button>
-          </div>
-          <p className="text-gray-800 mb-3">
-            🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! #CommunityEvent #PoolParty
-          </p>
-        </div>
-<div className="overflow-hidden rounded-lg">
-  <img 
-    src={PoolPartyImage} 
-    alt="Community Pool Party"
-    className="w-full h-auto"
-  />
-</div>
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center space-x-4">
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                <Heart className="w-5 h-5" />
-                <span className="text-sm font-medium">24</span>
-              </button>
-              <button 
-                onClick={() => setShowComments(prev => ({ ...prev, 1: !prev[1] }))}
-                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span className="text-sm font-medium">8</span>
-              </button>
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
-                <CheckCircle className="w-5 h-5" />
-                <span className="text-sm font-medium">Going</span>
-              </button>
-            </div>
-            <span className="text-sm text-gray-500">24 likes • 8 comments</span>
-          </div>
-          
-          {/* Comments Section */}
-          {showComments[1] && (
-            <div className="border-t pt-3 space-y-3">
-              <div className="flex space-x-3">
-                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                  <span className="text-gray-600 text-xs font-semibold">SM</span>
+<div className="space-y-4">
+  {/* Filter posts based on activeCategory */}
+  {(() => {
+    const allPosts = [
+      {
+        id: 1,
+        category: 'Events',
+        content: (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="p-4">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold">CT</span>
                 </div>
                 <div className="flex-1">
-                  <div className="bg-gray-50 rounded-lg px-3 py-2">
-                    <p className="text-sm font-medium text-gray-900">Sarah M</p>
-                    <p className="text-sm text-gray-700">Can't wait! Should I bring anything?</p>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">1 hour ago</p>
+                  <h4 className="font-semibold text-gray-900">Community Team</h4>
+                  <p className="text-sm text-gray-600">2 hours ago • Unit Management</p>
                 </div>
+                <button className="text-gray-400 hover:text-gray-600">
+                  <MoreHorizontal className="w-5 h-5" />
+                </button>
               </div>
-              
-              {/* Add Comment */}
-              <div className="flex items-center space-x-3 pt-2">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm font-semibold">S</span>
-                </div>
-                <div className="flex-1 flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Add a comment..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter' && newComment.trim()) {
-                        setNewComment('');
-                      }
-                    }}
-                  />
-                  <button className="px-3 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
-                    <Send className="w-4 h-4" />
+              <p className="text-gray-800 mb-3">
+                🎉 Pool Party this Saturday at 2 PM! Join us for food, music, and fun by the pool. Bring your swimsuit and appetite! #CommunityEvent #PoolParty
+              </p>
+            </div>
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src={PoolPartyImage} 
+                alt="Community Pool Party"
+                className="w-full h-auto"
+              />
+            </div>
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-4">
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5" />
+                    <span className="text-sm font-medium">24</span>
+                  </button>
+                  <button 
+                    onClick={() => setShowComments(prev => ({ ...prev, 1: !prev[1] }))}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="text-sm font-medium">8</span>
+                  </button>
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="text-sm font-medium">Going</span>
                   </button>
                 </div>
+                <span className="text-sm text-gray-500">24 likes • 8 comments</span>
+              </div>
+              
+              {showComments[1] && (
+                <div className="border-t pt-3 space-y-3">
+                  <div className="flex space-x-3">
+                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                      <span className="text-gray-600 text-xs font-semibold">SM</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="bg-gray-50 rounded-lg px-3 py-2">
+                        <p className="text-sm font-medium text-gray-900">Sarah M</p>
+                        <p className="text-sm text-gray-700">Can't wait! Should I bring anything?</p>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">1 hour ago</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3 pt-2">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-semibold">S</span>
+                    </div>
+                    <div className="flex-1 flex space-x-2">
+                      <input
+                        type="text"
+                        placeholder="Add a comment..."
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        className="flex-1 px-3 py-2 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && newComment.trim()) {
+                            setNewComment('');
+                          }
+                        }}
+                      />
+                      <button className="px-3 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+                        <Send className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      },
+      {
+        id: 2,
+        category: 'Recommendations',
+        content: (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="p-4">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold">MR</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-gray-900">Mike Rodriguez</h4>
+                  <p className="text-sm text-gray-600">3 hours ago • Unit 7A</p>
+                </div>
+                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                  Recommendation
+                </span>
+              </div>
+              <p className="text-gray-800 mb-3">
+                🍕 Just tried Tony's Pizza for delivery - amazing! They deliver to our building in under 30 minutes. Highly recommend the pepperoni! Anyone else tried them?
+              </p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5" />
+                    <span className="text-sm font-medium">12</span>
+                  </button>
+                  <button 
+                    onClick={() => setShowComments(prev => ({ ...prev, 2: !prev[2] }))}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="text-sm font-medium">5</span>
+                  </button>
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                    <span className="text-sm font-medium">👍 Helpful</span>
+                  </button>
+                </div>
+                <span className="text-sm text-gray-500">12 likes • 5 comments</span>
               </div>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        )
+      },
+      {
+        id: 3,
+        category: 'Welcome',
+        content: (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="p-4">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold">LB</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-gray-900">Lisa Brown</h4>
+                  <p className="text-sm text-gray-600">5 hours ago • Unit 3C</p>
+                </div>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  New Neighbor
+                </span>
+              </div>
+              <p className="text-gray-800 mb-3">
+                👋 Hi everyone! Just moved into Unit 3C with my family. Excited to be part of this community! Any recommendations for the best coffee shops nearby? ☕
+              </p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5" />
+                    <span className="text-sm font-medium">18</span>
+                  </button>
+                  <button 
+                    onClick={() => setShowComments(prev => ({ ...prev, 3: !prev[3] }))}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="text-sm font-medium">12</span>
+                  </button>
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors">
+                    <span className="text-sm font-medium">🏠 Welcome</span>
+                  </button>
+                </div>
+                <span className="text-sm text-gray-500">18 likes • 12 comments</span>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      {
+        id: 4,
+        category: 'Marketplace',
+        content: (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="p-4">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold">JM</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-gray-900">Jessica Martinez</h4>
+                  <p className="text-sm text-gray-600">8 hours ago • Unit 4B</p>
+                </div>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                  For Sale
+                </span>
+              </div>
+              <p className="text-gray-800 mb-3">
+                🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
+              </p>
+              <div className="aspect-square rounded-lg overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
+                <img 
+                  src={NavySofaImage} 
+                  alt="Navy Blue Sofa for Sale"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5" />
+                    <span className="text-sm font-medium">6</span>
+                  </button>
+                  <button 
+                    onClick={() => setShowComments(prev => ({ ...prev, 4: !prev[4] }))}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="text-sm font-medium">3</span>
+                  </button>
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
+                    <span className="text-sm font-medium">💰 Interested</span>
+                  </button>
+                </div>
+                <span className="text-sm text-gray-500">$400</span>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    ];
 
-      {/* Neighbor Recommendation Post */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-        <div className="p-4">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-semibold">MR</span>
-            </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">Mike Rodriguez</h4>
-              <p className="text-sm text-gray-600">3 hours ago • Unit 7A</p>
-            </div>
-            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-              Recommendation
-            </span>
-          </div>
-          <p className="text-gray-800 mb-3">
-            🍕 Just tried Tony's Pizza for delivery - amazing! They deliver to our building in under 30 minutes. Highly recommend the pepperoni! Anyone else tried them?
-          </p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                <Heart className="w-5 h-5" />
-                <span className="text-sm font-medium">12</span>
-              </button>
-              <button 
-                onClick={() => setShowComments(prev => ({ ...prev, 3: !prev[3] }))}
-                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span className="text-sm font-medium">5</span>
-              </button>
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
-                <span className="text-sm font-medium">👍 Helpful</span>
-              </button>
-            </div>
-            <span className="text-sm text-gray-500">12 likes • 5 comments</span>
-          </div>
-        </div>
-      </div>
+    // Filter posts based on activeCategory
+    const filteredPosts = activeCategory === 'All Posts' 
+      ? allPosts 
+      : allPosts.filter(post => post.category === activeCategory);
 
-      {/* New Neighbor Welcome Post */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-        <div className="p-4">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-semibold">LB</span>
-            </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">Lisa Brown</h4>
-              <p className="text-sm text-gray-600">5 hours ago • Unit 3C</p>
-            </div>
-            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-              New Neighbor
-            </span>
-          </div>
-          <p className="text-gray-800 mb-3">
-            👋 Hi everyone! Just moved into Unit 3C with my family. Excited to be part of this community! Any recommendations for the best coffee shops nearby? ☕
-          </p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                <Heart className="w-5 h-5" />
-                <span className="text-sm font-medium">18</span>
-              </button>
-              <button 
-                onClick={() => setShowComments(prev => ({ ...prev, 4: !prev[4] }))}
-                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span className="text-sm font-medium">12</span>
-              </button>
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-500 transition-colors">
-                <span className="text-sm font-medium">🏠 Welcome</span>
-              </button>
-            </div>
-            <span className="text-sm text-gray-500">18 likes • 12 comments</span>
-          </div>
-        </div>
+    return filteredPosts.map(post => (
+      <div key={post.id}>
+        {post.content}
       </div>
+    ));
+  })()}
 
-      {/* Marketplace Post */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-        <div className="p-4">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-semibold">JM</span>
-            </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">Jessica Martinez</h4>
-              <p className="text-sm text-gray-600">8 hours ago • Unit 4B</p>
-            </div>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-              For Sale
-            </span>
-          </div>
-          <p className="text-gray-800 mb-3">
-            🛋️ Moving sale! Selling a beautiful navy blue sofa - barely used, originally $800, asking $400. Perfect for anyone just moving in! DM me if interested.
-          </p>
-<div className="aspect-square rounded-lg overflow-hidden mb-3 cursor-pointer hover:opacity-90 transition-opacity">
-  <img 
-    src={NavySofaImage} 
-    alt="Navy Blue Sofa for Sale"
-    className="w-full h-full object-cover"
-  />
+{/* Load More */}
+  <div className="text-center py-6">
+    <button className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+      Load More Posts
+    </button>
+  </div>
 </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                <Heart className="w-5 h-5" />
-                <span className="text-sm font-medium">6</span>
-              </button>
-              <button 
-                onClick={() => setShowComments(prev => ({ ...prev, 5: !prev[5] }))}
-                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span className="text-sm font-medium">3</span>
-              </button>
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors">
-                <span className="text-sm font-medium">💰 Interested</span>
-              </button>
-            </div>
-            <span className="text-sm text-gray-500">$400</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* Load More */}
-    <div className="text-center py-6">
-      <button className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
-        Load More Posts
-      </button>
-    </div>
   </div>
 )}
 
