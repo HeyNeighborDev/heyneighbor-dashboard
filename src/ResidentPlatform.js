@@ -1109,7 +1109,225 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   </div>
 )}
 
-{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && (
+{activeTab === 'events' && (
+  <div className="space-y-6">
+    {/* Events Header */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Community Events</h1>
+          <p className="text-gray-600">Discover and join neighborhood activities</p>
+        </div>
+        <button 
+          onClick={() => setShowCreateEventModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Create Event</span>
+        </button>
+      </div>
+      
+      {/* Event Categories */}
+      <div className="mt-6 flex flex-wrap gap-2">
+        {['All Events', 'This Week', 'Social', 'Fitness', 'Maintenance', 'Holiday'].map((category) => (
+          <button
+            key={category}
+            className="px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors"
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Upcoming Events */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming This Week</h2>
+      <div className="space-y-4">
+        {/* Pool Party Event */}
+        <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div className="flex-shrink-0">
+            <div className="w-16 h-16 bg-blue-500 rounded-xl flex items-center justify-center">
+              <div className="text-white text-2xl">🏊‍♀️</div>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center space-x-2 mb-1">
+              <h3 className="text-lg font-semibold text-gray-900">Pool Party</h3>
+              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Social</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Join us for food, music, and fun by the pool!</p>
+            <div className="flex items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-1">
+                <Calendar className="w-4 h-4" />
+                <span>Saturday, Dec 28</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Clock className="w-4 h-4" />
+                <span>2:00 PM - 6:00 PM</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <MapPin className="w-4 h-4" />
+                <span>Pool Deck</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex-shrink-0 text-right">
+            <div className="text-sm text-gray-600 mb-2">24 attending</div>
+            <button className="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium hover:bg-green-200 transition-colors">
+              Going ✓
+            </button>
+          </div>
+        </div>
+
+        {/* Yoga Class Event */}
+        <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div className="flex-shrink-0">
+            <div className="w-16 h-16 bg-purple-500 rounded-xl flex items-center justify-center">
+              <div className="text-white text-2xl">🧘‍♀️</div>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center space-x-2 mb-1">
+              <h3 className="text-lg font-semibold text-gray-900">Morning Yoga</h3>
+              <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">Fitness</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Start your day with peaceful yoga by the rooftop garden</p>
+            <div className="flex items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-1">
+                <Calendar className="w-4 h-4" />
+                <span>Monday, Dec 30</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Clock className="w-4 h-4" />
+                <span>7:00 AM - 8:00 AM</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <MapPin className="w-4 h-4" />
+                <span>Rooftop</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex-shrink-0 text-right">
+            <div className="text-sm text-gray-600 mb-2">8 attending</div>
+            <button className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium hover:bg-blue-200 transition-colors">
+              RSVP
+            </button>
+          </div>
+        </div>
+
+        {/* Game Night Event */}
+        <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div className="flex-shrink-0">
+            <div className="w-16 h-16 bg-orange-500 rounded-xl flex items-center justify-center">
+              <div className="text-white text-2xl">🎮</div>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center space-x-2 mb-1">
+              <h3 className="text-lg font-semibold text-gray-900">Game Night</h3>
+              <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">Social</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Board games, video games, and snacks in the community lounge</p>
+            <div className="flex items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-1">
+                <Calendar className="w-4 h-4" />
+                <span>Wednesday, Jan 1</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Clock className="w-4 h-4" />
+                <span>7:00 PM - 10:00 PM</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <MapPin className="w-4 h-4" />
+                <span>Community Lounge</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex-shrink-0 text-right">
+            <div className="text-sm text-gray-600 mb-2">12 attending</div>
+            <button className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium hover:bg-blue-200 transition-colors">
+              RSVP
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Monthly Calendar Preview */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-900">December 2024</h2>
+        <div className="flex items-center space-x-2">
+          <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+            <ChevronLeft className="w-5 h-5 rotate-180" />
+          </button>
+        </div>
+      </div>
+      
+      {/* Calendar Grid */}
+      <div className="grid grid-cols-7 gap-2 mb-4">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+          <div key={day} className="p-3 text-center text-sm font-medium text-gray-500">
+            {day}
+          </div>
+        ))}
+      </div>
+      
+      <div className="grid grid-cols-7 gap-2">
+        {/* Calendar Days */}
+        {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+          <div
+            key={day}
+            className={`p-3 text-center text-sm rounded-lg transition-colors ${
+              day === 28 || day === 30 || day === 1
+                ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-200 cursor-pointer hover:bg-blue-100'
+                : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
+            }`}
+          >
+            {day}
+            {day === 28 && <div className="text-xs text-blue-600 mt-1">Pool</div>}
+            {day === 30 && <div className="text-xs text-purple-600 mt-1">Yoga</div>}
+            {day === 1 && <div className="text-xs text-orange-600 mt-1">Games</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Past Events */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Events</h2>
+      <div className="space-y-3">
+        <div className="flex items-center space-x-4 p-3 border border-gray-100 rounded-lg opacity-75">
+          <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center">
+            <div className="text-gray-600 text-lg">🍖</div>
+          </div>
+          <div className="flex-1">
+            <h3 className="font-medium text-gray-900">Community BBQ</h3>
+            <p className="text-sm text-gray-500">Dec 21 • 32 attended</p>
+          </div>
+          <span className="text-xs text-gray-400">Completed</span>
+        </div>
+        
+        <div className="flex items-center space-x-4 p-3 border border-gray-100 rounded-lg opacity-75">
+          <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center">
+            <div className="text-gray-600 text-lg">🎄</div>
+          </div>
+          <div className="flex-1">
+            <h3 className="font-medium text-gray-900">Holiday Party</h3>
+            <p className="text-sm text-gray-500">Dec 15 • 45 attended</p>
+          </div>
+          <span className="text-xs text-gray-400">Completed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && (
   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
     <div className="text-gray-400 mb-4">
       <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
