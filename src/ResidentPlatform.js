@@ -35,6 +35,14 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   const [showGroupDetails, setShowGroupDetails] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [groupFilter, setGroupFilter] = useState('All Groups');
+  const [selectedAmenity, setSelectedAmenity] = useState('pool');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [myBookings, setMyBookings] = useState([
+  { id: 1, amenity: 'Pool Deck', date: 'Dec 28', time: '2:00 PM - 4:00 PM', status: 'confirmed' },
+  { id: 2, amenity: 'Fitness Center', date: 'Dec 30', time: '7:00 AM - 8:00 AM', status: 'confirmed' }
+]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1963,17 +1971,376 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   </div>
 )}
 
-{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && activeTab !== 'neighbors' && activeTab !== 'groups' && (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-    <div className="text-gray-400 mb-4">
-      <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
-        <Clock className="w-8 h-8" />
+{activeTab === 'amenities' && (
+  <div className="space-y-6">
+    {/* Amenities Header */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Amenity Booking</h1>
+          <p className="text-gray-600">Reserve community spaces and facilities</p>
+        </div>
+        <button 
+          onClick={() => setShowBookingModal(true)}
+          className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+        >
+          <Calendar className="w-4 h-4" />
+          <span>Quick Book</span>
+        </button>
+      </div>
+      
+      {/* My Bookings Summary */}
+      {myBookings.length > 0 && (
+        <div className="mt-6 bg-teal-50 border border-teal-200 rounded-lg p-4">
+          <div className="flex items-center space-x-2 mb-3">
+            <CheckCircle className="w-5 h-5 text-teal-600" />
+            <h3 className="font-semibold text-teal-900">My Upcoming Bookings ({myBookings.length})</h3>
+          </div>
+          <div className="space-y-2">
+            {myBookings.map((booking) => (
+              <div key={booking.id} className="flex items-center justify-between bg-white p-3 rounded-lg">
+                <div>
+                  <p className="font-medium text-gray-900">{booking.amenity}</p>
+                  <p className="text-sm text-gray-600">{booking.date} • {booking.time}</p>
+                </div>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  {booking.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Amenities Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Pool Deck */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-6xl mb-4">🏊‍♀️</div>
+            <p className="text-xl font-semibold">Pool Deck</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Pool Deck</h3>
+            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Available
+            </span>
+          </div>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Clock className="w-4 h-4 mr-2" />
+              <span>Hours: 6 AM - 10 PM</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Users className="w-4 h-4 mr-2" />
+              <span>Max 8 people per slot</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>2-hour time slots</span>
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => {
+              setSelectedAmenity('pool');
+              setShowBookingModal(true);
+            }}
+            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Book Pool Deck
+          </button>
+        </div>
+      </div>
+
+      {/* Fitness Center */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-6xl mb-4">💪</div>
+            <p className="text-xl font-semibold">Fitness Center</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Fitness Center</h3>
+            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Available
+            </span>
+          </div>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Clock className="w-4 h-4 mr-2" />
+              <span>Hours: 5 AM - 11 PM</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Users className="w-4 h-4 mr-2" />
+              <span>Max 6 people per slot</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>1-hour time slots</span>
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => {
+              setSelectedAmenity('fitness');
+              setShowBookingModal(true);
+            }}
+            className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Book Fitness Center
+          </button>
+        </div>
+      </div>
+
+      {/* Rooftop Terrace */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-6xl mb-4">🌆</div>
+            <p className="text-xl font-semibold">Rooftop Terrace</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Rooftop Terrace</h3>
+            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+              Popular
+            </span>
+          </div>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Clock className="w-4 h-4 mr-2" />
+              <span>Hours: 8 AM - 10 PM</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Users className="w-4 h-4 mr-2" />
+              <span>Max 15 people per slot</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>3-hour time slots</span>
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => {
+              setSelectedAmenity('rooftop');
+              setShowBookingModal(true);
+            }}
+            className="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Book Rooftop
+          </button>
+        </div>
+      </div>
+
+      {/* Community Lounge */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-6xl mb-4">🛋️</div>
+            <p className="text-xl font-semibold">Community Lounge</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Community Lounge</h3>
+            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Available
+            </span>
+          </div>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Clock className="w-4 h-4 mr-2" />
+              <span>Hours: 24/7</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Users className="w-4 h-4 mr-2" />
+              <span>Max 20 people per slot</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>2-hour time slots</span>
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => {
+              setSelectedAmenity('lounge');
+              setShowBookingModal(true);
+            }}
+            className="w-full px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Book Lounge
+          </button>
+        </div>
+      </div>
+
+      {/* Game Room */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-6xl mb-4">🎮</div>
+            <p className="text-xl font-semibold">Game Room</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Game Room</h3>
+            <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
+              Maintenance
+            </span>
+          </div>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Clock className="w-4 h-4 mr-2" />
+              <span>Hours: 10 AM - 10 PM</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Users className="w-4 h-4 mr-2" />
+              <span>Max 8 people per slot</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <AlertTriangle className="w-4 h-4 mr-2" />
+              <span>Under maintenance</span>
+            </div>
+          </div>
+          
+          <button 
+            className="w-full px-4 py-2 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed"
+            disabled
+          >
+            Temporarily Unavailable
+          </button>
+        </div>
+      </div>
+
+      {/* Business Center */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div className="h-48 bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-6xl mb-4">💼</div>
+            <p className="text-xl font-semibold">Business Center</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Business Center</h3>
+            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Available
+            </span>
+          </div>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Clock className="w-4 h-4 mr-2" />
+              <span>Hours: 6 AM - 10 PM</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Users className="w-4 h-4 mr-2" />
+              <span>Max 4 people per slot</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>1-hour time slots</span>
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => {
+              setSelectedAmenity('business');
+              setShowBookingModal(true);
+            }}
+            className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Book Business Center
+          </button>
+        </div>
       </div>
     </div>
-    <h3 className="text-lg font-medium text-gray-900 mb-2">Coming Soon</h3>
-    <p className="text-gray-600">This feature is currently in development.</p>
-  </div>
-)}
+
+    {/* Booking Rules */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Booking Guidelines</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-3">
+          <div className="flex items-start space-x-3">
+            <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
+            <div>
+              <p className="font-medium text-gray-900">Advanced Booking</p>
+              <p className="text-sm text-gray-600">Reserve up to 7 days in advance</p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-3">
+            <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
+            <div>
+              <p className="font-medium text-gray-900">Cancellation Policy</p>
+              <p className="text-sm text-gray-600">Cancel up to 2 hours before your booking</p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-3">
+              <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
+              <div>
+                <p className="font-medium text-gray-900">Guest Policy</p>
+                <p className="text-sm text-gray-600">Residents are responsible for their guests</p>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="flex items-start space-x-3">
+              <AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5" />
+              <div>
+                <p className="font-medium text-gray-900">Clean Up Required</p>
+                <p className="text-sm text-gray-600">Leave spaces clean for the next resident</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5" />
+              <div>
+                <p className="font-medium text-gray-900">Noise Policy</p>
+                <p className="text-sm text-gray-600">Respect quiet hours: 10 PM - 8 AM</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5" />
+              <div>
+                <p className="font-medium text-gray-900">Equipment Care</p>
+                <p className="text-sm text-gray-600">Report any damage or maintenance issues</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>)}
+
+{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && activeTab !== 'neighbors' && activeTab !== 'groups' && activeTab !== 'amenities' && (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+        <div className="text-gray-400 mb-4">
+            <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
+                <Clock className="w-8 h-8" />
+            </div>
+        </div>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Coming Soon</h3>
+        <p className="text-gray-600">This feature is currently in development.</p>
+        </div>
+    )}
+                
+
+              </div>
+            </div>
+          </div>
           {/* Share Photo Modal */}
         {showSharePhotoModal && (
           <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowSharePhotoModal(false)}>
@@ -2840,9 +3207,160 @@ const ResidentPlatform = ({ onBackToManagement }) => {
           </div>
         )}
 
+        {/* Amenity Booking Modal */}
+        {showBookingModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto" onClick={() => setShowBookingModal(false)}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto" onClick={e => e.stopPropagation()}>
+              <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-teal-700">Book Amenity</h3>
+                <button
+                  onClick={() => setShowBookingModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Calendar className="w-5 h-5 text-teal-600" />
+                    <h4 className="font-semibold text-teal-800">Reserve Your Spot</h4>
+                  </div>
+                  <p className="text-sm text-teal-700">
+                    Book community amenities up to 7 days in advance. All bookings require confirmation.
+                  </p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Select Amenity</label>
+                  <select 
+                    value={selectedAmenity}
+                    onChange={(e) => setSelectedAmenity(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  >
+                    <option value="pool">🏊‍♀️ Pool Deck</option>
+                    <option value="fitness">💪 Fitness Center</option>
+                    <option value="rooftop">🌆 Rooftop Terrace</option>
+                    <option value="lounge">🛋️ Community Lounge</option>
+                    <option value="business">💼 Business Center</option>
+                  </select>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input 
+                      type="date"
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Time Slot</label>
+                    <select 
+                      value={selectedTime}
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    >
+                      <option value="">Select time...</option>
+                      <option value="6:00 AM - 8:00 AM">6:00 AM - 8:00 AM</option>
+                      <option value="8:00 AM - 10:00 AM">8:00 AM - 10:00 AM</option>
+                      <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                      <option value="12:00 PM - 2:00 PM">12:00 PM - 2:00 PM</option>
+                      <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
+                      <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
+                      <option value="6:00 PM - 8:00 PM">6:00 PM - 8:00 PM</option>
+                      <option value="8:00 PM - 10:00 PM">8:00 PM - 10:00 PM</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Number of Guests</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                    <option value="1">Just me</option>
+                    <option value="2">2 people</option>
+                    <option value="3">3 people</option>
+                    <option value="4">4 people</option>
+                    <option value="5">5 people</option>
+                    <option value="6">6+ people</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Purpose (Optional)</label>
+                  <textarea 
+                    placeholder="Birthday party, workout session, business meeting, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
+                    rows="2"
+                  />
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h5 className="font-medium text-gray-900 mb-2">Booking Summary</h5>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Amenity:</span>
+                      <span className="text-gray-900">
+                        {selectedAmenity === 'pool' && '🏊‍♀️ Pool Deck'}
+                        {selectedAmenity === 'fitness' && '💪 Fitness Center'}
+                        {selectedAmenity === 'rooftop' && '🌆 Rooftop Terrace'}
+                        {selectedAmenity === 'lounge' && '🛋️ Community Lounge'}
+                        {selectedAmenity === 'business' && '💼 Business Center'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Date:</span>
+                      <span className="text-gray-900">{selectedDate || 'Not selected'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Time:</span>
+                      <span className="text-gray-900">{selectedTime || 'Not selected'}</span>
+                    </div>
+                    <div className="flex justify-between font-medium">
+                      <span className="text-gray-900">Booking Fee:</span>
+                      <span className="text-green-600">FREE</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <div className="flex items-start space-x-2">
+                    <AlertTriangle className="w-4 h-4 text-yellow-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-yellow-800">Cancellation Policy</p>
+                      <p className="text-xs text-yellow-700">
+                        Cancel up to 2 hours before your booking time to avoid penalties.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    onClick={() => setShowBookingModal(false)}
+                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
+                      selectedDate && selectedTime 
+                        ? 'bg-teal-600 hover:bg-teal-700 text-white'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
+                    disabled={!selectedDate || !selectedTime}
+                  >
+                    Confirm Booking
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+        )}
           {/* Mobile Bottom Navigation */}
           <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
             <div className="flex justify-around">
