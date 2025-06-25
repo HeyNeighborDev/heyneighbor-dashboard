@@ -243,7 +243,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0 bg-gray-50 md:ml-0">
-          <div className="flex-1 relative overflow-y-auto md:pb-0 pb-16">
+          <div className="flex-1 relative overflow-y-auto md:pb-0 pb-16 mt-16 md:mt-0">
             <div className="py-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 
@@ -596,10 +596,10 @@ const ResidentPlatform = ({ onBackToManagement }) => {
 
           {/* Share Photo Modal */}
         {showSharePhotoModal && (
-          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4" onClick={() => setShowSharePhotoModal(false)}>
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setShowSharePhotoModal(false)}>
             <div 
-              className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-96 overflow-hidden"
-              onClick={e => e.stopPropagation()}
+                className="bg-white rounded-xl shadow-xl max-w-md w-full my-auto mx-auto"
+                onClick={e => e.stopPropagation()}
             >
               <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Share Photo</h3>
