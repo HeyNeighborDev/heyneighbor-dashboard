@@ -16,7 +16,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
     <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen w-full">
         {/* Desktop Sidebar - Hidden on Mobile */}
-        <div className="hidden md:flex md:w-64 md:flex-col">
+        <div className="hidden md:flex md:w-64 md:flex-col md:relative">
           <div className="flex flex-col flex-1 bg-white border-r border-gray-200">
             {/* Profile Section */}
             <div className="flex items-center px-4 py-6 border-b border-gray-200">
@@ -245,7 +245,7 @@ const ResidentPlatform = ({ onBackToManagement }) => {
 <div className="flex-1 flex flex-col min-w-0 bg-gray-50 w-full md:ml-0">
   <div className="flex-1 relative overflow-y-auto md:pb-0 pb-16 mt-16 md:mt-0 w-full">
             <div className="py-6">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+              <div className="w-full md:max-w-7xl md:mx-auto px-4 sm:px-6 md:px-8">
                 
                 {/* Home Tab Content */}
                 {activeTab === 'home' && (
