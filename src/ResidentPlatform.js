@@ -30,6 +30,11 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   const [neighborFilter, setNeighborFilter] = useState('All Neighbors');
   const [friendRequests, setFriendRequests] = useState(['mike_r', 'lisa_b']);
   const [friends, setFriends] = useState(['sarah_m', 'jessica_m']);
+  const [myGroups, setMyGroups] = useState(['book_club', 'dog_owners']);
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [showGroupDetails, setShowGroupDetails] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [groupFilter, setGroupFilter] = useState('All Groups');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1632,7 +1637,333 @@ const ResidentPlatform = ({ onBackToManagement }) => {
   </div>
 )}
 
-{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && activeTab !== 'neighbors' && (
+{activeTab === 'groups' && (
+  <div className="space-y-6">
+    {/* Groups Header */}
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Community Groups</h1>
+          <p className="text-gray-600">Connect with neighbors who share your interests</p>
+        </div>
+        <button 
+          onClick={() => setShowCreateGroupModal(true)}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Create Group</span>
+        </button>
+      </div>
+      
+      {/* My Groups Summary */}
+      <div className="mt-6 bg-purple-50 border border-purple-200 rounded-lg p-4">
+        <div className="flex items-center space-x-2 mb-3">
+          <Users className="w-5 h-5 text-purple-600" />
+          <h3 className="font-semibold text-purple-900">My Groups ({myGroups.length})</h3>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <span className="px-3 py-1 bg-white text-purple-700 rounded-full text-sm font-medium border border-purple-200">
+            📚 Book Club
+          </span>
+          <span className="px-3 py-1 bg-white text-purple-700 rounded-full text-sm font-medium border border-purple-200">
+            🐕 Dog Owners
+          </span>
+        </div>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="mt-6 flex flex-wrap gap-2">
+        {['All Groups', 'My Groups', 'Popular', 'New Groups', 'Activities', 'Committees'].map((filter) => (
+          <button
+            key={filter}
+            onClick={() => setGroupFilter(filter)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              groupFilter === filter
+                ? 'bg-purple-100 text-purple-700'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Groups Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Book Club - Member */}
+      <div className="bg-white rounded-xl shadow-sm border-2 border-purple-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl">📚</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Book Club</h3>
+              <p className="text-sm text-gray-600">12 members</p>
+            </div>
+          </div>
+          <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+            Member
+          </span>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Monthly discussions of bestsellers and classics. Currently reading "The Seven Husbands of Evelyn Hugo"</p>
+        
+        <div className="flex items-center text-xs text-gray-500 mb-4">
+          <Calendar className="w-4 h-4 mr-1" />
+          <span>Next: Thu 7 PM • Community Lounge</span>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedGroup({
+                name: 'Book Club',
+                members: 12,
+                description: 'Monthly discussions of bestsellers and classics. Currently reading "The Seven Husbands of Evelyn Hugo"',
+                isMember: true,
+                isPrivate: false,
+                emoji: '📚'
+              });
+              setShowGroupDetails(true);
+            }}
+            className="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-200 transition-colors"
+          >
+            View Group
+          </button>
+          <button className="px-3 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors">
+            Leave
+          </button>
+        </div>
+      </div>
+
+      {/* Dog Owners - Member */}
+      <div className="bg-white rounded-xl shadow-sm border-2 border-purple-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl">🐕</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Dog Owners</h3>
+              <p className="text-sm text-gray-600">18 members</p>
+            </div>
+          </div>
+          <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+            Member
+          </span>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Share tips, organize playdates, and help each other with pet care. Dog park meetups every weekend!</p>
+        
+        <div className="flex items-center text-xs text-gray-500 mb-4">
+          <MapPin className="w-4 h-4 mr-1" />
+          <span>Next meetup: Sat 10 AM • Nearby Park</span>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedGroup({
+                name: 'Dog Owners',
+                members: 18,
+                description: 'Share tips, organize playdates, and help each other with pet care. Dog park meetups every weekend!',
+                isMember: true,
+                isPrivate: false,
+                emoji: '🐕'
+              });
+              setShowGroupDetails(true);
+            }}
+            className="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-200 transition-colors"
+          >
+            View Group
+          </button>
+          <button className="px-3 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors">
+            Leave
+          </button>
+        </div>
+      </div>
+
+      {/* Fitness Group - Not Member */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl">💪</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Fitness Group</h3>
+              <p className="text-sm text-gray-600">24 members</p>
+            </div>
+          </div>
+          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+            Popular
+          </span>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Morning workouts, running partners, and fitness challenges. All levels welcome!</p>
+        
+        <div className="flex items-center text-xs text-gray-500 mb-4">
+          <Clock className="w-4 h-4 mr-1" />
+          <span>Daily: 6 AM • Fitness Center</span>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedGroup({
+                name: 'Fitness Group',
+                members: 24,
+                description: 'Morning workouts, running partners, and fitness challenges. All levels welcome!',
+                isMember: false,
+                isPrivate: false,
+                emoji: '💪'
+              });
+              setShowGroupDetails(true);
+            }}
+            className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+          >
+            View Group
+          </button>
+          <button className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+            Join Group
+          </button>
+        </div>
+      </div>
+
+      {/* Cooking Club - Not Member */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl">👨‍🍳</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Cooking Club</h3>
+              <p className="text-sm text-gray-600">15 members</p>
+            </div>
+          </div>
+          <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+            New
+          </span>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Share recipes, host potlucks, and learn new cuisines together. Monthly themed dinners!</p>
+        
+        <div className="flex items-center text-xs text-gray-500 mb-4">
+          <Calendar className="w-4 h-4 mr-1" />
+          <span>Next: Fri 6 PM • Community Kitchen</span>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedGroup({
+                name: 'Cooking Club',
+                members: 15,
+                description: 'Share recipes, host potlucks, and learn new cuisines together. Monthly themed dinners!',
+                isMember: false,
+                isPrivate: false,
+                emoji: '👨‍🍳'
+              });
+              setShowGroupDetails(true);
+            }}
+            className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+          >
+            View Group
+          </button>
+          <button className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+            Join Group
+          </button>
+        </div>
+      </div>
+
+      {/* Safety Committee - Private */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl">🛡️</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Safety Committee</h3>
+              <p className="text-sm text-gray-600">8 members</p>
+            </div>
+          </div>
+          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">
+            Private
+          </span>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Building safety initiatives and emergency preparedness. Invitation only.</p>
+        
+        <div className="flex items-center text-xs text-gray-500 mb-4">
+          <Shield className="w-4 h-4 mr-1" />
+          <span>Monthly meetings • Private</span>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <button className="px-3 py-2 bg-gray-100 text-gray-500 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+            Private Group
+          </button>
+          <button className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+            Request Join
+          </button>
+        </div>
+      </div>
+
+      {/* Game Night - Not Member */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl">🎮</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Game Night</h3>
+              <p className="text-sm text-gray-600">21 members</p>
+            </div>
+          </div>
+          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+            Active
+          </span>
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-4">Board games, card games, and video games every Wednesday. Snacks provided!</p>
+        
+        <div className="flex items-center text-xs text-gray-500 mb-4">
+          <Calendar className="w-4 h-4 mr-1" />
+          <span>Every Wed 7 PM • Community Lounge</span>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => {
+              setSelectedGroup({
+                name: 'Game Night',
+                members: 21,
+                description: 'Board games, card games, and video games every Wednesday. Snacks provided!',
+                isMember: false,
+                isPrivate: false,
+                emoji: '🎮'
+              });
+              setShowGroupDetails(true);
+            }}
+            className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+          >
+            View Group
+          </button>
+          <button className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+            Join Group
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{activeTab !== 'home' && activeTab !== 'marketplace' && activeTab !== 'feed' && activeTab !== 'events' && activeTab !== 'neighbors' && activeTab !== 'groups' && (
   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
     <div className="text-gray-400 mb-4">
       <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
