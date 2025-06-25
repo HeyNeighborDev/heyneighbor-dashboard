@@ -4,7 +4,8 @@ import {
   ShoppingBag, Phone, AlertTriangle, Bell, Search, Plus,
   MapPin, Clock, Camera, Zap, Coffee, Dumbbell, Waves,
   Car, Package, Shield, Star, TrendingUp, UserPlus, Menu,
-  X, Settings, LogOut, Edit, Share2, Bookmark, Filter, ChevronLeft
+  X, Settings, LogOut, Edit, Share2, Bookmark, Filter, ChevronLeft,
+  MoreHorizontal, CheckCircle, Send
 } from 'lucide-react';
 
 const ResidentPlatform = ({ onBackToManagement }) => {
