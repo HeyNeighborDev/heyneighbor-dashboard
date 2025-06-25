@@ -156,8 +156,8 @@ const ResidentPlatform = ({ onBackToManagement }) => {
         {/* Mobile Menu Overlay */}
         {showMobileMenu && (
           <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowMobileMenu(false)}>
-            <div className="fixed inset-y-0 right-0 w-64 bg-white shadow-lg" onClick={e => e.stopPropagation()}>
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-blue-50">
                 <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
                 <button 
                   onClick={() => setShowMobileMenu(false)}
@@ -166,10 +166,10 @@ const ResidentPlatform = ({ onBackToManagement }) => {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <nav className="p-4 space-y-2">
+              <nav className="p-3 space-y-1">
                 <button
                   onClick={() => { onBackToManagement(); setShowMobileMenu(false); }}
-                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200 bg-blue-50"
                 >
                   <ChevronLeft className="w-5 h-5 mr-3" />
                   Back to Management
