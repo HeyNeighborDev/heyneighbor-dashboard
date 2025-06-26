@@ -2685,7 +2685,7 @@ const handleManageAmenitySettings = (amenity = null) => {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
-                    <span className="text-lg">🤖</span>
+                    <NoraIcon size={20} className="text-purple-600" />
                     <span>AI Hub</span>
                   </button>
                 </div>
@@ -2704,7 +2704,7 @@ const handleManageAmenitySettings = (amenity = null) => {
                           <div className="flex items-start justify-between">
                             <div className="flex items-start space-x-3">
                               <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <span className="text-xl">🤖</span>
+                                <NoraIcon size={24} className="text-white" />
                               </div>
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2 mb-1">
@@ -3027,7 +3027,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                       <div className="flex items-center space-x-3">
                         <h2 className="text-xl font-bold text-gray-900">Renewal Risk Analysis</h2>
                         <div className="bg-purple-100 px-3 py-1 rounded-full">
-                          <span className="text-xs text-purple-700 font-bold">🤖 AI-Powered</span>
+                          <span className="text-xs text-purple-700 font-bold">
+                            <NoraIcon size={14} className="text-purple-700 inline mr-1" /> AI-Powered
+                          </span>
                         </div>
                       </div>
                       <p className="text-sm text-gray-500 mt-1">Nora's advanced prediction model with 94.2% accuracy</p>
@@ -3106,7 +3108,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                             </div>
                             <p className="text-sm text-yellow-700 mt-2">5 residents under AI surveillance - proactive engagement scheduled</p>
                             <div className="mt-3 bg-yellow-100 p-3 rounded-lg">
-                              <p className="text-xs text-yellow-800 font-medium">🤖 Nora's Plan: Automated check-in calls this week + community event invitations</p>
+                              <p className="text-xs text-yellow-800 font-medium">
+                                <NoraIcon size={14} className="text-yellow-800 inline mr-1" /> Nora's Plan: Automated check-in calls this week + community event invitations
+                              </p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-3">
@@ -3191,7 +3195,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                         </div>
                         
                         <div className="bg-purple-50 p-4 rounded-lg mt-4">
-                          <p className="text-xs text-purple-800 font-medium">🤖 Nora's Pattern Recognition:</p>
+                          <p className="text-xs text-purple-800 font-medium">
+                            <NoraIcon size={14} className="text-purple-800 inline mr-1" /> Nora's Pattern Recognition:
+                          </p>
                           <p className="text-xs text-purple-700 mt-1">70% of "rent increase" departures are preventable with early engagement. AI suggests proactive conversations 60 days before lease renewal.</p>
                         </div>
                       </div>
@@ -3339,7 +3345,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                       </div>
                       
                       <div className="bg-purple-50 p-3 rounded-lg">
-                        <p className="text-xs text-purple-800 font-medium">🤖 Nora's Insight:</p>
+                        <p className="text-xs text-purple-800 font-medium">
+                          <NoraIcon size={14} className="text-purple-800 inline mr-1" /> Nora's Insight:
+                        </p>
                         <p className="text-xs text-purple-700 mt-1">Sentiment analysis shows coffee hours are creating positive social connections. Recommend increasing frequency to bi-weekly.</p>
                       </div>
                     </div>
@@ -3431,7 +3439,7 @@ const handleManageAmenitySettings = (amenity = null) => {
                     <div className="relative z-10">
                       <div className="flex items-center space-x-3 mb-4">
                         <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
-                          <span className="text-2xl">🤖</span>
+                          <NoraIcon size={28} className="text-white" />
                         </div>
                         <div>
                           <h2 className="text-xl font-bold">Nora AI Assistant</h2>
@@ -3482,7 +3490,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                           </div>
                           <p className="text-sm text-red-700 mb-2 font-medium">Schedule urgent meeting with Sarah Chen (Unit 4B)</p>
                           <div className="bg-red-100 p-3 rounded-lg mb-4">
-                            <p className="text-xs text-red-800 font-medium">🤖 Nora's Analysis:</p>
+                            <p className="text-xs text-red-800 font-medium">
+                              <NoraIcon size={14} className="text-purple-600 inline mr-1" /> Nora's Analysis:
+                            </p>
                             <p className="text-xs text-red-700 mt-1">Behavioral pattern shows 3 noise complaints + 67% engagement drop + rent inquiry = 94% move-out probability. Intervention within 48hrs increases retention to 89%.</p>
                           </div>
                           <button 
@@ -3511,7 +3521,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                           </div>
                           <p className="text-sm text-blue-700 mb-2 font-medium">Host coffee hour this Thursday at 6 PM</p>
                           <div className="bg-blue-100 p-3 rounded-lg mb-4">
-                            <p className="text-xs text-blue-800 font-medium">🤖 Nora's Optimization:</p>
+                            <p className="text-xs text-blue-800 font-medium">
+                              <NoraIcon size={14} className="text-purple-600 inline mr-1" /> Nora's Optimization:
+                            </p>
                             <p className="text-xs text-blue-700 mt-1">Historical data shows Thursday 6 PM gets 23% higher attendance. 12 residents likely to attend based on calendar analysis.</p>
                           </div>
                           <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2">
@@ -3528,7 +3540,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                           </div>
                           <p className="text-sm text-green-700 mb-2 font-medium">Send personalized appreciation gifts to 5 long-term residents</p>
                           <div className="bg-green-100 p-3 rounded-lg mb-4">
-                            <p className="text-xs text-green-800 font-medium">🤖 Nora's Personalization:</p>
+                            <p className="text-xs text-green-800 font-medium">
+                              <NoraIcon size={14} className="text-purple-600 inline mr-1" /> Nora's Personalization:
+                            </p>
                             <p className="text-xs text-green-700 mt-1">Target residents: 3+ years tenure, high satisfaction. Gift suggestions: Local coffee shop cards. Cost: $150, retention value: $12,000.</p>
                           </div>
                           <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center space-x-2">
@@ -3603,7 +3617,9 @@ const handleManageAmenitySettings = (amenity = null) => {
                           <h3 className="text-xl font-bold text-gray-900">{selectedKpi.title}</h3>
                           {selectedKpi.type.includes('ai') || selectedKpi.type.includes('nora') ? (
                             <div className="bg-purple-100 px-3 py-1 rounded-full">
-                              <span className="text-xs text-purple-700 font-bold">🤖 AI Powered</span>
+                              <span className="text-xs text-purple-700 font-bold">
+                                <NoraIcon size={14} className="text-purple-700 inline mr-1" /> AI Powered
+                              </span>
                             </div>
                           ) : null}
                         </div>
@@ -3691,7 +3707,7 @@ const handleManageAmenitySettings = (amenity = null) => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                          <span className="text-lg">🤖</span>
+                          <NoraIcon size={20} className="text-purple-600" />
                         </div>
                         <div>
                           <h4 className="font-bold">Nora AI Assistant</h4>
@@ -3773,7 +3789,7 @@ const handleManageAmenitySettings = (amenity = null) => {
                   onClick={() => setShowNoraChat(true)}
                   className="fixed bottom-4 right-4 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 z-40 flex items-center justify-center"
                 >
-                  <span className="text-2xl">🤖</span>
+                  <NoraIcon size={28} className="text-purple-600" />
                   {noraNotifications.filter(n => !n.seen).length > 0 && (
                     <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
                       <span className="text-white text-xs font-bold">{noraNotifications.filter(n => !n.seen).length}</span>
@@ -4394,20 +4410,22 @@ const handleManageAmenitySettings = (amenity = null) => {
             }`}
           >
             Amenities & Policies
-          </button>
           <button
             onClick={() => setSettingsTab('nora')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-              settingsTab === 'nora' 
-                ? 'border-blue-500 text-blue-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            🤖 Nora AI
-          </button>
-        </nav>
-      </div>
-    </div>
+          className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+            settingsTab === 'nora' 
+              ? 'border-blue-500 text-blue-600' 
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          }`}
+        >
+          <NoraIcon 
+            size={16} 
+            className={`inline mr-1 ${
+              settingsTab === 'nora' ? 'text-blue-600' : 'text-gray-500'
+            }`} 
+          /> 
+          Nora AI
+        </button>
 
     {/* Property Details Tab */}
     {settingsTab === 'property' && (
@@ -4646,7 +4664,7 @@ const handleManageAmenitySettings = (amenity = null) => {
         <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-200 p-8">
           <div className="flex items-center space-x-3 mb-6">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white text-xl">🤖</span>
+              <NoraIcon size={24} className="text-white" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Nora AI Configuration</h2>
