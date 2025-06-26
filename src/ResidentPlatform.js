@@ -10,7 +10,7 @@ import airFryer from './Assets/marketplace-air-fryer.png';
 import textbooks from './Assets/marketplace-textbooks.png';
 import plantStand from './Assets/marketplace-plant-stand.png';
 
-// Amenity Images  
+// Amenity Images
 import poolDeck from './Assets/amenity-pool-deck.png';
 import fitnessCenter from './Assets/amenity-fitness-center.png';
 import rooftopTerrace from './Assets/amenity-rooftop-terrace.png';
@@ -162,6 +162,76 @@ const ResidentPlatform = ({ onBackToManagement }) => {
       image: plantStand
     }
   ];
+
+  // Amenities data array
+const amenities = [
+  {
+    id: 1,
+    name: "Pool Deck",
+    status: "Available",
+    hours: "6 AM - 10 PM",
+    maxPeople: "8 people per slot",
+    timeSlots: "2-hour time slots",
+    image: poolDeck,
+    buttonText: "Book Pool Deck",
+    buttonColor: "bg-blue-500 hover:bg-blue-600"
+  },
+  {
+    id: 2,
+    name: "Fitness Center", 
+    status: "Available",
+    hours: "5 AM - 11 PM",
+    maxPeople: "6 people per slot",
+    timeSlots: "1-hour time slots",
+    image: fitnessCenter,
+    buttonText: "Book Fitness Center",
+    buttonColor: "bg-green-500 hover:bg-green-600"
+  },
+  {
+    id: 3,
+    name: "Rooftop Terrace",
+    status: "Popular",
+    hours: "8 AM - 10 PM", 
+    maxPeople: "15 people per slot",
+    timeSlots: "3-hour time slots",
+    image: rooftopTerrace,
+    buttonText: "Book Rooftop",
+    buttonColor: "bg-purple-500 hover:bg-purple-600"
+  },
+  {
+    id: 4,
+    name: "Community Lounge",
+    status: "Available",
+    hours: "24/7",
+    maxPeople: "20 people per slot", 
+    timeSlots: "2-hour time slots",
+    image: communityLounge,
+    buttonText: "Book Lounge",
+    buttonColor: "bg-orange-500 hover:bg-orange-600"
+  },
+  {
+    id: 5,
+    name: "Game Room",
+    status: "Maintenance",
+    hours: "10 AM - 10 PM",
+    maxPeople: "8 people per slot",
+    timeSlots: "Under maintenance",
+    image: gameRoom,
+    buttonText: "Temporarily Unavailable",
+    buttonColor: "bg-gray-400 cursor-not-allowed"
+  },
+  {
+    id: 6,
+    name: "Business Center",
+    status: "Available", 
+    hours: "6 AM - 10 PM",
+    maxPeople: "4 people per slot",
+    timeSlots: "1-hour time slots",
+    image: businessCenter,
+    buttonText: "Book Business Center",
+    buttonColor: "bg-gray-500 hover:bg-gray-600"
+  }
+];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -2061,262 +2131,63 @@ const ResidentPlatform = ({ onBackToManagement }) => {
     </div>
 
     {/* Amenities Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {/* Pool Deck */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="text-6xl mb-4">🏊‍♀️</div>
-            <p className="text-xl font-semibold">Pool Deck</p>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Pool Deck</h3>
-            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-              Available
-            </span>
-          </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-gray-600">
-              <Clock className="w-4 h-4 mr-2" />
-              <span>Hours: 6 AM - 10 PM</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Max 8 people per slot</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Calendar className="w-4 h-4 mr-2" />
-              <span>2-hour time slots</span>
-            </div>
-          </div>
-          
-          <button 
-            onClick={() => {
-              setSelectedAmenity('pool');
-              setShowBookingModal(true);
-            }}
-            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-          >
-            Book Pool Deck
-          </button>
-        </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {amenities.map(amenity => (
+    <div key={amenity.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+      <div className="h-48 overflow-hidden">
+        <img 
+          src={amenity.image} 
+          alt={amenity.name}
+          className="w-full h-full object-cover"
+        />
       </div>
-
-      {/* Fitness Center */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="text-6xl mb-4">💪</div>
-            <p className="text-xl font-semibold">Fitness Center</p>
-          </div>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">{amenity.name}</h3>
+          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+            amenity.status === 'Available' ? 'bg-green-100 text-green-800' :
+            amenity.status === 'Popular' ? 'bg-yellow-100 text-yellow-800' :
+            'bg-red-100 text-red-800'
+          }`}>
+            {amenity.status}
+          </span>
         </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Fitness Center</h3>
-            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-              Available
-            </span>
+        
+        <div className="space-y-2 mb-4">
+          <div className="flex items-center text-sm text-gray-600">
+            <Clock className="w-4 h-4 mr-2" />
+            <span>Hours: {amenity.hours}</span>
           </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-gray-600">
-              <Clock className="w-4 h-4 mr-2" />
-              <span>Hours: 5 AM - 11 PM</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Max 6 people per slot</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Calendar className="w-4 h-4 mr-2" />
-              <span>1-hour time slots</span>
-            </div>
+          <div className="flex items-center text-sm text-gray-600">
+            <Users className="w-4 h-4 mr-2" />
+            <span>{amenity.maxPeople}</span>
           </div>
-          
-          <button 
-            onClick={() => {
-              setSelectedAmenity('fitness');
-              setShowBookingModal(true);
-            }}
-            className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
-          >
-            Book Fitness Center
-          </button>
-        </div>
-      </div>
-
-      {/* Rooftop Terrace */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="text-6xl mb-4">🌆</div>
-            <p className="text-xl font-semibold">Rooftop Terrace</p>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Rooftop Terrace</h3>
-            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-              Popular
-            </span>
-          </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-gray-600">
-              <Clock className="w-4 h-4 mr-2" />
-              <span>Hours: 8 AM - 10 PM</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Max 15 people per slot</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Calendar className="w-4 h-4 mr-2" />
-              <span>3-hour time slots</span>
-            </div>
-          </div>
-          
-          <button 
-            onClick={() => {
-              setSelectedAmenity('rooftop');
-              setShowBookingModal(true);
-            }}
-            className="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
-          >
-            Book Rooftop
-          </button>
-        </div>
-      </div>
-
-      {/* Community Lounge */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="text-6xl mb-4">🛋️</div>
-            <p className="text-xl font-semibold">Community Lounge</p>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Community Lounge</h3>
-            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-              Available
-            </span>
-          </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-gray-600">
-              <Clock className="w-4 h-4 mr-2" />
-              <span>Hours: 24/7</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Max 20 people per slot</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Calendar className="w-4 h-4 mr-2" />
-              <span>2-hour time slots</span>
-            </div>
-          </div>
-          
-          <button 
-            onClick={() => {
-              setSelectedAmenity('lounge');
-              setShowBookingModal(true);
-            }}
-            className="w-full px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-colors"
-          >
-            Book Lounge
-          </button>
-        </div>
-      </div>
-
-      {/* Game Room */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="text-6xl mb-4">🎮</div>
-            <p className="text-xl font-semibold">Game Room</p>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Game Room</h3>
-            <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
-              Maintenance
-            </span>
-          </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-gray-600">
-              <Clock className="w-4 h-4 mr-2" />
-              <span>Hours: 10 AM - 10 PM</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Max 8 people per slot</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
+          <div className="flex items-center text-sm text-gray-600">
+            {amenity.status === 'Maintenance' ? (
               <AlertTriangle className="w-4 h-4 mr-2" />
-              <span>Under maintenance</span>
-            </div>
-          </div>
-          
-          <button 
-            className="w-full px-4 py-2 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed"
-            disabled
-          >
-            Temporarily Unavailable
-          </button>
-        </div>
-      </div>
-
-      {/* Business Center */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="text-6xl mb-4">💼</div>
-            <p className="text-xl font-semibold">Business Center</p>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Business Center</h3>
-            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-              Available
-            </span>
-          </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-gray-600">
-              <Clock className="w-4 h-4 mr-2" />
-              <span>Hours: 6 AM - 10 PM</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Max 4 people per slot</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
+            ) : (
               <Calendar className="w-4 h-4 mr-2" />
-              <span>1-hour time slots</span>
-            </div>
+            )}
+            <span>{amenity.timeSlots}</span>
           </div>
-          
-          <button 
-            onClick={() => {
-              setSelectedAmenity('business');
-              setShowBookingModal(true);
-            }}
-            className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
-          >
-            Book Business Center
-          </button>
         </div>
+        
+        <button 
+          onClick={() => {
+            if (amenity.status !== 'Maintenance') {
+              setSelectedAmenity(amenity.name.toLowerCase().replace(' ', ''));
+              setShowBookingModal(true);
+            }
+          }}
+          className={`w-full px-4 py-2 text-white rounded-lg font-medium transition-colors ${amenity.buttonColor}`}
+          disabled={amenity.status === 'Maintenance'}
+        >
+          {amenity.buttonText}
+        </button>
       </div>
     </div>
+  ))}
+</div>
 
     {/* Booking Rules */}
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
