@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
 import PoolPartyImage from './Assets/pool-party.png';
 import NavySofaImage from './Assets/navy-sofa.png';
+// Marketplace Images
+import sectionalSofa from '../assets/images/marketplace-sectional-sofa.png';
+import mountainBike from '../assets/images/marketplace-mountain-bike.png';
+import coffeeTable from '../assets/images/marketplace-coffee-table.png';
+import airFryer from '../assets/images/marketplace-air-fryer.png';
+import textbooks from '../assets/images/marketplace-textbooks.png';
+import plantStand from '../assets/images/marketplace-plant-stand.png';
+
+// Amenity Images
+import poolDeck from '../assets/images/amenity-pool-deck.png';
+import fitnessCenter from '../assets/images/amenity-fitness-center.png';
+import rooftopTerrace from '../assets/images/amenity-rooftop-terrace.png';
+import communityLounge from '../assets/images/amenity-community-lounge.png';
+import gameRoom from '../assets/images/amenity-game-room.png';
+import businessCenter from '../assets/images/amenity-business-center.png';
 import { 
   Home, Heart, MessageCircle, Users, Calendar, Building, 
   ShoppingBag, Phone, AlertTriangle, Bell, Search, Plus,
@@ -89,6 +104,63 @@ const ResidentPlatform = ({ onBackToManagement }) => {
       online: true
     }
   ]);
+
+  const marketplaceItems = [
+    {
+      id: 1,
+      title: "Navy Blue Sectional Sofa",
+      condition: "Like new condition",
+      unit: "Unit 4B",
+      price: "$450",
+      description: "Comfortable sectional sofa, perfect for a living room. Barely used, moving out of state.",
+      image: sectionalSofa
+    },
+    {
+      id: 2,
+      title: "Trek Mountain Bike",
+      condition: "Good condition",
+      unit: "Unit 2A", 
+      price: "$280",
+      description: "21-speed mountain bike, great for trails. Well maintained, some wear on tires.",
+      image: mountainBike
+    },
+    {
+      id: 3,
+      title: "Glass Coffee Table",
+      condition: "Fair condition",
+      unit: "Unit 1C",
+      price: "$85",
+      description: "Modern glass coffee table with metal legs. Small scratch on surface but very functional.",
+      image: coffeeTable
+    },
+    {
+      id: 4,
+      title: "Ninja Air Fryer",
+      condition: "Brand new",
+      unit: "Unit 3A",
+      price: "$120", 
+      description: "Never used air fryer, still in box. Received as gift but already have one.",
+      image: airFryer
+    },
+    {
+      id: 5,
+      title: "College Textbooks (Set of 4)",
+      condition: "Good condition",
+      unit: "Unit 5A",
+      price: "$75",
+      description: "Business and economics textbooks from Georgia Tech. Some highlighting but great condition.",
+      image: textbooks
+    },
+    {
+      id: 6,
+      title: "Wooden Plant Stand",
+      condition: "Like new",
+      unit: "Unit 2C", 
+      price: "$35",
+      description: "Beautiful wooden plant stand with 3 tiers. Perfect for displaying plants indoors.",
+      image: plantStand
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -706,132 +778,29 @@ const ResidentPlatform = ({ onBackToManagement }) => {
     </div>
 
     {/* Marketplace Items Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {/* Sample Item 1 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gray-200 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <Package className="w-12 h-12 mx-auto mb-2" />
-            <p className="text-sm">Navy Blue Sectional</p>
-          </div>
-        </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-1">Navy Blue Sectional Sofa</h3>
-          <p className="text-sm text-gray-600 mb-2">Like new condition • Unit 4B</p>
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Comfortable sectional sofa, perfect for a living room. Barely used, moving out of state.</p>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-green-600">$450</span>
-            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
-              Contact Seller
-            </button>
-          </div>
-        </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {marketplaceItems.map(item => (
+    <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+      <div className="h-48 bg-gray-200 overflow-hidden">
+        <img 
+          src={item.image} 
+          alt={item.title}
+          className="w-full h-full object-cover"
+        />
       </div>
-
-      {/* Sample Item 2 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gray-200 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <Package className="w-12 h-12 mx-auto mb-2" />
-            <p className="text-sm">Mountain Bike</p>
+      <div className="p-4">
+        <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
+        <p className="text-sm text-gray-600 mb-2">{item.condition} • {item.unit}</p>
+        <p className="text-xs text-gray-500 mb-3 line-clamp-2">{item.description}</p>
+        <div className="flex items-center justify-between">
+          <span className="text-lg font-bold text-green-600">{item.price}</span>
+          <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+            Contact Seller
+              </button>
+            </div>
           </div>
         </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-1">Trek Mountain Bike</h3>
-          <p className="text-sm text-gray-600 mb-2">Good condition • Unit 2A</p>
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">21-speed mountain bike, great for trails. Well maintained, some wear on tires.</p>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-green-600">$280</span>
-            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
-              Contact Seller
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Sample Item 3 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gray-200 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <Package className="w-12 h-12 mx-auto mb-2" />
-            <p className="text-sm">Coffee Table</p>
-          </div>
-        </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-1">Glass Coffee Table</h3>
-          <p className="text-sm text-gray-600 mb-2">Fair condition • Unit 1C</p>
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Modern glass coffee table with metal legs. Small scratch on surface but very functional.</p>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-green-600">$85</span>
-            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
-              Contact Seller
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Sample Item 4 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gray-200 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <Package className="w-12 h-12 mx-auto mb-2" />
-            <p className="text-sm">Air Fryer</p>
-          </div>
-        </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-1">Ninja Air Fryer</h3>
-          <p className="text-sm text-gray-600 mb-2">Brand new • Unit 3A</p>
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Never used air fryer, still in box. Received as gift but already have one.</p>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-green-600">$120</span>
-            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
-              Contact Seller
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Sample Item 5 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gray-200 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <Package className="w-12 h-12 mx-auto mb-2" />
-            <p className="text-sm">Textbooks</p>
-          </div>
-        </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-1">College Textbooks (Set of 4)</h3>
-          <p className="text-sm text-gray-600 mb-2">Good condition • Unit 5A</p>
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Business and economics textbooks from Georgia Tech. Some highlighting but great condition.</p>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-green-600">$75</span>
-            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
-              Contact Seller
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Sample Item 6 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-        <div className="h-48 bg-gray-200 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <Package className="w-12 h-12 mx-auto mb-2" />
-            <p className="text-sm">Plant Stand</p>
-          </div>
-        </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-1">Wooden Plant Stand</h3>
-          <p className="text-sm text-gray-600 mb-2">Like new • Unit 2C</p>
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">Beautiful wooden plant stand with 3 tiers. Perfect for displaying plants indoors.</p>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-green-600">$35</span>
-            <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
-              Contact Seller
-            </button>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 )}
