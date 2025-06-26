@@ -545,7 +545,7 @@ const amenitySettings = [
     maxDuration: 4, // hours
     availableHours: '10:00-20:00',
     requiresApproval: true,
-    bookingFee: 0,
+    bookingFee: 150, // Updated realistic fee
     rules: ['No glass containers', 'Music volume limits apply', 'Children must be supervised']
   },
   {
@@ -556,7 +556,7 @@ const amenitySettings = [
     maxDuration: 2,
     availableHours: '05:00-23:00',
     requiresApproval: false,
-    bookingFee: 0,
+    bookingFee: 0, // Usually free for residents
     rules: ['Wipe down equipment after use', 'No personal trainers without permission', 'Proper workout attire required']
   },
   {
@@ -567,7 +567,7 @@ const amenitySettings = [
     maxDuration: 6,
     availableHours: '08:00-22:00',
     requiresApproval: true,
-    bookingFee: 25,
+    bookingFee: 300, // Premium clubhouse pricing like Bell Alpharetta
     rules: ['No smoking', 'Clean up after events', 'Decorations must be approved']
   },
   {
@@ -578,7 +578,7 @@ const amenitySettings = [
     maxDuration: 4,
     availableHours: '16:00-22:00',
     requiresApproval: true,
-    bookingFee: 50,
+    bookingFee: 250, // Premium outdoor space
     rules: ['Weather dependent', 'No open flames', 'Music cutoff at 10 PM']
   },
   {
@@ -589,7 +589,7 @@ const amenitySettings = [
     maxDuration: 3,
     availableHours: '10:00-22:00',
     requiresApproval: true,
-    bookingFee: 15,
+    bookingFee: 75, // Moderate fee for game room
     rules: ['Adult supervision required for children', 'No food or drinks near equipment', 'Report any damage immediately']
   }
 ];
@@ -1614,6 +1614,32 @@ const amenitySettings = [
       default: return 'Property Manager';
     }
   };
+
+  // Booking Detail Modal Handler
+const handleBookingDetails = (booking) => {
+  setSelectedBooking(booking);
+  setShowBookingModal(true);
+};
+
+// Booking Approval Handler
+const handleApproveBooking = (bookingId) => {
+  // In a real app, this would make an API call
+  console.log('Approving booking:', bookingId);
+  // You could update state here to reflect the approval
+  alert(`Booking ${bookingId} approved! Email notification sent to resident.`);
+};
+
+// Booking Decline Handler  
+const handleDeclineBooking = (booking) => {
+  setSelectedBooking(booking);
+  setShowBookingModal(true);
+};
+
+// Amenity Settings Handler
+const handleManageAmenitySettings = (amenity = null) => {
+  setSelectedAmenityForSettings(amenity);
+  setShowAmenitySettingsModal(true);
+};
 
   if (currentPage === 'resident-home') {
     return <ResidentPlatform onBackToManagement={() => setCurrentPage('dashboard')} />;
@@ -3671,7 +3697,7 @@ const amenitySettings = [
                   </div>
                   
                   <button 
-                    onClick={() => setShowAmenitySettingsModal(true)}
+                    onClick={() => handleManageAmenitySettings()}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
                   >
                     <Settings className="w-4 h-4" />
@@ -3762,20 +3788,14 @@ const amenitySettings = [
                               {booking.status === 'pending' && (
                                 <>
                                   <button 
-                                    onClick={() => {
-                                      // Here you would handle the approval logic
-                                      console.log('Approve booking:', booking.id);
-                                    }}
+                                    onClick={() => handleApproveBooking(booking.id)}                                                                      
                                     className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
                                   >
                                     <CheckCircle className="w-4 h-4" />
                                     <span>Approve</span>
                                   </button>
                                   <button 
-                                    onClick={() => {
-                                      setSelectedBooking(booking);
-                                      setShowBookingModal(true);
-                                    }}
+                                    onClick={() => handleDeclineBooking(booking)}                                
                                     className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
                                   >
                                     <AlertCircle className="w-4 h-4" />
@@ -3784,10 +3804,7 @@ const amenitySettings = [
                                 </>
                               )}
                               <button 
-                                onClick={() => {
-                                  setSelectedBooking(booking);
-                                  setShowBookingModal(true);
-                                }}
+                                onClick={() => handleBookingDetails(booking)}
                                 className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
                               >
                                 <Eye className="w-4 h-4" />
@@ -3817,7 +3834,7 @@ const amenitySettings = [
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                     <div className="space-y-2">
                       <button 
-                        onClick={() => setShowAmenitySettingsModal(true)}
+                        onClick={() => handleManageAmenitySettings()}
                         className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                       >
                         <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -3825,7 +3842,10 @@ const amenitySettings = [
                         </div>
                         <span className="font-medium text-gray-900 text-sm">Manage Settings</span>
                       </button>
-                      <button 
+                      <button
+                        onClick={() => {
+                          alert('Calendar View:\n\n📅 Coming Soon!\n\n- Weekly/Monthly calendar view\n- Drag & drop booking management\n- Conflict detection\n- Availability blocking\n\nThis feature is in development!');
+                      }}
                         className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                       >
                         <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
@@ -3833,7 +3853,10 @@ const amenitySettings = [
                         </div>
                         <span className="font-medium text-gray-900 text-sm">View Calendar</span>
                       </button>
-                      <button 
+                      <button
+                        onClick={() => {
+                          alert('Usage Analytics:\n\n📊 Coming Soon!\n\n- Booking trends & patterns\n- Revenue analytics\n- Popular time slots\n- Resident usage statistics\n- Capacity utilization\n\nThis feature is in development!');
+                        }}
                         className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                       >
                         <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -3912,7 +3935,225 @@ const amenitySettings = [
               </div>
             </>
           )}
+
+          {/* Booking Details Modal */}
+{showBookingModal && selectedBooking && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <span className="text-2xl">
+              {amenitySettings.find(a => a.name === selectedBooking.amenity)?.icon || '🏢'}
+            </span>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">{selectedBooking.amenity} Booking</h3>
+              <p className="text-gray-600">{selectedBooking.resident} • {selectedBooking.unit}</p>
+            </div>
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+              selectedBooking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+              selectedBooking.status === 'approved' ? 'bg-green-100 text-green-800' :
+              'bg-red-100 text-red-800'
+            }`}>
+              {selectedBooking.status}
+            </span>
+          </div>
+          <button 
+            onClick={() => setShowBookingModal(false)}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-3">Booking Details</h4>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Date:</span>
+                <span className="font-medium">{new Date(selectedBooking.date).toLocaleDateString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Time:</span>
+                <span className="font-medium">{selectedBooking.startTime} - {selectedBooking.endTime}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Party Size:</span>
+                <span className="font-medium">{selectedBooking.partySize} people</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Requested:</span>
+                <span className="font-medium">{new Date(selectedBooking.requestedDate).toLocaleDateString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Booking Fee:</span>
+                <span className="font-medium text-green-600">
+                  ${amenitySettings.find(a => a.name === selectedBooking.amenity)?.bookingFee || 0}
+                </span>
+              </div>
+            </div>
+          </div>
           
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Mail className="w-4 h-4 text-gray-400" />
+                <span className="text-sm">{selectedBooking.contact}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <MapPin className="w-4 h-4 text-gray-400" />
+                <span className="text-sm">Unit {selectedBooking.unit}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {selectedBooking.specialRequests && selectedBooking.specialRequests !== 'None' && (
+          <div className="mb-6">
+            <h4 className="font-semibold text-gray-900 mb-3">Special Requests</h4>
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <p className="text-blue-800">{selectedBooking.specialRequests}</p>
+            </div>
+          </div>
+        )}
+        
+        {selectedBooking.status === 'declined' && selectedBooking.declineReason && (
+          <div className="mb-6">
+            <h4 className="font-semibold text-gray-900 mb-3">Decline Reason</h4>
+            <div className="bg-red-50 p-4 rounded-lg">
+              <p className="text-red-800">{selectedBooking.declineReason}</p>
+            </div>
+          </div>
+        )}
+        
+        <div className="border-t pt-6">
+          <h4 className="font-semibold text-gray-900 mb-3">Amenity Rules</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+            {amenitySettings.find(a => a.name === selectedBooking.amenity)?.rules.map((rule, index) => (
+              <li key={index}>{rule}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      
+      <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-xl">
+        <div className="flex space-x-3">
+          {selectedBooking.status === 'pending' && (
+            <>
+              <button
+                onClick={() => {
+                  handleApproveBooking(selectedBooking.id);
+                  setShowBookingModal(false);
+                }}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+              >
+                <CheckCircle className="w-4 h-4" />
+                <span>Approve Booking</span>
+              </button>
+              <button
+                onClick={() => {
+                  const reason = prompt('Please provide a reason for declining this booking:');
+                  if (reason) {
+                    console.log('Declining booking:', selectedBooking.id, 'Reason:', reason);
+                    alert(`Booking declined. Reason: ${reason}\nEmail notification sent to resident.`);
+                    setShowBookingModal(false);
+                  }
+                }}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+              >
+                <AlertCircle className="w-4 h-4" />
+                <span>Decline Booking</span>
+              </button>
+            </>
+          )}
+          <button
+            onClick={() => setShowBookingModal(false)}
+            className="flex-1 px-4 py-3 text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg font-medium transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Amenity Settings Modal */}
+{showAmenitySettingsModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold text-gray-900">Amenity Settings Management</h3>
+          <button 
+            onClick={() => setShowAmenitySettingsModal(false)}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {amenitySettings.map((amenity) => (
+            <div key={amenity.name} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+              <div className="flex items-center space-x-3 mb-3">
+                <span className="text-2xl">{amenity.icon}</span>
+                <h4 className="font-semibold text-gray-900">{amenity.name}</h4>
+              </div>
+              
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Max Capacity:</span>
+                  <span className="font-medium">{amenity.maxCapacity} people</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Available Hours:</span>
+                  <span className="font-medium">{amenity.availableHours}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Booking Fee:</span>
+                  <span className="font-medium text-green-600">${amenity.bookingFee}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Advance Booking:</span>
+                  <span className="font-medium">{amenity.bookingWindow} days</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Max Duration:</span>
+                  <span className="font-medium">{amenity.maxDuration} hours</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Requires Approval:</span>
+                  <span className={`font-medium ${amenity.requiresApproval ? 'text-yellow-600' : 'text-green-600'}`}>
+                    {amenity.requiresApproval ? 'Yes' : 'No'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="mt-4">
+                <button
+                  onClick={() => {
+                    alert(`Edit ${amenity.name} settings:\n\n- Update capacity, hours, fees\n- Modify booking rules\n- Set availability\n\n(Feature coming soon!)`);
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Edit Settings
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
           {/* Settings Page */}
 {currentPage === 'settings' && (
   <>
