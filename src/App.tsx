@@ -225,13 +225,20 @@ const [composerType, setComposerType] = useState('');
 const [showComments, setShowComments] = useState({});
 const [newComment, setNewComment] = useState('');
 
-  const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
-  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const [newTemplate, setNewTemplate] = useState({
+const [showReportIncidentModal, setShowReportIncidentModal] = useState(false);
+const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+const [newTemplate, setNewTemplate] = useState({
     name: '',
     category: 'maintenance',
     content: ''
   });
+
+  // Amenities Management States
+const [amenitiesFilter, setAmenitiesFilter] = useState('all');
+const [selectedBooking, setSelectedBooking] = useState(null);
+const [showBookingModal, setShowBookingModal] = useState(false);
+const [showAmenitySettingsModal, setShowAmenitySettingsModal] = useState(false);
+const [selectedAmenityForSettings, setSelectedAmenityForSettings] = useState(null);
 
 // Dynamic greeting system
 useEffect(() => {
@@ -453,6 +460,139 @@ useEffect(() => {
       content: 'Important policy update regarding [POLICY_AREA]. Effective [DATE], [NEW_POLICY]. This change is being implemented to [REASON]. Please review the updated community guidelines.'
     }
   ];
+
+  // Amenities booking data
+const amenityBookings = [
+  {
+    id: 1,
+    amenity: 'Pool Deck',
+    resident: 'Sarah Martinez',
+    unit: 'A-301',
+    date: '2024-06-25',
+    startTime: '14:00',
+    endTime: '16:00',
+    status: 'pending',
+    requestedDate: '2024-06-20T10:30:00',
+    partySize: 6,
+    specialRequests: 'Birthday party setup',
+    contact: 'sarah.martinez@email.com'
+  },
+  {
+    id: 2,
+    amenity: 'Fitness Center',
+    resident: 'Mike Rodriguez',
+    unit: 'B-205',
+    date: '2024-06-24',
+    startTime: '06:00',
+    endTime: '07:00',
+    status: 'approved',
+    requestedDate: '2024-06-18T09:15:00',
+    partySize: 1,
+    specialRequests: 'None',
+    contact: 'mike.rodriguez@email.com'
+  },
+  {
+    id: 3,
+    amenity: 'Community Lounge',
+    resident: 'Emily Davis',
+    unit: 'B-308',
+    date: '2024-06-26',
+    startTime: '19:00',
+    endTime: '22:00',
+    status: 'approved',
+    requestedDate: '2024-06-19T14:20:00',
+    partySize: 12,
+    specialRequests: 'Book club meeting - need tables arranged',
+    contact: 'emily.davis@email.com'
+  },
+  {
+    id: 4,
+    amenity: 'Rooftop Terrace',
+    resident: 'David Kim',
+    unit: 'C-102',
+    date: '2024-06-28',
+    startTime: '18:00',
+    endTime: '21:00',
+    status: 'pending',
+    requestedDate: '2024-06-21T16:45:00',
+    partySize: 8,
+    specialRequests: 'Anniversary dinner - need romantic lighting',
+    contact: 'david.kim@email.com'
+  },
+  {
+    id: 5,
+    amenity: 'Game Room',
+    resident: 'Lisa Chen',
+    unit: 'A-205',
+    date: '2024-06-23',
+    startTime: '15:00',
+    endTime: '17:00',
+    status: 'declined',
+    requestedDate: '2024-06-22T11:30:00',
+    partySize: 15,
+    specialRequests: 'Kids birthday party',
+    contact: 'lisa.chen@email.com',
+    declineReason: 'Exceeds maximum capacity for game room'
+  }
+];
+
+const amenitySettings = [
+  {
+    name: 'Pool Deck',
+    icon: '🏊‍♀️',
+    maxCapacity: 8,
+    bookingWindow: 14, // days in advance
+    maxDuration: 4, // hours
+    availableHours: '10:00-20:00',
+    requiresApproval: true,
+    bookingFee: 0,
+    rules: ['No glass containers', 'Music volume limits apply', 'Children must be supervised']
+  },
+  {
+    name: 'Fitness Center',
+    icon: '💪',
+    maxCapacity: 6,
+    bookingWindow: 7,
+    maxDuration: 2,
+    availableHours: '05:00-23:00',
+    requiresApproval: false,
+    bookingFee: 0,
+    rules: ['Wipe down equipment after use', 'No personal trainers without permission', 'Proper workout attire required']
+  },
+  {
+    name: 'Community Lounge',
+    icon: '🛋️',
+    maxCapacity: 20,
+    bookingWindow: 30,
+    maxDuration: 6,
+    availableHours: '08:00-22:00',
+    requiresApproval: true,
+    bookingFee: 25,
+    rules: ['No smoking', 'Clean up after events', 'Decorations must be approved']
+  },
+  {
+    name: 'Rooftop Terrace',
+    icon: '🌆',
+    maxCapacity: 15,
+    bookingWindow: 21,
+    maxDuration: 4,
+    availableHours: '16:00-22:00',
+    requiresApproval: true,
+    bookingFee: 50,
+    rules: ['Weather dependent', 'No open flames', 'Music cutoff at 10 PM']
+  },
+  {
+    name: 'Game Room',
+    icon: '🎮',
+    maxCapacity: 12,
+    bookingWindow: 14,
+    maxDuration: 3,
+    availableHours: '10:00-22:00',
+    requiresApproval: true,
+    bookingFee: 15,
+    rules: ['Adult supervision required for children', 'No food or drinks near equipment', 'Report any damage immediately']
+  }
+];
 
   const directMessagesData = [
     {
@@ -1559,6 +1699,18 @@ useEffect(() => {
             <BarChart3 className="w-5 h-5" />
             <span>Analytics</span>
           </button>
+
+          <button 
+            onClick={() => setCurrentPage('amenities')}
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+              currentPage === 'amenities' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <Building className="w-5 h-5" />
+            <span>Amenities</span>
+          </button>
+
+
           <button 
             onClick={() => setCurrentPage('settings')}
             className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
@@ -1602,6 +1754,7 @@ useEffect(() => {
                  currentPage === 'communications' ? 'Communications' :
                  currentPage === 'events' ? 'Events & Activities' :
                  currentPage === 'analytics' ? 'Analytics & Reports' :
+                 currentPage === 'amenities' ? 'Amenities Management' :
                  currentPage === 'settings' ? 'Settings' : greeting}
               </h1>
               <p className="text-gray-600 mt-1">
@@ -1610,6 +1763,7 @@ useEffect(() => {
                  currentPage === 'residents' ? 'Manage residents and community members' :
                  currentPage === 'safety' ? 'Monitor incidents and safety reports' :
                  currentPage === 'events' ? 'Organize and manage community events' :
+                 currentPage === 'amenities' ? 'Manage bookings, settings, and amenity access' :
                  'Complete activity feed and incident tracking'}
               </p>
             </div>
@@ -3405,6 +3559,360 @@ useEffect(() => {
               )}
             </>
           )}
+
+          {/* Amenities Management Page */}
+          {currentPage === 'amenities' && (
+            <>
+              {/* Amenities Overview Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Pending Requests</p>
+                      <p className="text-2xl font-bold text-yellow-600">
+                        {amenityBookings.filter(booking => booking.status === 'pending').length}
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-6 h-6 text-yellow-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Approved Bookings</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        {amenityBookings.filter(booking => booking.status === 'approved').length}
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                      <CheckCircle className="w-6 h-6 text-green-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">This Week</p>
+                      <p className="text-2xl font-bold text-blue-600">
+                        {amenityBookings.filter(booking => {
+                          const bookingDate = new Date(booking.date);
+                          const now = new Date();
+                          const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+                          const weekEnd = new Date(weekStart);
+                          weekEnd.setDate(weekEnd.getDate() + 6);
+                          return bookingDate >= weekStart && bookingDate <= weekEnd;
+                        }).length}
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-blue-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-gray-600 text-sm">Revenue (Est.)</p>
+                      <p className="text-2xl font-bold text-purple-600">
+                        ${amenityBookings.filter(booking => booking.status === 'approved').reduce((total, booking) => {
+                          const amenitySetting = amenitySettings.find(setting => setting.name === booking.amenity);
+                          return total + (amenitySetting ? amenitySetting.bookingFee : 0);
+                        }, 0)}
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <BarChart3 className="w-6 h-6 text-purple-600" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Filter Bar */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                  <div className="flex flex-wrap gap-2">
+                    <button 
+                      onClick={() => setAmenitiesFilter('all')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        amenitiesFilter === 'all' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      All Bookings ({amenityBookings.length})
+                    </button>
+                    <button 
+                      onClick={() => setAmenitiesFilter('pending')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        amenitiesFilter === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Pending ({amenityBookings.filter(b => b.status === 'pending').length})
+                    </button>
+                    <button 
+                      onClick={() => setAmenitiesFilter('approved')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        amenitiesFilter === 'approved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Approved ({amenityBookings.filter(b => b.status === 'approved').length})
+                    </button>
+                    <button 
+                      onClick={() => setAmenitiesFilter('declined')}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                        amenitiesFilter === 'declined' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Declined ({amenityBookings.filter(b => b.status === 'declined').length})
+                    </button>
+                  </div>
+                  
+                  <button 
+                    onClick={() => setShowAmenitySettingsModal(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                  >
+                    <Settings className="w-4 h-4" />
+                    <span>Manage Settings</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Main Content Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Booking Requests - Left Column (2/3 width) */}
+                <div className="lg:col-span-2">
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div className="p-4 border-b border-gray-200">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {amenitiesFilter === 'all' ? 'All Booking Requests' :
+                         amenitiesFilter === 'pending' ? 'Pending Requests' :
+                         amenitiesFilter === 'approved' ? 'Approved Bookings' :
+                         'Declined Requests'}
+                      </h3>
+                    </div>
+                    
+                    <div className="divide-y divide-gray-200">
+                      {amenityBookings
+                        .filter(booking => amenitiesFilter === 'all' || booking.status === amenitiesFilter)
+                        .map((booking) => (
+                        <div key={booking.id} className="p-4 hover:bg-gray-50 transition-colors">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-3 mb-2">
+                                <span className="text-2xl">
+                                  {amenitySettings.find(a => a.name === booking.amenity)?.icon || '🏢'}
+                                </span>
+                                <div>
+                                  <h4 className="font-semibold text-gray-900">{booking.amenity}</h4>
+                                  <p className="text-sm text-gray-600">{booking.resident} • {booking.unit}</p>
+                                </div>
+                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                  booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                  booking.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}>
+                                  {booking.status}
+                                </span>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
+                                <div>
+                                  <span className="font-medium">Date:</span><br />
+                                  {new Date(booking.date).toLocaleDateString()}
+                                </div>
+                                <div>
+                                  <span className="font-medium">Time:</span><br />
+                                  {booking.startTime} - {booking.endTime}
+                                </div>
+                                <div>
+                                  <span className="font-medium">Party Size:</span><br />
+                                  {booking.partySize} people
+                                </div>
+                                <div>
+                                  <span className="font-medium">Requested:</span><br />
+                                  {new Date(booking.requestedDate).toLocaleDateString()}
+                                </div>
+                              </div>
+                              
+                              {booking.specialRequests && booking.specialRequests !== 'None' && (
+                                <div className="bg-blue-50 p-3 rounded-lg mb-3">
+                                  <span className="text-sm font-medium text-blue-800">Special Requests:</span>
+                                  <p className="text-sm text-blue-700 mt-1">{booking.specialRequests}</p>
+                                </div>
+                              )}
+                              
+                              {booking.status === 'declined' && booking.declineReason && (
+                                <div className="bg-red-50 p-3 rounded-lg mb-3">
+                                  <span className="text-sm font-medium text-red-800">Decline Reason:</span>
+                                  <p className="text-sm text-red-700 mt-1">{booking.declineReason}</p>
+                                </div>
+                              )}
+                              
+                              <div className="flex items-center space-x-2 text-sm text-gray-500">
+                                <MessageSquare className="w-4 h-4" />
+                                <span>{booking.contact}</span>
+                              </div>
+                            </div>
+                            
+                            <div className="flex flex-col space-y-2 ml-4">
+                              {booking.status === 'pending' && (
+                                <>
+                                  <button 
+                                    onClick={() => {
+                                      // Here you would handle the approval logic
+                                      console.log('Approve booking:', booking.id);
+                                    }}
+                                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
+                                  >
+                                    <CheckCircle className="w-4 h-4" />
+                                    <span>Approve</span>
+                                  </button>
+                                  <button 
+                                    onClick={() => {
+                                      setSelectedBooking(booking);
+                                      setShowBookingModal(true);
+                                    }}
+                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
+                                  >
+                                    <AlertCircle className="w-4 h-4" />
+                                    <span>Decline</span>
+                                  </button>
+                                </>
+                              )}
+                              <button 
+                                onClick={() => {
+                                  setSelectedBooking(booking);
+                                  setShowBookingModal(true);
+                                }}
+                                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
+                              >
+                                <Eye className="w-4 h-4" />
+                                <span>Details</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {amenityBookings.filter(booking => amenitiesFilter === 'all' || booking.status === amenitiesFilter).length === 0 && (
+                      <div className="text-center py-12">
+                        <Building className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No bookings found</h3>
+                        <p className="text-gray-600">No bookings match the selected filter.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right Sidebar - Amenity Settings & Quick Stats */}
+                <div className="space-y-6">
+                  
+                  {/* Quick Actions */}
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                    <div className="space-y-2">
+                      <button 
+                        onClick={() => setShowAmenitySettingsModal(true)}
+                        className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <Settings className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="font-medium text-gray-900 text-sm">Manage Settings</span>
+                      </button>
+                      <button 
+                        className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                          <Calendar className="w-4 h-4 text-green-600" />
+                        </div>
+                        <span className="font-medium text-gray-900 text-sm">View Calendar</span>
+                      </button>
+                      <button 
+                        className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                          <BarChart3 className="w-4 h-4 text-purple-600" />
+                        </div>
+                        <span className="font-medium text-gray-900 text-sm">Usage Analytics</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Popular Amenities */}
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Popular Amenities</h3>
+                    <div className="space-y-3">
+                      {amenitySettings
+                        .map(amenity => ({
+                          ...amenity,
+                          bookingCount: amenityBookings.filter(booking => booking.amenity === amenity.name).length
+                        }))
+                        .sort((a, b) => b.bookingCount - a.bookingCount)
+                        .slice(0, 5)
+                        .map((amenity, index) => (
+                        <div key={amenity.name} className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <span className="text-lg">{amenity.icon}</span>
+                            <div>
+                              <p className="font-medium text-gray-900 text-sm">{amenity.name}</p>
+                              <p className="text-xs text-gray-500">{amenity.bookingCount} bookings</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="w-16 bg-gray-200 rounded-full h-2">
+                              <div 
+                                className="bg-blue-500 h-2 rounded-full" 
+                                style={{ 
+                                  width: `${Math.min((amenity.bookingCount / Math.max(...amenitySettings.map(a => amenityBookings.filter(b => b.amenity === a.name).length))) * 100, 100)}%` 
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Recent Activity */}
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                    <div className="space-y-3">
+                      {amenityBookings
+                        .sort((a, b) => new Date(b.requestedDate) - new Date(a.requestedDate))
+                        .slice(0, 4)
+                        .map((booking) => (
+                        <div key={booking.id} className="flex items-start space-x-3">
+                          <span className="text-sm">
+                            {amenitySettings.find(a => a.name === booking.amenity)?.icon || '🏢'}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-gray-900">
+                              <span className="font-medium">{booking.resident}</span> requested {booking.amenity}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(booking.requestedDate).toLocaleDateString()} • {booking.status}
+                            </p>
+                          </div>
+                          <span className={`w-2 h-2 rounded-full ${
+                            booking.status === 'pending' ? 'bg-yellow-400' :
+                            booking.status === 'approved' ? 'bg-green-400' :
+                            'bg-red-400'
+                          }`}></span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          
           {/* Settings Page */}
 {currentPage === 'settings' && (
   <>
