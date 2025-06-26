@@ -10,7 +10,7 @@ import airFryer from './Assets/marketplace-air-fryer.png';
 import textbooks from './Assets/marketplace-textbooks.png';
 import plantStand from './Assets/marketplace-plant-stand.png';
 
-// Amenity Images
+// Amenity Images  
 import poolDeck from './Assets/amenity-pool-deck.png';
 import fitnessCenter from './Assets/amenity-fitness-center.png';
 import rooftopTerrace from './Assets/amenity-rooftop-terrace.png';
