@@ -1892,6 +1892,122 @@ const handleManageAmenitySettings = (amenity = null) => {
   setShowAmenitySettingsModal(true);
 };
 
+// Real Nora AI Chat Handler
+const askNora = async (userMessage) => {
+  try {
+    // Build property context from your existing data
+    const propertyContext = {
+      name: propertySettings.name || "your property",
+      totalUnits: propertySettings.totalUnits || "120",
+      address: propertySettings.address || "Atlanta, GA",
+      
+      // Current dashboard stats
+      occupancyRate: "92%",
+      pendingMaintenance: workOrders.filter(w => w.status === 'pending').length,
+      atRiskResidents: residents.filter(r => r.renewalProbability < 60).length,
+      
+      // Recent activity
+      recentIssues: workOrders.slice(0, 3).map(w => w.description),
+      upcomingEvents: eventsData.filter(e => e.status === 'upcoming').slice(0, 2).map(e => e.title),
+      
+      // Amenities from your settings
+      amenities: amenitySettings.map(a => a.name),
+      
+      // Recent bookings
+      pendingBookings: amenityBookings.filter(b => b.status === 'pending').length,
+      
+      // AI insights context
+      hasNotifications: noraNotifications.filter(n => !n.seen).length > 0
+    };
+
+    const prompt = `You are Nora, the friendly AI property management assistant for ${propertyContext.name}.
+
+PROPERTY CONTEXT:
+- ${propertyContext.totalUnits} units at ${propertyContext.address}
+- Currently ${propertyContext.occupancyRate} occupied
+- ${propertyContext.pendingMaintenance} pending maintenance requests
+- ${propertyContext.atRiskResidents} residents at renewal risk
+- ${propertyContext.pendingBookings} pending amenity bookings
+
+AVAILABLE AMENITIES: ${propertyContext.amenities.join(', ')}
+
+RECENT ACTIVITY:
+- Issues: ${propertyContext.recentIssues.join(', ') || 'None'}
+- Events: ${propertyContext.upcomingEvents.join(', ') || 'None'}
+
+USER MESSAGE: "${userMessage}"
+
+INSTRUCTIONS:
+- Respond as Nora, the helpful AI assistant who knows this property intimately
+- Be conversational, friendly, and specific to this property
+- Reference actual data when relevant (occupancy, maintenance, events, etc.)
+- Offer actionable insights and suggestions
+- Keep responses under 150 words
+- If asked about specific residents or sensitive data, be helpful but maintain privacy
+
+Respond naturally as Nora would:`;
+
+    const response = await window.claude.complete(prompt);
+    return response;
+    
+  } catch (error) {
+    console.error('Nora AI Error:', error);
+    return "I'm having trouble connecting right now, but I'm here to help! Could you try asking me again in a moment?";
+  }
+};
+
+// Enhanced message handler with loading state
+const handleNoraMessage = async (userInput) => {
+  // Add user message immediately
+  const userMessage = {
+    id: Date.now(),
+    type: 'user',
+    message: userInput,
+    timestamp: new Date(),
+    context: 'user_input'
+  };
+  setNoraMessages(prev => [...prev, userMessage]);
+  
+  // Add loading message
+  const loadingMessage = {
+    id: Date.now() + 1,
+    type: 'nora',
+    message: "Analyzing your request...",
+    timestamp: new Date(),
+    context: 'loading',
+    isLoading: true
+  };
+  setNoraMessages(prev => [...prev, loadingMessage]);
+  
+  try {
+    // Get real AI response
+    const aiResponse = await askNora(userInput);
+    
+    // Replace loading message with real response
+    const noraResponse = {
+      id: Date.now() + 2,
+      type: 'nora',
+      message: aiResponse,
+      timestamp: new Date(),
+      context: 'ai_response'
+    };
+    
+    setNoraMessages(prev => prev.filter(m => !m.isLoading).concat([noraResponse]));
+    
+  } catch (error) {
+    // Replace loading with error message
+    const errorResponse = {
+      id: Date.now() + 3,
+      type: 'nora',
+      message: "I'm experiencing some technical difficulties. Please try again in a moment!",
+      timestamp: new Date(),
+      context: 'error_response'
+    };
+    
+    setNoraMessages(prev => prev.filter(m => !m.isLoading).concat([errorResponse]));
+  }
+};
+
   if (currentPage === 'resident-home') {
     return <ResidentPlatform onBackToManagement={() => setCurrentPage('dashboard')} />;
   }
@@ -3751,31 +3867,22 @@ const handleManageAmenitySettings = (amenity = null) => {
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                         onKeyPress={(e) => {
                           if (e.key === 'Enter' && e.target.value.trim()) {
-                            const userMessage = {
-                              id: Date.now(),
-                              type: 'user',
-                              message: e.target.value,
-                              timestamp: new Date(),
-                              context: 'user_input'
-                            };
-                            setNoraMessages(prev => [...prev, userMessage]);
-                            
-                            setTimeout(() => {
-                              const noraResponse = {
-                                id: Date.now() + 1,
-                                type: 'nora',
-                                message: "That's a great question! Based on your current analytics, I can see that you're focused on improving resident retention. Would you like me to create a personalized action plan for the 3 high-risk residents we identified?",
-                                timestamp: new Date(),
-                                context: 'ai_response'
-                              };
-                              setNoraMessages(prev => [...prev, noraResponse]);
-                            }, 1500);
-                            
+                            const userInput = e.target.value.trim();
+                            handleNoraMessage(userInput);
                             e.target.value = '';
                           }
                         }}
                       />
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                      <button 
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                        onClick={() => {
+                          const input = document.querySelector('input[placeholder="Ask Nora anything..."]');
+                          if (input && input.value.trim()) {
+                            handleNoraMessage(input.value.trim());
+                            input.value = '';
+                          }
+                        }}
+                      >
                         <Send className="w-4 h-4" />
                       </button>
                     </div>
