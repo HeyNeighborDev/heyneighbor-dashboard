@@ -1,3 +1,4 @@
+// Force deployment with all assets
 import React, { useState } from 'react';
 import PoolPartyImage from './Assets/pool-party.png';
 import NavySofaImage from './Assets/navy-sofa.png';
