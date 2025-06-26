@@ -4403,29 +4403,33 @@ const handleManageAmenitySettings = (amenity = null) => {
           </button>
           <button
             onClick={() => setSettingsTab('amenities')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-              settingsTab === 'amenities' 
-                ? 'border-blue-500 text-blue-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
+          className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+            settingsTab === 'amenities' 
+              ? 'border-blue-500 text-blue-600' 
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          }`}
+>
             Amenities & Policies
+          </button>
           <button
             onClick={() => setSettingsTab('nora')}
           className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
             settingsTab === 'nora' 
               ? 'border-blue-500 text-blue-600' 
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-          }`}
-        >
-          <NoraIcon 
-            size={16} 
+            }`}
+          >
+            <NoraIcon 
+              size={16} 
             className={`inline mr-1 ${
               settingsTab === 'nora' ? 'text-blue-600' : 'text-gray-500'
             }`} 
           /> 
           Nora AI
         </button>
+        </nav>
+      </div>
+    </div>
 
     {/* Property Details Tab */}
     {settingsTab === 'property' && (
