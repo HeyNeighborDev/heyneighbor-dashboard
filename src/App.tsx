@@ -46,6 +46,256 @@ import {
   Share2,
 } from 'lucide-react';
 
+// Custom Nora SVG Icon Component
+const NoraIcon = ({ size = 24, className = "" }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Outer Circle - AI Core */}
+    <circle cx="12" cy="12" r="10" fill="url(#noraGradient)" stroke="currentColor" strokeWidth="0.5"/>
+    
+    {/* Neural Network Pattern */}
+    <circle cx="8" cy="8" r="1.5" fill="rgba(255,255,255,0.9)"/>
+    <circle cx="16" cy="8" r="1.5" fill="rgba(255,255,255,0.9)"/>
+    <circle cx="12" cy="12" r="2" fill="rgba(255,255,255,1)"/>
+    <circle cx="7" cy="16" r="1" fill="rgba(255,255,255,0.8)"/>
+    <circle cx="17" cy="16" r="1" fill="rgba(255,255,255,0.8)"/>
+    
+    {/* Connection Lines */}
+    <path d="M8 8 L12 12 L16 8" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" fill="none"/>
+    <path d="M12 12 L7 16" stroke="rgba(255,255,255,0.6)" strokeWidth="1" fill="none"/>
+    <path d="M12 12 L17 16" stroke="rgba(255,255,255,0.6)" strokeWidth="1" fill="none"/>
+    
+    {/* AI Brain Waves */}
+    <path d="M4 6 Q6 4 8 6 T12 6" stroke="rgba(255,255,255,0.4)" strokeWidth="1" fill="none"/>
+    <path d="M12 6 Q14 4 16 6 T20 6" stroke="rgba(255,255,255,0.4)" strokeWidth="1" fill="none"/>
+    <path d="M4 18 Q6 20 8 18 T12 18" stroke="rgba(255,255,255,0.4)" strokeWidth="1" fill="none"/>
+    <path d="M12 18 Q14 20 16 18 T20 18" stroke="rgba(255,255,255,0.4)" strokeWidth="1" fill="none"/>
+    
+    {/* Gradient Definition */}
+    <defs>
+      <linearGradient id="noraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#667eea"/>
+        <stop offset="100%" stopColor="#764ba2"/>
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+// Add these functions after NoraIcon component
+const generateCommunityHealthData = (timeRange) => {
+  const periods = timeRange === '30d' ? 30 : timeRange === '90d' ? 12 : 12;
+  const data = [];
+  
+  for (let i = 0; i < periods; i++) {
+    const baseScore = 75 + Math.random() * 15; // Base 75-90%
+    
+    // Add realistic events that affect community health
+    let eventBoost = 0;
+    let eventDescription = '';
+    
+    // Coffee hours boost (recent periods)
+    if (timeRange === '30d' && i >= 20) {
+      eventBoost = 5 + Math.random() * 3;
+      eventDescription = 'Coffee hours launched';
+    }
+    
+    // Pool maintenance dip
+    if (timeRange === '30d' && i >= 10 && i <= 15) {
+      eventBoost = -4;
+      eventDescription = 'Pool maintenance issues';
+    }
+    
+    // New resident move-ins boost
+    if (i % 8 === 0) {
+      eventBoost = 2;
+      eventDescription = 'New residents welcomed';
+    }
+    
+    const finalScore = Math.min(95, Math.max(65, baseScore + eventBoost));
+    
+    data.push({
+      period: i + 1,
+      score: finalScore,
+      date: timeRange === '30d' 
+        ? new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000)
+        : new Date(Date.now() - (periods - i - 1) * 30 * 24 * 60 * 60 * 1000),
+      components: {
+        satisfaction: 70 + Math.random() * 25,
+        safety: 80 + Math.random() * 15,
+        engagement: 60 + Math.random() * 35,
+        maintenance: 75 + Math.random() * 20
+      },
+      events: eventDescription ? [eventDescription] : [],
+      isNoraImpacted: eventBoost > 3
+    });
+  }
+  
+  return data;
+};
+
+// Updated Community Health Trends Component
+const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) => {
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [hoveredBar, setHoveredBar] = useState(null);
+  const healthData = generateCommunityHealthData(analyticsTimeRange);
+  
+  return (
+    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 relative">
+      <div className="absolute top-4 right-4">
+        <div className="flex items-center space-x-2 bg-purple-50 px-3 py-1 rounded-full">
+          <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+          <span className="text-xs text-purple-700 font-medium">Nora analyzing</span>
+        </div>
+      </div>
+      
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">Community Health Trends</h2>
+          <p className="text-sm text-gray-500 mt-1">AI-powered performance analysis and predictions</p>
+        </div>
+        <div className="flex space-x-2">
+          <button 
+            onClick={() => setAnalyticsTimeRange('30d')}
+            className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
+              analyticsTimeRange === '30d' 
+                ? 'bg-blue-100 text-blue-700' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            30d
+          </button>
+          <button 
+            onClick={() => setAnalyticsTimeRange('90d')}
+            className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
+              analyticsTimeRange === '90d' 
+                ? 'bg-blue-100 text-blue-700' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            90d
+          </button>
+          <button 
+            onClick={() => setAnalyticsTimeRange('1y')}
+            className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
+              analyticsTimeRange === '1y' 
+                ? 'bg-blue-100 text-blue-700' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            1y
+          </button>
+        </div>
+      </div>
+      
+      {/* Interactive Chart */}
+      <div 
+        className="h-52 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl border border-gray-100 relative overflow-hidden"
+        onMouseEnter={() => setShowOverlay(true)}
+        onMouseLeave={() => {
+          setShowOverlay(false);
+          setHoveredBar(null);
+        }}
+      >
+        
+        {/* Chart Bars */}
+        <div className="absolute inset-4">
+          <div className="flex items-end justify-between h-full">
+            {healthData.map((dataPoint, index) => (
+              <div
+                key={index}
+                className={`${dataPoint.isNoraImpacted ? 'bg-green-500' : 'bg-blue-400'} opacity-70 rounded-t-sm hover:opacity-100 transition-all cursor-pointer relative`}
+                style={{ 
+                  width: analyticsTimeRange === '30d' ? '8px' : '16px',
+                  height: `${(dataPoint.score / 100) * 100}%`,
+                  marginRight: '2px'
+                }}
+                onMouseEnter={() => setHoveredBar(index)}
+                onMouseLeave={() => setHoveredBar(null)}
+              >
+                {/* Tooltip */}
+                {hoveredBar === index && (
+                  <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap z-20">
+                    <div className="font-bold">{dataPoint.score.toFixed(1)}% Health Score</div>
+                    <div className="text-gray-300">
+                      {analyticsTimeRange === '30d' 
+                        ? dataPoint.date.toLocaleDateString()
+                        : `Period ${dataPoint.period}`}
+                    </div>
+                    {dataPoint.events.length > 0 && (
+                      <div className="text-yellow-300 mt-1">{dataPoint.events[0]}</div>
+                    )}
+                    <div className="mt-1 text-xs">
+                      <div>Satisfaction: {dataPoint.components.satisfaction.toFixed(0)}%</div>
+                      <div>Safety: {dataPoint.components.safety.toFixed(0)}%</div>
+                      <div>Engagement: {dataPoint.components.engagement.toFixed(0)}%</div>
+                    </div>
+                    {/* Tooltip Arrow */}
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-2 border-transparent border-t-gray-900"></div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Hover Overlay - Only shows on hover */}
+        {showOverlay && (
+          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center transition-all duration-300">
+            <div className="text-center bg-white bg-opacity-95 rounded-lg p-4 max-w-sm">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <BarChart3 className="w-8 h-8 text-blue-500" />
+                <NoraIcon size={32} className="text-purple-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">Nora's Health Analysis</h3>
+              <p className="text-sm text-gray-600">
+                {analyticsTimeRange === '30d' && 'Hover bars for details. Coffee hours driving 📈 recent spike!'}
+                {analyticsTimeRange === '90d' && 'Quarterly view: Pool issues resolved, satisfaction recovering 🎯'}
+                {analyticsTimeRange === '1y' && 'Annual trend: Steady growth with AI optimization impact 🚀'}
+              </p>
+              <div className="mt-3 text-xs text-gray-500">
+                <div className="flex items-center justify-center space-x-4">
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-3 bg-blue-400 rounded"></div>
+                    <span>Normal</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-3 bg-green-500 rounded"></div>
+                    <span>Nora Impact</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-purple-600 mt-2 font-medium">💡 Hover individual bars for detailed breakdowns</p>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Chart Legend */}
+      <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+        <div>
+          <span className="font-medium">Community Health Score:</span> Combination of satisfaction, safety, engagement & maintenance metrics
+        </div>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-1">
+            <div className="w-2 h-2 bg-blue-400 rounded"></div>
+            <span>Baseline</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <div className="w-2 h-2 bg-green-500 rounded"></div>
+            <span>AI Enhanced</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ManagementDashboard = () => {
   const [greeting, setGreeting] = useState('Good morning, Sarah! ☀️');
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -2760,96 +3010,13 @@ const handleManageAmenitySettings = (amenity = null) => {
                     </div>
                   </div>
 
-                  {/* Community Health Trends Chart */}
-                  <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 relative">
-                    <div className="absolute top-4 right-4">
-                      <div className="flex items-center space-x-2 bg-purple-50 px-3 py-1 rounded-full">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
-                        <span className="text-xs text-purple-700 font-medium">Nora analyzing</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <h2 className="text-xl font-bold text-gray-900">Community Health Trends</h2>
-                        <p className="text-sm text-gray-500 mt-1">AI-powered performance analysis and predictions</p>
-                      </div>
-                      <div className="flex space-x-2">
-                        <button 
-                          onClick={() => setAnalyticsTimeRange('30d')}
-                          className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
-                            analyticsTimeRange === '30d' 
-                              ? 'bg-blue-100 text-blue-700' 
-                              : 'text-gray-600 hover:bg-gray-100'
-                          }`}
-                        >
-                          30d
-                        </button>
-                        <button 
-                          onClick={() => setAnalyticsTimeRange('90d')}
-                          className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
-                            analyticsTimeRange === '90d' 
-                              ? 'bg-blue-100 text-blue-700' 
-                              : 'text-gray-600 hover:bg-gray-100'
-                          }`}
-                        >
-                          90d
-                        </button>
-                        <button 
-                          onClick={() => setAnalyticsTimeRange('1y')}
-                          className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
-                            analyticsTimeRange === '1y' 
-                              ? 'bg-blue-100 text-blue-700' 
-                              : 'text-gray-600 hover:bg-gray-100'
-                          }`}
-                        >
-                          1y
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div className="h-52 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl flex items-center justify-center border border-gray-100 relative overflow-hidden">
-                      <div className="absolute inset-4">
-                        <div className="flex items-end justify-between h-full">
-                          {Array.from({length: analyticsTimeRange === '30d' ? 30 : analyticsTimeRange === '90d' ? 12 : 12}).map((_, index) => {
-                            const baseHeight = Math.random() * 40 + 30;
-                            const aiBoost = index > (analyticsTimeRange === '30d' ? 20 : 8) ? 15 : 0;
-                            const height = baseHeight + aiBoost;
-                            const isAiImpacted = aiBoost > 0;
-                            
-                            return (
-                              <div
-                                key={index}
-                                className={`${isAiImpacted ? 'bg-green-500' : 'bg-blue-400'} opacity-70 rounded-t-sm hover:opacity-100 transition-all cursor-pointer`}
-                                style={{ 
-                                  width: analyticsTimeRange === '30d' ? '8px' : '16px',
-                                  height: `${height}%`,
-                                  marginRight: '2px'
-                                }}
-                                title={`${analyticsTimeRange === '30d' ? 'Day' : 'Period'} ${index + 1}: ${(70 + height/3).toFixed(1)}% ${isAiImpacted ? '(Nora impact!)' : ''}`}
-                              ></div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      
-                      <div className="text-center relative z-10 bg-white bg-opacity-95 rounded-lg p-4">
-                        <div className="flex items-center justify-center space-x-2 mb-2">
-                          <BarChart3 className="w-12 h-12 text-blue-500" />
-                          <span className="text-2xl">🤖</span>
-                        </div>
-                        <h3 className="text-lg font-semibold text-gray-800 mb-1">Nora's Health Analysis</h3>
-                        <p className="text-sm text-gray-600">
-                          {analyticsTimeRange === '30d' && 'Recent spike: My coffee hour suggestions working! 📈'}
-                          {analyticsTimeRange === '90d' && 'Quarterly AI optimizations +18.7% improvement 🎯'}
-                          {analyticsTimeRange === '1y' && 'Annual AI learning: +34.2% community growth 🚀'}
-                        </p>
-                        <p className="text-xs text-purple-600 mt-2 font-medium">Green bars = Nora's impact</p>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+                  {/* Improved Community Health Trends */}
+                  <CommunityHealthTrends 
+                    analyticsTimeRange={analyticsTimeRange} 
+                    setAnalyticsTimeRange={setAnalyticsTimeRange} 
+                  />
+                  </>
+                  )}
 
               {/* Resident Analytics Tab */}
               {analyticsTab === 'residents' && (
