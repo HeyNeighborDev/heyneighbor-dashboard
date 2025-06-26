@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import PoolPartyImage from './Assets/pool-party.png';
 import NavySofaImage from './Assets/navy-sofa.png';
 // Marketplace Images
-import sectionalSofa from '../assets/images/marketplace-sectional-sofa.png';
-import mountainBike from '../assets/images/marketplace-mountain-bike.png';
-import coffeeTable from '../assets/images/marketplace-coffee-table.png';
-import airFryer from '../assets/images/marketplace-air-fryer.png';
-import textbooks from '../assets/images/marketplace-textbooks.png';
-import plantStand from '../assets/images/marketplace-plant-stand.png';
+import sectionalSofa from './Assets/marketplace-sectional-sofa.png';
+import mountainBike from './Assets/marketplace-mountain-bike.png';
+import coffeeTable from './Assets/marketplace-coffee-table.png';
+import airFryer from './Assets/marketplace-air-fryer.png';
+import textbooks from './Assets/marketplace-textbooks.png';
+import plantStand from './Assets/marketplace-plant-stand.png';
 
 // Amenity Images
-import poolDeck from '../assets/images/amenity-pool-deck.png';
-import fitnessCenter from '../assets/images/amenity-fitness-center.png';
-import rooftopTerrace from '../assets/images/amenity-rooftop-terrace.png';
-import communityLounge from '../assets/images/amenity-community-lounge.png';
-import gameRoom from '../assets/images/amenity-game-room.png';
-import businessCenter from '../assets/images/amenity-business-center.png';
+import poolDeck from './Assets/amenity-pool-deck.png';
+import fitnessCenter from './Assets/amenity-fitness-center.png';
+import rooftopTerrace from './Assets/amenity-rooftop-terrace.png';
+import communityLounge from './Assets/amenity-community-lounge.png';
+import gameRoom from './Assets/amenity-game-room.png';
+import businessCenter from './Assets/amenity-business-center.png';
 import { 
   Home, Heart, MessageCircle, Users, Calendar, Building, 
   ShoppingBag, Phone, AlertTriangle, Bell, Search, Plus,
