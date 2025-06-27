@@ -7970,4 +7970,5 @@ const App = () => {
   return isDemoSite ? <DemoLoginPage /> : <ManagementDashboard />;
 };
 
+export { ManagementDashboard };
 export default App;
