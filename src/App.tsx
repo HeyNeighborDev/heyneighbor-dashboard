@@ -2047,8 +2047,8 @@ INSTRUCTIONS:
 
 Respond naturally as Nora would:`;
 
-    const response = await window.claude.complete(prompt);
-    return response;
+    const response = getSmartMockResponse(userMessage, propertyContext);
+return response;
     */
     
   } catch (error) {
