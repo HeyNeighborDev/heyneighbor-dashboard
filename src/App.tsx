@@ -243,45 +243,12 @@ const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) =>
                       <div>Safety: {dataPoint.components.safety.toFixed(0)}%</div>
                       <div>Engagement: {dataPoint.components.engagement.toFixed(0)}%</div>
                     </div>
-                    {/* Tooltip Arrow */}
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-2 border-transparent border-t-gray-900"></div>
                   </div>
                 )}
               </div>
             ))}
           </div>
         </div>
-        
-        {/* Hover Overlay - Only shows on hover */}
-        {showOverlay && (
-          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center transition-all duration-300">
-            <div className="text-center bg-white bg-opacity-95 rounded-lg p-4 max-w-sm">
-              <div className="flex items-center justify-center space-x-2 mb-2">
-                <BarChart3 className="w-8 h-8 text-blue-500" />
-                <NoraIcon size={32} className="text-purple-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">Nora's Health Analysis</h3>
-              <p className="text-sm text-gray-600">
-                {analyticsTimeRange === '30d' && 'Hover bars for details. Coffee hours driving 📈 recent spike!'}
-                {analyticsTimeRange === '90d' && 'Quarterly view: Pool issues resolved, satisfaction recovering 🎯'}
-                {analyticsTimeRange === '1y' && 'Annual trend: Steady growth with AI optimization impact 🚀'}
-              </p>
-              <div className="mt-3 text-xs text-gray-500">
-                <div className="flex items-center justify-center space-x-4">
-                  <div className="flex items-center space-x-1">
-                    <div className="w-3 h-3 bg-blue-400 rounded"></div>
-                    <span>Normal</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-3 h-3 bg-green-500 rounded"></div>
-                    <span>Nora Impact</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-xs text-purple-600 mt-2 font-medium">💡 Hover individual bars for detailed breakdowns</p>
-            </div>
-          </div>
-        )}
       </div>
       
       {/* Chart Legend */}
