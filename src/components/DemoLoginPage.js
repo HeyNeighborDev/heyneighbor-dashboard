@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ManagementDashboard } from '../App';
 import { Eye, EyeOff, Lock, User, ArrowRight } from 'lucide-react';
 import HeyNeighborLogo from '../Assets/heyneighbor-emblem-blues.svg';
 
@@ -173,8 +174,25 @@ const DemoLoginPage = () => {
   );
 
   if (isAuthenticated) {
-    return <DashboardDemo />;
-  }
+  return (
+    <>
+      {/* Demo Mode Banner */}
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-center py-3 shadow-sm">
+        <div className="flex items-center justify-center space-x-2">
+          <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+          <span className="font-medium">🎮 Demo Mode Active</span>
+          <span className="text-purple-200">|</span>
+          <button className="underline hover:text-purple-200 transition-colors">
+            Request Real Demo
+          </button>
+        </div>
+      </div>
+      
+      {/* Your REAL dashboard */}
+      <ManagementDashboard />
+    </>
+  );
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700">
