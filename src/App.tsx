@@ -141,9 +141,13 @@ const generateCommunityHealthData = (timeRange) => {
 
 // Updated Community Health Trends Component
 const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) => {
-  const [showOverlay, setShowOverlay] = useState(false);
   const [hoveredBar, setHoveredBar] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const healthData = generateCommunityHealthData(analyticsTimeRange);
+
+  const handleMouseMove = (e) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
   
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 relative">
@@ -196,11 +200,8 @@ const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) =>
       {/* Interactive Chart */}
       <div 
         className="h-52 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl border border-gray-100 relative overflow-hidden"
-        onMouseEnter={() => setShowOverlay(true)}
-        onMouseLeave={() => {
-          setShowOverlay(false);
-          setHoveredBar(null);
-        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => setHoveredBar(null)}
       >
         
         {/* Chart Bars */}
@@ -220,7 +221,14 @@ const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) =>
               >
                 {/* Tooltip */}
                 {hoveredBar === index && (
-                  <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap z-20">
+                  <div 
+                    className="fixed bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap z-50 pointer-events-none"
+                    style={{
+                      left: mousePosition.x + 10,
+                      top: mousePosition.y - 10,
+                      transform: 'translateY(-100%)'
+                    }}
+                  >
                     <div className="font-bold">{dataPoint.score.toFixed(1)}% Health Score</div>
                     <div className="text-gray-300">
                       {analyticsTimeRange === '30d' 
