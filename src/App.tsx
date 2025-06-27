@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import ResidentPlatform from './ResidentPlatform'; // Adjust path as needed
+import DemoLoginPage from './components/DemoLoginPage';
 import HeyNeighborLogo from './Assets/heyneighbor-logo.svg';
 import PoolPartyImage from './Assets/pool-party.png';
 import NavySofaImage from './Assets/navy-sofa.png';
@@ -272,6 +273,11 @@ const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) =>
 };
 
 const ManagementDashboard = () => {
+  const isDemoSite = window.location.hostname === 'demo.useheyneighbor.com';
+  
+  if (isDemoSite) {
+    return <DemoLoginPage />;
+  }
   const [greeting, setGreeting] = useState('Good morning, Sarah! ☀️');
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [activityFilter, setActivityFilter] = useState('all');
