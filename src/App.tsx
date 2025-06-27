@@ -273,11 +273,6 @@ const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) =>
 };
 
 const ManagementDashboard = () => {
-  const isDemoSite = window.location.hostname === 'demo.useheyneighbor.com';
-  
-  if (isDemoSite) {
-    return <DemoLoginPage />;
-  }
   const [greeting, setGreeting] = useState('Good morning, Sarah! ☀️');
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [activityFilter, setActivityFilter] = useState('all');
@@ -7968,4 +7963,11 @@ const handleNoraMessage = async (userInput) => {
   );
 };
 
-export default ManagementDashboard;
+// Main App wrapper that decides which component to show
+const App = () => {
+  const isDemoSite = window.location.hostname === 'demo.useheyneighbor.com';
+  
+  return isDemoSite ? <DemoLoginPage /> : <ManagementDashboard />;
+};
+
+export default App;
