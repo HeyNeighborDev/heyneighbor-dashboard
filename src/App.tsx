@@ -1892,10 +1892,101 @@ const handleManageAmenitySettings = (amenity = null) => {
   setShowAmenitySettingsModal(true);
 };
 
-// Real Nora AI Chat Handler
+// Smart Mock Response System for Demo
+const getSmartMockResponse = (userMessage, propertyContext) => {
+  const q = userMessage.toLowerCase();
+  
+  // Occupancy and Performance Questions
+  if (q.includes('occupancy') || q.includes('92%') || q.includes('performance')) {
+    return `Your occupancy rate of ${propertyContext.occupancyRate} is excellent! That's above the national average of 85%. This strong performance is likely due to your amenities like ${propertyContext.amenities.slice(0, 2).join(' and ')}, plus effective resident retention strategies.`;
+  }
+  
+  // Maintenance and Work Orders
+  if (q.includes('maintenance') || q.includes('work order') || q.includes('repair')) {
+    if (propertyContext.pendingMaintenance > 0) {
+      return `You currently have ${propertyContext.pendingMaintenance} pending maintenance requests. Recent issues include: ${propertyContext.recentIssues.slice(0, 2).join(', ')}. I recommend prioritizing any HVAC or plumbing issues as they most impact resident satisfaction.`;
+    } else {
+      return `Great news! You have no pending maintenance requests right now. Your proactive maintenance approach is keeping residents happy and preventing major issues.`;
+    }
+  }
+  
+  // At-Risk Residents and Retention
+  if (q.includes('at-risk') || q.includes('renewal') || q.includes('retention')) {
+    if (propertyContext.atRiskResidents > 0) {
+      return `You have ${propertyContext.atRiskResidents} residents at renewal risk. I recommend scheduling one-on-one meetings to understand their concerns. Consider offering renewal incentives like amenity credits or minor unit upgrades.`;
+    } else {
+      return `Excellent! No residents are currently flagged as at-risk for renewal. Your resident satisfaction strategies are working well. Keep up the community engagement and responsive maintenance.`;
+    }
+  }
+  
+  // Amenities and Bookings
+  if (q.includes('amenity') || q.includes('booking') || q.includes('pool') || q.includes('gym') || q.includes('community')) {
+    if (propertyContext.pendingBookings > 0) {
+      return `You have ${propertyContext.pendingBookings} pending amenity bookings. Your available amenities (${propertyContext.amenities.join(', ')}) are clearly popular! Consider expanding booking hours or adding capacity for high-demand amenities.`;
+    } else {
+      return `Your amenities (${propertyContext.amenities.join(', ')}) are available for booking. Consider promoting them more to increase resident engagement and justify premium pricing.`;
+    }
+  }
+  
+  // Events and Community
+  if (q.includes('event') || q.includes('community') || q.includes('social')) {
+    if (propertyContext.upcomingEvents.length > 0) {
+      return `Great community engagement! You have upcoming events: ${propertyContext.upcomingEvents.join(', ')}. Events like these boost retention by 15-20% and create a sense of community that residents value.`;
+    } else {
+      return `Consider planning some community events! Coffee mornings, yoga classes, or seasonal celebrations can significantly improve resident satisfaction and reduce turnover.`;
+    }
+  }
+  
+  // Revenue and Financial
+  if (q.includes('revenue') || q.includes('financial') || q.includes('rent') || q.includes('income')) {
+    const estimatedRevenue = Math.round(parseInt(propertyContext.totalUnits) * 1420 * 0.92);
+    return `Based on your ${propertyContext.occupancyRate} occupancy across ${propertyContext.totalUnits} units, your estimated monthly revenue is around $${estimatedRevenue.toLocaleString()}. With this strong occupancy, consider 3-5% rent increases for new leases.`;
+  }
+  
+  // Notifications and Alerts
+  if (q.includes('notification') || q.includes('alert') || q.includes('urgent')) {
+    if (propertyContext.hasNotifications) {
+      return `You have important notifications that need attention. These could include lease renewals, maintenance priorities, or resident concerns. I recommend reviewing them to stay ahead of any issues.`;
+    } else {
+      return `No urgent notifications right now! Your property management is running smoothly. This is a great time to focus on proactive initiatives like resident engagement or preventive maintenance.`;
+    }
+  }
+  
+  // General property questions
+  if (q.includes('property') || q.includes('overview') || q.includes('summary')) {
+    return `${propertyContext.name} is performing well with ${propertyContext.occupancyRate} occupancy across ${propertyContext.totalUnits} units. You have ${propertyContext.pendingMaintenance} maintenance items and ${propertyContext.atRiskResidents} at-risk residents to monitor. Your amenities (${propertyContext.amenities.slice(0, 3).join(', ')}) are key value drivers.`;
+  }
+  
+  // Specific recommendations
+  if (q.includes('recommend') || q.includes('suggest') || q.includes('advice') || q.includes('improve')) {
+    const recommendations = [
+      `Focus on your ${propertyContext.atRiskResidents} at-risk residents with personalized outreach`,
+      `Promote your underutilized amenities: ${propertyContext.amenities.slice(-2).join(' and ')}`,
+      `Consider hosting monthly community events to boost engagement`,
+      `Implement preventive maintenance schedules to reduce emergency repairs`
+    ];
+    return `Here are my top recommendations: ${recommendations.slice(0, 2).join('. ')}. These initiatives typically improve retention by 10-15%.`;
+  }
+  
+  // Greeting responses
+  if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q === '') {
+    return `Hi there! I'm Nora, your AI assistant for ${propertyContext.name}. I can help you analyze your ${propertyContext.occupancyRate} occupancy, manage your ${propertyContext.pendingMaintenance} maintenance items, or discuss strategies for your ${propertyContext.atRiskResidents} at-risk residents. What would you like to explore?`;
+  }
+  
+  // Fallback responses that still use property context
+  const fallbacks = [
+    `That's an interesting question about ${propertyContext.name}! With your current ${propertyContext.occupancyRate} occupancy and ${propertyContext.amenities.length} amenities, there are several ways I can help. Could you be more specific?`,
+    `I'd love to help you with that! Based on your property data - ${propertyContext.totalUnits} units with ${propertyContext.pendingMaintenance} maintenance items - what specific aspect interests you most?`,
+    `Great question! Your property is performing well overall (${propertyContext.occupancyRate} occupancy), and I can provide insights on retention, maintenance, amenities, or financial performance. What would you like to dive into?`
+  ];
+  
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+};
+
+// Modified askNora function for demo
 const askNora = async (userMessage) => {
   try {
-    // Build property context from your existing data
+    // Build property context from your existing data (KEEP THIS EXACTLY AS IS!)
     const propertyContext = {
       name: propertySettings.name || "your property",
       totalUnits: propertySettings.totalUnits || "120",
@@ -1920,6 +2011,15 @@ const askNora = async (userMessage) => {
       hasNotifications: noraNotifications.filter(n => !n.seen).length > 0
     };
 
+    // DEMO VERSION: Use smart mock responses
+    const response = getSmartMockResponse(userMessage, propertyContext);
+    
+    // Add slight delay to feel more natural
+    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
+    
+    return response;
+    
+    /* PRODUCTION VERSION: Uncomment this when ready for real AI
     const prompt = `You are Nora, the friendly AI property management assistant for ${propertyContext.name}.
 
 PROPERTY CONTEXT:
@@ -1949,6 +2049,7 @@ Respond naturally as Nora would:`;
 
     const response = await window.claude.complete(prompt);
     return response;
+    */
     
   } catch (error) {
     console.error('Nora AI Error:', error);
@@ -3818,7 +3919,7 @@ const handleNoraMessage = async (userInput) => {
 
               {/* Floating Nora Chat Widget */}
               {showNoraChat && (
-                <div className="fixed bottom-4 right-4 w-96 h-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col">
+                <div className="fixed bottom-4 right-4 w-80 h-[28rem] sm:w-80 sm:h-[30rem] md:w-96 md:h-[32rem] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)] bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col">
                   <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-xl">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
