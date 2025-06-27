@@ -1983,32 +1983,40 @@ const getSmartMockResponse = (userMessage, propertyContext) => {
   return fallbacks[Math.floor(Math.random() * fallbacks.length)];
 };
 
-// Modified askNora function for demo
+// Modified askNora function for demo - CORRECTED VERSION
 const askNora = async (userMessage) => {
   try {
-    // Build property context from your existing data (KEEP THIS EXACTLY AS IS!)
+    // Build property context using YOUR ACTUAL DATA VARIABLES
     const propertyContext = {
       name: propertySettings.name || "your property",
       totalUnits: propertySettings.totalUnits || "120",
       address: propertySettings.address || "Atlanta, GA",
-      
-      // Current dashboard stats
+
+      // Current dashboard stats using YOUR existing data
       occupancyRate: "92%",
-      pendingMaintenance: workOrders.filter(w => w.status === 'pending').length,
-      atRiskResidents: residents.filter(r => r.renewalProbability < 60).length,
+      pendingMaintenance: safetyIncidents.filter(i => ['investigating', 'scheduled', 'documenting'].includes(i.status)).length || 3,
+      atRiskResidents: residentsData.filter(r => r.status === 'active').length > 50 ? 3 : 5, // Mock at-risk logic
+
+      // Recent activity using YOUR existing data
+      recentIssues: safetyIncidents.slice(0, 3).map(i => i.title) || ["Pool heater repair", "Parking gate malfunction", "Elevator inspection"],
+      upcomingEvents: eventsData.filter(e => e.status === 'upcoming').slice(0, 2).map(e => e.title) || [],
+
+      // Amenities from YOUR existing settings
+      amenities: amenitySettings.map(a => a.name) || ['Pool', 'Fitness Center', 'Community Lounge'],
+
+      // Recent bookings from YOUR existing data
+      pendingBookings: amenityBookings.filter(b => b.status === 'pending').length || 0,
+
+      // AI insights context using YOUR existing data
+      hasNotifications: noraNotifications.filter(n => !n.seen).length > 0,
       
-      // Recent activity
-      recentIssues: workOrders.slice(0, 3).map(w => w.description),
-      upcomingEvents: eventsData.filter(e => e.status === 'upcoming').slice(0, 2).map(e => e.title),
-      
-      // Amenities from your settings
-      amenities: amenitySettings.map(a => a.name),
-      
-      // Recent bookings
-      pendingBookings: amenityBookings.filter(b => b.status === 'pending').length,
-      
-      // AI insights context
-      hasNotifications: noraNotifications.filter(n => !n.seen).length > 0
+      // Additional context from your data
+      totalResidents: residentsData.length || 120,
+      activeResidents: residentsData.filter(r => r.status === 'active').length || 110,
+      totalEvents: eventsData.length || 6,
+      upcomingEventsCount: eventsData.filter(e => e.status === 'upcoming').length || 3,
+      totalIncidents: safetyIncidents.length || 5,
+      openIncidents: safetyIncidents.filter(i => ['investigating', 'scheduled', 'documenting'].includes(i.status)).length || 2
     };
 
     // DEMO VERSION: Use smart mock responses
@@ -2047,8 +2055,8 @@ INSTRUCTIONS:
 
 Respond naturally as Nora would:`;
 
-    const response = getSmartMockResponse(userMessage, propertyContext);
-return response;
+    const response = await window.claude.complete(prompt);
+    return response;
     */
     
   } catch (error) {
