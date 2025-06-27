@@ -3959,7 +3959,67 @@ const handleNoraMessage = async (userInput) => {
                       </div>
                     ))}
                   </div>
-                  
+
+                  {/* Quick Actions */}
+<div className="px-4 pb-4 bg-white border-t border-gray-100">
+  <div className="text-xs font-medium text-gray-600 mb-3 flex items-center space-x-2">
+    <div className="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+    <span>Quick insights</span>
+  </div>
+  <div className="grid grid-cols-1 gap-2">
+    <button
+      onClick={() => {
+        const input = document.querySelector('input[placeholder="Ask Nora anything..."]');
+        if (input) {
+          input.value = "Explain this month's performance";
+          input.focus();
+        }
+      }}
+      className="w-full text-left px-3 py-2.5 text-sm bg-purple-50 hover:bg-purple-100 border border-purple-100 hover:border-purple-200 rounded-lg flex items-center space-x-3 transition-all duration-200 group"
+    >
+      <div className="w-6 h-6 bg-white group-hover:bg-purple-200 rounded-md flex items-center justify-center transition-colors border border-purple-200">
+        <BarChart3 className="w-3.5 h-3.5 text-purple-600" />
+      </div>
+      <span className="text-gray-700">Explain this month's performance</span>
+    </button>
+    
+    <button
+      onClick={() => {
+        const input = document.querySelector('input[placeholder="Ask Nora anything..."]');
+        if (input) {
+          input.value = "What's driving occupancy changes?";
+          input.focus();
+        }
+      }}
+      className="w-full text-left px-3 py-2.5 text-sm bg-purple-50 hover:bg-purple-100 border border-purple-100 hover:border-purple-200 rounded-lg flex items-center space-x-3 transition-all duration-200 group"
+    >
+      <div className="w-6 h-6 bg-white group-hover:bg-purple-200 rounded-md flex items-center justify-center transition-colors border border-purple-200">
+        <Building className="w-3.5 h-3.5 text-purple-600" />
+      </div>
+      <span className="text-gray-700">What's driving occupancy changes?</span>
+    </button>
+    
+    <button
+      onClick={() => {
+        const input = document.querySelector('input[placeholder="Ask Nora anything..."]');
+        if (input) {
+          input.value = "Show me at-risk residents";
+          input.focus();
+        }
+      }}
+      className="w-full text-left px-3 py-2.5 text-sm bg-purple-50 hover:bg-purple-100 border border-purple-100 hover:border-purple-200 rounded-lg flex items-center space-x-3 transition-all duration-200 group"
+    >
+      <div className="w-6 h-6 bg-white group-hover:bg-purple-200 rounded-md flex items-center justify-center transition-colors border border-purple-200">
+        <Users className="w-3.5 h-3.5 text-purple-600" />
+      </div>
+      <span className="text-gray-700">Show me at-risk residents</span>
+    </button>
+  </div>
+</div>
+
+                                  
+
+
                   <div className="p-4 border-t border-gray-200">
                     <div className="flex space-x-2">
                       <input
