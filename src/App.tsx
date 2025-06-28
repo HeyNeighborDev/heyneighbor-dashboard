@@ -45,6 +45,7 @@ import {
   Zap,
   ChevronLeft,
   Share2,
+  Menu
 } from 'lucide-react';
 
 // Custom Nora SVG Icon Component
@@ -364,6 +365,7 @@ const ManagementDashboard = () => {
 const [searchQuery, setSearchQuery] = useState('');
 const [showNotifications, setShowNotifications] = useState(false);
 const [showProfileMenu, setShowProfileMenu] = useState(false);
+const [showMobileMenu, setShowMobileMenu] = useState(false);
 // Analytics Interactive States  
 const [selectedKpi, setSelectedKpi] = useState(null);
 const [showKpiModal, setShowKpiModal] = useState(false);
@@ -2098,130 +2100,274 @@ const handleNoraMessage = async (userInput) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-sm border-r border-gray-200 flex flex-col fixed h-full z-10">
-        {/* Logo */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center justify-center">
-<img 
-  src={HeyNeighborLogo} 
-  alt="HeyNeighbor Logo" 
-  className="h-10 w-auto"
-/>
-</div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
-          <button 
-            onClick={() => setCurrentPage('dashboard')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'dashboard' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Home className="w-5 h-5" />
-            <span className="font-medium">Dashboard</span>
-          </button>
-          <button 
-            onClick={() => setCurrentPage('residents')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'residents' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Users className="w-5 h-5" />
-            <span>Residents</span>
-          </button>
-          <button 
-            onClick={() => setCurrentPage('safety')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'safety' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Shield className="w-5 h-5" />
-            <span>Safety</span>
-          </button>
-          <button 
-            onClick={() => setCurrentPage('communications')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'communications' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <MessageSquare className="w-5 h-5" />
-            <span>Communications</span>
-          </button>
-          <button 
-            onClick={() => setCurrentPage('social')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'social' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Heart className="w-5 h-5" />
-            <span>Social Feed</span>
-          </button>
-          <button 
-            onClick={() => setCurrentPage('events')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'events' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Calendar className="w-5 h-5" />
-            <span>Events</span>
-          </button>
-          <button 
-            onClick={() => setCurrentPage('analytics')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'analytics' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <BarChart3 className="w-5 h-5" />
-            <span>Analytics</span>
-          </button>
-
-          <button 
-            onClick={() => setCurrentPage('amenities')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'amenities' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Building className="w-5 h-5" />
-            <span>Amenities</span>
-          </button>
-
-
-          <button 
-            onClick={() => setCurrentPage('settings')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'settings' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Settings className="w-5 h-5" />
-            <span>Settings</span>
-          </button>
-          <button
-          onClick={() => setCurrentPage('resident-home')}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
-              currentPage === 'resident-home' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <Users className="w-5 h-5" />
-            <span>Resident View</span>
-          </button>
-        </nav>
-
-        {/* Emergency Button */}
-        <div className="p-4 border-t border-gray-200">
-          <button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2">
-            <AlertTriangle className="w-5 h-5" />
-            <span>Send Emergency Alert</span>
-          </button>
+  <div className="min-h-screen bg-gray-50 flex">
+    {/* Desktop Sidebar - Hidden on mobile */}
+    <div className="hidden md:flex w-64 bg-white shadow-sm border-r border-gray-200 flex flex-col fixed h-full z-10">
+      {/* Logo */}
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-center">
+          <img 
+            src={HeyNeighborLogo} 
+            alt="HeyNeighbor Logo" 
+            className="h-10 w-auto"
+          />
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col ml-64">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
+      {/* Navigation */}
+      <nav className="flex-1 p-4 space-y-2">
+        <button 
+          onClick={() => setCurrentPage('dashboard')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'dashboard' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Home className="w-5 h-5" />
+          <span className="font-medium">Dashboard</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('residents')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'residents' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Users className="w-5 h-5" />
+          <span>Residents</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('safety')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'safety' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Shield className="w-5 h-5" />
+          <span>Safety</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('communications')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'communications' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <MessageSquare className="w-5 h-5" />
+          <span>Communications</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('social')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'social' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Heart className="w-5 h-5" />
+          <span>Social Feed</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('events')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'events' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Calendar className="w-5 h-5" />
+          <span>Events</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('analytics')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'analytics' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <BarChart3 className="w-5 h-5" />
+          <span>Analytics</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('amenities')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'amenities' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Building className="w-5 h-5" />
+          <span>Amenities</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('settings')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'settings' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Settings className="w-5 h-5" />
+          <span>Settings</span>
+        </button>
+        <button
+          onClick={() => setCurrentPage('resident-home')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'resident-home' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Users className="w-5 h-5" />
+          <span>Resident View</span>
+        </button>
+      </nav>
+
+      {/* Emergency Button */}
+      <div className="p-4 border-t border-gray-200">
+        <button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2">
+          <AlertTriangle className="w-5 h-5" />
+          <span>Send Emergency Alert</span>
+        </button>
+      </div>
+    </div>
+
+    {/* Mobile Header */}
+    <div className="md:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 fixed top-0 left-0 right-0 z-40">
+      <div className="flex items-center justify-between">
+        <button 
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+          className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <h1 className="text-lg font-semibold text-gray-900">Management</h1>
+        <div className="flex items-center space-x-2">
+          <button 
+            onClick={() => setShowNotifications(true)}
+            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors relative"
+          >
+            <Bell className="w-5 h-5" />
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+          </button>
+          <button 
+            onClick={() => setShowProfileMenu(true)}
+            className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center"
+          >
+            <span className="text-white font-semibold text-sm">S</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {/* Mobile Menu Overlay */}
+    {showMobileMenu && (
+      <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowMobileMenu(false)}>
+        <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-blue-50">
+            <h2 className="text-lg font-semibold text-gray-900">Management Menu</h2>
+            <button 
+              onClick={() => setShowMobileMenu(false)}
+              className="p-2 text-gray-600 hover:text-blue-600 rounded-lg transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <nav className="p-3 space-y-1">
+            <button
+              onClick={() => { setCurrentPage('resident-home'); setShowMobileMenu(false); }}
+              className="w-full flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200 bg-blue-50"
+            >
+              <Users className="w-5 h-5 mr-3" />
+              Switch to Resident View
+            </button>
+            <div className="border-t border-gray-200 my-2"></div>
+            <button
+              onClick={() => { setCurrentPage('dashboard'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'dashboard' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <Home className="w-5 h-5 mr-3" />
+              Dashboard
+            </button>
+            <button
+              onClick={() => { setCurrentPage('residents'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'residents' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <Users className="w-5 h-5 mr-3" />
+              Residents
+            </button>
+            <button
+              onClick={() => { setCurrentPage('safety'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'safety' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <Shield className="w-5 h-5 mr-3" />
+              Safety & Security
+            </button>
+            <button
+              onClick={() => { setCurrentPage('communications'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'communications' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <MessageSquare className="w-5 h-5 mr-3" />
+              Communications
+            </button>
+            <button
+              onClick={() => { setCurrentPage('social'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'social' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <Heart className="w-5 h-5 mr-3" />
+              Social Feed
+            </button>
+            <button
+              onClick={() => { setCurrentPage('events'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'events' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <Calendar className="w-5 h-5 mr-3" />
+              Events
+            </button>
+            <button
+              onClick={() => { setCurrentPage('analytics'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'analytics' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <BarChart3 className="w-5 h-5 mr-3" />
+              Analytics
+            </button>
+            <button
+              onClick={() => { setCurrentPage('amenities'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'amenities' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <Building className="w-5 h-5 mr-3" />
+              Amenities
+            </button>
+            <button
+              onClick={() => { setCurrentPage('settings'); setShowMobileMenu(false); }}
+              className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 'settings' ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <Settings className="w-5 h-5 mr-3" />
+              Settings
+            </button>
+            <div className="border-t border-gray-200 my-2"></div>
+            <button 
+              onClick={() => {
+                setShowMobileMenu(false);
+                alert('Emergency Alert Feature - Would integrate with emergency notification system');
+              }}
+              className="w-full flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <AlertTriangle className="w-5 h-5 mr-3" />
+              Send Emergency Alert
+            </button>
+          </nav>
+        </div>
+      </div>
+    )}
+
+    {/* Main Content - Responsive margins */}
+    <div className="flex-1 flex flex-col md:ml-64 pt-16 md:pt-0 pb-20 md:pb-0">
+        {/* Desktop Header - Hidden on mobile */}
+        <header className="hidden md:block bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-medium text-gray-900">
@@ -6446,6 +6592,61 @@ const handleNoraMessage = async (userInput) => {
 
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-40">
+      <div className="flex justify-around">
+        <button
+          onClick={() => setCurrentPage('dashboard')}
+          className={`flex flex-col items-center py-2 px-3 ${
+            currentPage === 'dashboard' ? 'text-blue-600' : 'text-gray-600'
+          }`}
+        >
+          <Home className="w-5 h-5" />
+          <span className="text-xs mt-1">Dashboard</span>
+        </button>
+        
+        <button
+          onClick={() => setCurrentPage('residents')}
+          className={`flex flex-col items-center py-2 px-3 ${
+            currentPage === 'residents' ? 'text-blue-600' : 'text-gray-600'
+          }`}
+        >
+          <Users className="w-5 h-5" />
+          <span className="text-xs mt-1">Residents</span>
+        </button>
+        
+        <button
+          onClick={() => setCurrentPage('safety')}
+          className={`flex flex-col items-center py-2 px-3 ${
+            currentPage === 'safety' ? 'text-blue-600' : 'text-gray-600'
+          }`}
+        >
+          <Shield className="w-5 h-5" />
+          <span className="text-xs mt-1">Safety</span>
+        </button>
+        
+        <button
+          onClick={() => setCurrentPage('communications')}
+          className={`flex flex-col items-center py-2 px-3 ${
+            currentPage === 'communications' ? 'text-blue-600' : 'text-gray-600'
+          }`}
+        >
+          <MessageSquare className="w-5 h-5" />
+          <span className="text-xs mt-1">Messages</span>
+        </button>
+        
+        <button
+          onClick={() => setCurrentPage('analytics')}
+          className={`flex flex-col items-center py-2 px-3 ${
+            currentPage === 'analytics' ? 'text-blue-600' : 'text-gray-600'
+          }`}
+        >
+          <BarChart3 className="w-5 h-5" />
+          <span className="text-xs mt-1">Analytics</span>
+        </button>
+      </div>
+    </div>
 
       {/* All Modals */}
       
