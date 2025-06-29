@@ -6652,9 +6652,9 @@ const handleNoraMessage = async (userInput) => {
       
       {/* Broadcast Message Modal */}
       {showBroadcastModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-sm md:max-w-2xl max-h-[95vh] md:max-h-[90vh] overflow-y-auto mx-2 md:mx-0">
+            <div className="p-4 md:p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Send Message</h3>
                 <button 
@@ -6666,7 +6666,7 @@ const handleNoraMessage = async (userInput) => {
               </div>
             </div>
             
-            <div className="p-6 space-y-6">
+            <div className="p-4 md:p-6 space-y-4 md:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Message Title</label>
                 <input
@@ -6772,7 +6772,7 @@ const handleNoraMessage = async (userInput) => {
               </div>
             </div>
             
-            <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+            <div className="p-4 md:p-6 border-t border-gray-200 flex flex-col md:flex-row justify-end space-y-2 md:space-y-0 md:space-x-3">
               <button 
                 onClick={() => setShowBroadcastModal(false)}
                 className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
@@ -7378,9 +7378,9 @@ const handleNoraMessage = async (userInput) => {
       )}
       {/* Add Resident Modal */}
       {showAddResidentModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
-            <div className="p-6 border-b border-gray-200">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-sm md:max-w-md mx-2 md:mx-0 max-h-[95vh] overflow-y-auto">
+            <div className="p-4 md:p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Add New Resident</h3>
                 <button 
@@ -7392,7 +7392,7 @@ const handleNoraMessage = async (userInput) => {
               </div>
             </div>
             
-            <div className="p-6 space-y-4">
+            <div className="p-4 md:p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                 <input
@@ -7429,10 +7429,10 @@ const handleNoraMessage = async (userInput) => {
                 />
               </div>
               
-              <div className="flex space-x-3 pt-4">
+              <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-3 pt-4">
                 <button
                   onClick={() => setShowAddResidentModal(false)}
-                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-3 md:py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors min-h-[44px] md:min-h-0"
                 >
                   Cancel
                 </button>
