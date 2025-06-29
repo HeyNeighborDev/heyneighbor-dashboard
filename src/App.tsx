@@ -296,6 +296,13 @@ const ManagementDashboard = () => {
   const [escalationReason, setEscalationReason] = useState('');
   const [escalationLevel, setEscalationLevel] = useState('supervisor');
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+  const [emergencyStep, setEmergencyStep] = useState(1); // 1: Type, 2: Details, 3: Confirm
+  const [emergencyType, setEmergencyType] = useState('');
+  const [emergencyMessage, setEmergencyMessage] = useState('');
+  const [emergencyTarget, setEmergencyTarget] = useState('all');
+  const [emergencySeverity, setEmergencySeverity] = useState('high');
+  const [showEmergencySuccess, setShowEmergencySuccess] = useState(false);
   const [newIncident, setNewIncident] = useState({
     title: '',
     type: 'maintenance',
@@ -2043,6 +2050,90 @@ Respond naturally as Nora would:`;
   }
 };
 
+// Emergency Alert System Functions
+const emergencyTypes = [
+  {
+    id: 'fire',
+    title: 'Fire Emergency',
+    icon: '🔥',
+    color: 'red',
+    defaultMessage: 'FIRE EMERGENCY: Please evacuate the building immediately. Use stairs, not elevators. Meet at the designated assembly point.'
+  },
+  {
+    id: 'security',
+    title: 'Security Alert',
+    icon: '🚨',
+    color: 'orange',
+    defaultMessage: 'SECURITY ALERT: Please remain in your units and lock all doors. Do not open doors to unknown individuals.'
+  },
+  {
+    id: 'weather',
+    title: 'Severe Weather',
+    icon: '🌪️',
+    color: 'blue',
+    defaultMessage: 'SEVERE WEATHER WARNING: Stay indoors and away from windows. Move to the lowest floor if possible.'
+  },
+  {
+    id: 'utility',
+    title: 'Utility Emergency',
+    icon: '⚡',
+    color: 'yellow',
+    defaultMessage: 'UTILITY EMERGENCY: There is a water/gas/electrical emergency. Please avoid the affected areas.'
+  },
+  {
+    id: 'medical',
+    title: 'Medical Emergency',
+    icon: '🚑',
+    color: 'green',
+    defaultMessage: 'MEDICAL EMERGENCY: Emergency services are on-site. Please keep common areas clear.'
+  },
+  {
+    id: 'custom',
+    title: 'Custom Alert',
+    icon: '📢',
+    color: 'gray',
+    defaultMessage: ''
+  }
+];
+
+const handleEmergencyTypeSelect = (type) => {
+  setEmergencyType(type.id);
+  setEmergencyMessage(type.defaultMessage);
+  setEmergencyStep(2);
+};
+
+const handleSendEmergency = async () => {
+  try {
+    // This would integrate with your backend API
+    console.log('Sending emergency alert:', {
+      type: emergencyType,
+      message: emergencyMessage,
+      target: emergencyTarget,
+      severity: emergencySeverity,
+      timestamp: new Date().toISOString()
+    });
+
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Show success and reset
+    setShowEmergencyModal(false);
+    setShowEmergencySuccess(true);
+    setEmergencyStep(1);
+    setEmergencyType('');
+    setEmergencyMessage('');
+    setEmergencyTarget('all');
+    setEmergencySeverity('high');
+
+    // Hide success message after 3 seconds
+    setTimeout(() => setShowEmergencySuccess(false), 3000);
+
+  } catch (error) {
+    console.error('Failed to send emergency alert:', error);
+    alert('Failed to send emergency alert. Please try again.');
+  }
+};
+
 // Enhanced message handler with loading state
 const handleNoraMessage = async (userInput) => {
   // Add user message immediately
@@ -2210,7 +2301,10 @@ const handleNoraMessage = async (userInput) => {
 
       {/* Emergency Button */}
       <div className="p-4 border-t border-gray-200">
-        <button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2">
+        <button 
+          onClick={() => setShowEmergencyModal(true)}
+          className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+        >
           <AlertTriangle className="w-5 h-5" />
           <span>Send Emergency Alert</span>
         </button>
@@ -2352,7 +2446,7 @@ const handleNoraMessage = async (userInput) => {
             <button 
               onClick={() => {
                 setShowMobileMenu(false);
-                alert('Emergency Alert Feature - Would integrate with emergency notification system');
+                setShowEmergencyModal(true);
               }}
               className="w-full flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
             >
@@ -6650,6 +6744,287 @@ const handleNoraMessage = async (userInput) => {
 
       {/* All Modals */}
       
+      {/* Emergency Alert Modal */}
+{showEmergencyModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4">
+    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg md:max-w-2xl mx-2 md:mx-0 max-h-[95vh] overflow-y-auto">
+      
+      {/* Step 1: Emergency Type Selection */}
+      {emergencyStep === 1 && (
+        <>
+          <div className="p-4 md:p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-red-600 flex items-center">
+                <AlertTriangle className="w-6 h-6 mr-2" />
+                Emergency Alert
+              </h2>
+              <button 
+                onClick={() => setShowEmergencyModal(false)}
+                className="text-gray-400 hover:text-gray-600 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-gray-600 mt-2">Select the type of emergency to alert residents</p>
+          </div>
+          
+          <div className="p-4 md:p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {emergencyTypes.map((type) => (
+                <button
+                  key={type.id}
+                  onClick={() => handleEmergencyTypeSelect(type)}
+                  className={`p-4 rounded-lg border-2 transition-all text-left hover:shadow-md ${
+                    type.color === 'red' ? 'border-red-200 hover:border-red-300 hover:bg-red-50' :
+                    type.color === 'orange' ? 'border-orange-200 hover:border-orange-300 hover:bg-orange-50' :
+                    type.color === 'blue' ? 'border-blue-200 hover:border-blue-300 hover:bg-blue-50' :
+                    type.color === 'yellow' ? 'border-yellow-200 hover:border-yellow-300 hover:bg-yellow-50' :
+                    type.color === 'green' ? 'border-green-200 hover:border-green-300 hover:bg-green-50' :
+                    'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center mb-2">
+                    <span className="text-2xl mr-3">{type.icon}</span>
+                    <span className="font-semibold text-gray-900">{type.title}</span>
+                  </div>
+                  {type.id === 'custom' ? (
+                    <p className="text-sm text-gray-600">Create a custom emergency message</p>
+                  ) : (
+                    <p className="text-sm text-gray-600 line-clamp-2">{type.defaultMessage}</p>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Step 2: Message Details */}
+      {emergencyStep === 2 && (
+        <>
+          <div className="p-4 md:p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-red-600 flex items-center">
+                <AlertTriangle className="w-6 h-6 mr-2" />
+                Emergency Details
+              </h2>
+              <button 
+                onClick={() => setShowEmergencyModal(false)}
+                className="text-gray-400 hover:text-gray-600 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          
+          <div className="p-4 md:p-6 space-y-6">
+            {/* Selected Emergency Type */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Emergency Type</h3>
+              <div className="flex items-center">
+                <span className="text-xl mr-2">
+                  {emergencyTypes.find(t => t.id === emergencyType)?.icon}
+                </span>
+                <span className="font-medium">
+                  {emergencyTypes.find(t => t.id === emergencyType)?.title}
+                </span>
+              </div>
+            </div>
+
+            {/* Severity Level */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Severity Level
+              </label>
+              <div className="grid grid-cols-3 gap-3">
+                <button
+                  onClick={() => setEmergencySeverity('low')}
+                  className={`p-3 rounded-lg border text-center transition-colors ${
+                    emergencySeverity === 'low' 
+                      ? 'border-yellow-500 bg-yellow-50 text-yellow-800' 
+                      : 'border-gray-200 hover:border-yellow-300'
+                  }`}
+                >
+                  <div className="font-semibold">Low</div>
+                  <div className="text-xs">Advisory</div>
+                </button>
+                <button
+                  onClick={() => setEmergencySeverity('medium')}
+                  className={`p-3 rounded-lg border text-center transition-colors ${
+                    emergencySeverity === 'medium' 
+                      ? 'border-orange-500 bg-orange-50 text-orange-800' 
+                      : 'border-gray-200 hover:border-orange-300'
+                  }`}
+                >
+                  <div className="font-semibold">Medium</div>
+                  <div className="text-xs">Important</div>
+                </button>
+                <button
+                  onClick={() => setEmergencySeverity('high')}
+                  className={`p-3 rounded-lg border text-center transition-colors ${
+                    emergencySeverity === 'high' 
+                      ? 'border-red-500 bg-red-50 text-red-800' 
+                      : 'border-gray-200 hover:border-red-300'
+                  }`}
+                >
+                  <div className="font-semibold">High</div>
+                  <div className="text-xs">Critical</div>
+                </button>
+              </div>
+            </div>
+
+            {/* Target Audience */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Send Alert To
+              </label>
+              <select
+                value={emergencyTarget}
+                onChange={(e) => setEmergencyTarget(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              >
+                <option value="all">All Residents</option>
+                <option value="building-a">Building A Only</option>
+                <option value="building-b">Building B Only</option>
+                <option value="building-c">Building C Only</option>
+                <option value="staff">Staff Only</option>
+              </select>
+            </div>
+
+            {/* Message */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Emergency Message
+              </label>
+              <textarea
+                value={emergencyMessage}
+                onChange={(e) => setEmergencyMessage(e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                placeholder="Enter your emergency message..."
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                {emergencyMessage.length}/500 characters
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4 md:p-6 border-t border-gray-200 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-3">
+            <button
+              onClick={() => setEmergencyStep(1)}
+              className="flex-1 px-4 py-3 md:py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors min-h-[44px] md:min-h-0"
+            >
+              Back
+            </button>
+            <button
+              onClick={() => setEmergencyStep(3)}
+              disabled={!emergencyMessage.trim()}
+              className="flex-1 px-4 py-3 md:py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white rounded-lg font-medium transition-colors min-h-[44px] md:min-h-0"
+            >
+              Review & Send
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Step 3: Confirmation */}
+      {emergencyStep === 3 && (
+        <>
+          <div className="p-4 md:p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-red-600 flex items-center">
+                <AlertTriangle className="w-6 h-6 mr-2" />
+                Confirm Emergency Alert
+              </h2>
+              <button 
+                onClick={() => setShowEmergencyModal(false)}
+                className="text-gray-400 hover:text-gray-600 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-red-600 mt-2 font-medium">⚠️ This will immediately notify all selected residents</p>
+          </div>
+          
+          <div className="p-4 md:p-6 space-y-4">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-semibold text-gray-700">Type:</span>
+                  <div className="flex items-center mt-1">
+                    <span className="mr-2">
+                      {emergencyTypes.find(t => t.id === emergencyType)?.icon}
+                    </span>
+                    {emergencyTypes.find(t => t.id === emergencyType)?.title}
+                  </div>
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">Severity:</span>
+                  <div className={`mt-1 inline-block px-2 py-1 rounded text-xs font-medium ${
+                    emergencySeverity === 'high' ? 'bg-red-100 text-red-800' :
+                    emergencySeverity === 'medium' ? 'bg-orange-100 text-orange-800' :
+                    'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {emergencySeverity.toUpperCase()}
+                  </div>
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">Recipients:</span>
+                  <div className="mt-1">{emergencyTarget === 'all' ? 'All Residents' : emergencyTarget}</div>
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">Time:</span>
+                  <div className="mt-1">{new Date().toLocaleString()}</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <span className="font-semibold text-gray-700">Message:</span>
+              <div className="mt-2 p-3 bg-gray-50 rounded-lg border">
+                {emergencyMessage}
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4 md:p-6 border-t border-gray-200 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-3">
+            <button
+              onClick={() => setEmergencyStep(2)}
+              className="flex-1 px-4 py-3 md:py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors min-h-[44px] md:min-h-0"
+            >
+              Edit Message
+            </button>
+            <button
+              onClick={handleSendEmergency}
+              className="flex-1 px-4 py-3 md:py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors min-h-[44px] md:min-h-0 flex items-center justify-center space-x-2"
+            >
+              <AlertTriangle className="w-4 h-4" />
+              <span>SEND EMERGENCY ALERT</span>
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+)}
+
+{/* Emergency Success Message */}
+{showEmergencySuccess && (
+  <div className="fixed top-4 right-4 bg-green-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
+    <div className="flex items-center">
+      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+        </svg>
+      </div>
+      <div>
+        <p className="font-semibold">Emergency Alert Sent!</p>
+        <p className="text-sm opacity-90">All residents have been notified</p>
+      </div>
+    </div>
+  </div>
+)}
+
       {/* Broadcast Message Modal */}
       {showBroadcastModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4">
