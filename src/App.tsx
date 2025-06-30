@@ -3267,7 +3267,7 @@ const handleNoraMessage = async (userInput) => {
 
                     {/* Renewal Probability KPI */}
                     <div 
-                      className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
+                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                       onClick={() => {
                         setSelectedKpi({
                           type: 'renewal',
@@ -3298,8 +3298,8 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-gray-500 text-sm font-medium">Renewal Probability</p>
                             <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" title="AI actively predicting"></div>
                           </div>
-                          <p className="text-3xl font-bold text-blue-600 mt-1">86.3%</p>
-                          <div className="flex items-center justify-between mt-2">
+                          <p className="text-2xl md:text-3xl font-bold text-blue-600 mt-1">86.3%</p>
+                          <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-2 space-y-1 md:space-y-0">
                             <p className="text-xs text-blue-600 font-medium">↗ +3.1% this quarter</p>
                             <p className="text-xs text-purple-500 font-medium">AI: 94% accuracy</p>
                           </div>
@@ -3318,7 +3318,7 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-xs text-gray-400 mt-1">Quarterly trend • Nora AI model</p>
                           </div>
                         </div>
-                        <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center ml-4">
+                        <div className="w-12 h-12 md:w-14 md:h-14 bg-blue-100 rounded-xl flex items-center justify-center ml-3 md:ml-4">
                           <Users className="w-7 h-7 text-blue-600" />
                         </div>
                       </div>
@@ -3326,7 +3326,7 @@ const handleNoraMessage = async (userInput) => {
 
                     {/* At-Risk Residents KPI */}
                     <div 
-                      className="bg-white p-6 rounded-xl shadow-md border border-yellow-200 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
+                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-yellow-200 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                       onClick={() => {
                         setSelectedKpi({
                           type: 'risk',
@@ -3368,8 +3368,8 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-gray-500 text-sm font-medium">At-Risk Residents</p>
                             <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" title="Critical alerts active"></div>
                           </div>
-                          <p className="text-3xl font-bold text-yellow-600 mt-1">3</p>
-                          <div className="flex items-center justify-between mt-2">
+                          <p className="text-2xl md:text-3xl font-bold text-yellow-600 mt-1">3</p>
+                          <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-2 space-y-1 md:space-y-0">
                             <p className="text-xs text-red-600 font-medium">🚨 1 Critical, 2 High Risk</p>
                             <p className="text-xs text-purple-500 font-medium">Nora: Act now!</p>
                           </div>
@@ -3385,9 +3385,9 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-xs text-gray-400 mt-1">AI risk distribution • 89% intervention success rate</p>
                           </div>
                         </div>
-                        <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center ml-4 relative">
+                        <div className="w-12 h-12 md:w-14 md:h-14 bg-yellow-100 rounded-xl flex items-center justify-center ml-3 md:ml-4 relative">
                           <AlertTriangle className="w-7 h-7 text-yellow-600" />
-                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                          <div className="absolute -top-1 -right-1 w-3 h-3 md:w-4 md:h-4 bg-red-500 rounded-full flex items-center justify-center">
                             <span className="text-white text-xs font-bold">!</span>
                           </div>
                         </div>
@@ -3396,7 +3396,7 @@ const handleNoraMessage = async (userInput) => {
 
                     {/* Engagement Score KPI */}
                     <div 
-                      className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
+                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                       onClick={() => {
                         setSelectedKpi({
                           type: 'engagement',
@@ -3427,8 +3427,8 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-gray-500 text-sm font-medium">Engagement Score</p>
                             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Nora optimization active"></div>
                           </div>
-                          <p className="text-3xl font-bold text-purple-600 mt-1">84.2%</p>
-                          <div className="flex items-center justify-between mt-2">
+                          <p className="text-2xl md:text-3xl font-bold text-purple-600 mt-1">84.2%</p>
+                          <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-2 space-y-1 md:space-y-0">
                             <p className="text-xs text-purple-600 font-medium">↗ +8.4% this month</p>
                             <p className="text-xs text-green-600 font-medium">Nora impact!</p>
                           </div>
@@ -3449,7 +3449,7 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-xs text-gray-400 mt-1">30-day trend • Green = Nora impact</p>
                           </div>
                         </div>
-                        <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center ml-4">
+                        <div className="w-12 h-12 md:w-14 md:h-14 bg-purple-100 rounded-xl flex items-center justify-center ml-3 md:ml-4">
                           <MessageSquare className="w-7 h-7 text-purple-600" />
                         </div>
                       </div>
