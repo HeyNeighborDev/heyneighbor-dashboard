@@ -3208,7 +3208,7 @@ const handleNoraMessage = async (userInput) => {
                     
                     {/* Community Health KPI */}
                     <div 
-                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
+                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-green-200 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                       onClick={() => {
                         setSelectedKpi({
                           type: 'health',
@@ -3267,7 +3267,7 @@ const handleNoraMessage = async (userInput) => {
 
                     {/* Renewal Probability KPI */}
                     <div 
-                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
+                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-blue-200 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                       onClick={() => {
                         setSelectedKpi({
                           type: 'renewal',
@@ -3396,7 +3396,7 @@ const handleNoraMessage = async (userInput) => {
 
                     {/* Engagement Score KPI */}
                     <div 
-                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
+                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-purple-200 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                       onClick={() => {
                         setSelectedKpi({
                           type: 'engagement',
