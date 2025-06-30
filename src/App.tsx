@@ -2657,26 +2657,27 @@ const handleNoraMessage = async (userInput) => {
         </div>
 
         {/* AI Insights Panel */}
-        <div className="lg:col-span-1 space-y-6">
+        {/* AI Insights Panel - Mobile Optimized */}
+        <div className="lg:col-span-1 space-y-4 md:space-y-6">
           {/* AI Insights */}
           <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-sm border border-purple-200">
-            <div className="p-4 border-b border-purple-200">
+            <div className="p-3 md:p-4 border-b border-purple-200">
               <div className="flex items-center space-x-2">
                 <Brain className="w-5 h-5 text-purple-600" />
                 <h3 className="text-base font-semibold text-gray-900">AI Insights</h3>
               </div>
             </div>
-            <div className="p-4 space-y-3">
+            <div className="p-3 md:p-4 space-y-3">
               <div className="bg-white rounded-lg p-3 border border-gray-100">
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <MessageSquare className="w-4 h-4 text-yellow-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-gray-900 mb-1">Pool Schedule Discussion</h4>
+                    <h4 className="text-sm font-medium text-gray-900 mb-1 leading-snug">Pool Schedule Discussion</h4>
                     <p className="text-xs text-gray-600 mb-2">23 residents discussing extended hours</p>
                     <div className="flex items-center justify-between">
-                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium py-1">
                         Review Request
                       </button>
                       <span className="text-xs text-gray-500">23 posts</span>
@@ -2687,14 +2688,14 @@ const handleNoraMessage = async (userInput) => {
 
               <div className="bg-white rounded-lg p-3 border border-gray-100">
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <TrendingUp className="w-4 h-4 text-red-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-gray-900 mb-1">Renewal Risk Detected</h4>
+                    <h4 className="text-sm font-medium text-gray-900 mb-1 leading-snug">Renewal Risk Detected</h4>
                     <p className="text-xs text-gray-600 mb-2">Unit 4B social engagement dropped 67%</p>
                     <div className="flex items-center justify-between">
-                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium py-1">
                         Schedule Check-in
                       </button>
                       <span className="text-xs text-gray-500">89% confidence</span>
@@ -2705,14 +2706,14 @@ const handleNoraMessage = async (userInput) => {
 
               <div className="bg-white rounded-lg p-3 border border-gray-100">
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Heart className="w-4 h-4 text-green-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-gray-900 mb-1">Community Win</h4>
+                    <h4 className="text-sm font-medium text-gray-900 mb-1 leading-snug">Community Win</h4>
                     <p className="text-xs text-gray-600 mb-2">BBQ event generated 34 positive posts</p>
                     <div className="flex items-center justify-between">
-                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium py-1">
                         Schedule Follow-up
                       </button>
                       <span className="text-xs text-gray-500">+12% satisfaction</span>
@@ -2723,44 +2724,44 @@ const handleNoraMessage = async (userInput) => {
             </div>
           </div>
 
-          {/* Quick Actions */}
+          {/* Quick Actions - Touch Optimized */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-3 md:p-4 border-b border-gray-200">
               <h3 className="text-base font-semibold text-gray-900">Quick Actions</h3>
             </div>
-            <div className="p-4 space-y-2">
+            <div className="p-3 md:p-4 space-y-2">
               <button 
                 onClick={() => setShowBroadcastModal(true)}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors min-h-[44px]"
               >
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Send className="w-4 h-4 text-blue-600" />
                 </div>
                 <span className="font-medium text-gray-900 text-sm">Send Notification</span>
               </button>
               <button 
                 onClick={() => setShowCreateEventModal(true)}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors min-h-[44px]"
               >
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Plus className="w-4 h-4 text-green-600" />
                 </div>
                 <span className="font-medium text-gray-900 text-sm">Create Event</span>
               </button>
               <button 
                 onClick={() => setShowAddResidentModal(true)}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors min-h-[44px]"
               >
-                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <UserPlus className="w-4 h-4 text-purple-600" />
                 </div>
                 <span className="font-medium text-gray-900 text-sm">Add Resident</span>
               </button>
               <button 
                 onClick={() => setCurrentPage('social')}
-                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors min-h-[44px]"
               >
-                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <BarChart3 className="w-4 h-4 text-orange-600" />
                 </div>
                 <span className="font-medium text-gray-900 text-sm">View Social Feed</span>
