@@ -3076,9 +3076,9 @@ const handleNoraMessage = async (userInput) => {
           {/* Analytics Page */}
           {currentPage === 'analytics' && (
             <>
-              {/* Analytics Tab Navigation */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 mb-6">
-                <div className="flex space-x-1">
+              {/* Analytics Tab Navigation - Mobile Optimized */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 mb-4 md:mb-6 overflow-x-auto">
+                <div className="flex space-x-1 min-w-max md:min-w-0">
                   <button
                     onClick={() => setAnalyticsTab('executive')}
                     className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
@@ -3088,11 +3088,11 @@ const handleNoraMessage = async (userInput) => {
                     }`}
                   >
                     <span className="text-lg">📈</span>
-                    <span>Executive Overview</span>
+                    <span className="whitespace-nowrap">Executive</span>
                   </button>
                   <button
                     onClick={() => setAnalyticsTab('residents')}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
+                    className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
                       analyticsTab === 'residents' 
                         ? 'bg-blue-100 text-blue-700 shadow-sm' 
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
