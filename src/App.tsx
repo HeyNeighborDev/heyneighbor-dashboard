@@ -3075,8 +3075,9 @@ const handleNoraMessage = async (userInput) => {
           )}
           {/* Analytics Page */}
           {currentPage === 'analytics' && (
-            <>
-              {/* Analytics Tab Navigation - Mobile Optimized */}
+  <>
+    <div className="w-full overflow-x-hidden">
+      {/* Analytics Tab Navigation - Mobile Optimized */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 mb-4 md:mb-6 overflow-x-auto w-full">
                 <div className="flex space-x-1 min-w-max md:min-w-0">
                   <button
@@ -4294,8 +4295,9 @@ const handleNoraMessage = async (userInput) => {
                   )}
                 </button>
               )}
-            </>
-          )}
+            </div>
+          </>
+        )}
 
           {/* Amenities Management Page */}
           {currentPage === 'amenities' && (
