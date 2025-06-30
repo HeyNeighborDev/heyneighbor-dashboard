@@ -2513,46 +2513,48 @@ const handleNoraMessage = async (userInput) => {
         </header>
 
         {/* Dashboard Content */}
-        <div className="flex-1 p-6 space-y-4">
+        <div className="flex-1 p-3 md:p-6 space-y-3 md:space-y-4">
           {/* Dashboard Page */}
           {currentPage === 'dashboard' && (
             <>
 {/* System Health Command Center */}
-      <div className="bg-green-50 border-green-200 rounded-xl border p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <CheckCircle className="w-6 h-6 text-green-600" />
-            <div>
+      <div className="bg-green-50 border-green-200 rounded-xl border p-3 md:p-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-3 md:space-y-0">
+          <div className="flex items-start md:items-center space-x-3">
+            <div className="flex-shrink-0">
+              <CheckCircle className="w-6 h-6 text-green-600" />
+            </div>
+            <div className="min-w-0 flex-1">
               <h3 className="font-semibold text-gray-900">All systems healthy</h3>
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-1 md:space-y-0 text-sm text-gray-600">
                 <span>Community mood: <span className="font-medium text-green-600">87% positive</span></span>
                 <span>Social sentiment: <span className="font-medium text-green-600">Positive trending</span></span>
                 <span>2 topics trending</span>
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex justify-end md:justify-start">
             <button 
-  onClick={() => setCurrentPage('analytics')}
-  className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
->
+              onClick={() => setCurrentPage('analytics')}
+              className="px-3 py-2 md:py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors min-h-[44px] md:min-h-0"
+            >
               View Details
             </button>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Stats Grid */}
-      <div className="flex flex-wrap gap-3">
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 w-28 h-28 flex flex-col relative">
-          <div className="flex items-center justify-between mb-1">
-            <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center">
+      {/* Enhanced Stats Grid - Mobile Responsive */}
+      <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 md:gap-3">
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col min-h-[100px] md:w-28 md:h-28 relative">
+          <div className="flex items-center justify-between mb-2 md:mb-1">
+            <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center flex-shrink-0">
               <Users className="w-3 h-3 text-blue-600" />
             </div>
             <div className="text-blue-600 text-xs font-medium">{communityStats.activeResidents.change}</div>
           </div>
           <div className="flex-1 flex flex-col justify-center">
-            <div className="text-xl font-bold text-gray-900 mb-0.5">{communityStats.activeResidents.count}</div>
+            <div className="text-lg md:text-xl font-bold text-gray-900 mb-0.5">{communityStats.activeResidents.count}</div>
             <div className="text-xs text-gray-600 leading-tight">Active Residents</div>
           </div>
           <div className="absolute top-2 right-2">
@@ -2560,15 +2562,15 @@ const handleNoraMessage = async (userInput) => {
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 w-28 h-28 flex flex-col relative">
-          <div className="flex items-center justify-between mb-1">
-            <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center">
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col min-h-[100px] md:w-28 md:h-28 relative">
+          <div className="flex items-center justify-between mb-2 md:mb-1">
+            <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center flex-shrink-0">
               <Activity className="w-3 h-3 text-green-600" />
             </div>
             <div className="text-green-600 text-xs font-medium">{communityStats.engagementScore.change}</div>
           </div>
           <div className="flex-1 flex flex-col justify-center">
-            <div className="text-xl font-bold text-gray-900 mb-0.5">{communityStats.engagementScore.score}</div>
+            <div className="text-lg md:text-xl font-bold text-gray-900 mb-0.5">{communityStats.engagementScore.score}</div>
             <div className="text-xs text-gray-600 leading-tight">Engagement Score</div>
           </div>
           <div className="absolute bottom-1 right-1 text-xs text-green-600 font-medium">
@@ -2576,28 +2578,28 @@ const handleNoraMessage = async (userInput) => {
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 w-28 h-28 flex flex-col">
-          <div className="flex items-center justify-between mb-1">
-            <div className="w-6 h-6 bg-orange-100 rounded flex items-center justify-center">
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col min-h-[100px] md:w-28 md:h-28">
+          <div className="flex items-center justify-between mb-2 md:mb-1">
+            <div className="w-6 h-6 bg-orange-100 rounded flex items-center justify-center flex-shrink-0">
               <AlertTriangle className="w-3 h-3 text-orange-600" />
             </div>
             <div className="text-green-600 text-xs font-medium">{communityStats.incidentReports.change}</div>
           </div>
           <div className="flex-1 flex flex-col justify-center">
-            <div className="text-xl font-bold text-gray-900 mb-0.5">{communityStats.incidentReports.count}</div>
+            <div className="text-lg md:text-xl font-bold text-gray-900 mb-0.5">{communityStats.incidentReports.count}</div>
             <div className="text-xs text-gray-600 leading-tight">Open Incidents</div>
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 w-28 h-28 flex flex-col">
-          <div className="flex items-center justify-between mb-1">
-            <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center">
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col min-h-[100px] md:w-28 md:h-28">
+          <div className="flex items-center justify-between mb-2 md:mb-1">
+            <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
               <Shield className="w-3 h-3 text-red-600" />
             </div>
             <div className="text-red-600 text-xs font-medium">{communityStats.safetyRequests.change}</div>
           </div>
           <div className="flex-1 flex flex-col justify-center">
-            <div className="text-xl font-bold text-gray-900 mb-0.5">{communityStats.safetyRequests.count}</div>
+            <div className="text-lg md:text-xl font-bold text-gray-900 mb-0.5">{communityStats.safetyRequests.count}</div>
             <div className="text-xs text-gray-600 leading-tight">Safety Requests</div>
           </div>
         </div>
