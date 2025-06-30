@@ -3146,10 +3146,10 @@ const handleNoraMessage = async (userInput) => {
                   {noraNotifications.filter(n => !n.seen).length > 0 && (
                     <div className="mb-6">
                       {noraNotifications.filter(n => !n.seen).map((notification) => (
-                        <div key={notification.id} className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-xl shadow-lg mb-4 animate-slide-down">
+                        <div key={notification.id} className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 md:p-4 rounded-xl shadow-lg mb-4 animate-slide-down">
                           <div className="flex items-start justify-between">
-                            <div className="flex items-start space-x-3">
-                              <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div className="flex items-start space-x-3 flex-1 min-w-0">
+                              <div className="w-8 h-8 md:w-10 md:h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <NoraIcon size={24} className="text-white" />
                               </div>
                               <div className="flex-1">
@@ -3163,7 +3163,7 @@ const handleNoraMessage = async (userInput) => {
                                 <p className="text-sm text-blue-100 mt-1">{notification.message}</p>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex flex-col md:flex-row items-end md:items-center space-y-2 md:space-y-0 md:space-x-2 ml-2">
                               <button
                                 onClick={() => {
                                   if (notification.action === 'schedule_meeting') {
