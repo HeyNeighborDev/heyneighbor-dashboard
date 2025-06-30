@@ -3081,7 +3081,7 @@ const handleNoraMessage = async (userInput) => {
                 <div className="flex space-x-1 min-w-max md:min-w-0">
                   <button
                     onClick={() => setAnalyticsTab('executive')}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
+                    className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
                       analyticsTab === 'executive' 
                         ? 'bg-blue-100 text-blue-700 shadow-sm' 
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -3099,40 +3099,40 @@ const handleNoraMessage = async (userInput) => {
                     }`}
                   >
                     <span className="text-lg">🏠</span>
-                    <span>Resident Analytics</span>
+                    <span className="whitespace-nowrap">Residents</span>
                   </button>
                   <button
                     onClick={() => setAnalyticsTab('community')}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
+                    className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
                       analyticsTab === 'community' 
                         ? 'bg-blue-100 text-blue-700 shadow-sm' 
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
                     <span className="text-lg">🏘️</span>
-                    <span>Community Insights</span>
+                    <span className="whitespace-nowrap">Community</span>
                   </button>
                   <button
                     onClick={() => setAnalyticsTab('communication')}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
+                    className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
                       analyticsTab === 'communication' 
                         ? 'bg-blue-100 text-blue-700 shadow-sm' 
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
                     <span className="text-lg">💬</span>
-                    <span>Communication</span>
+                    <span className="whitespace-nowrap">Comms</span>
                   </button>
                   <button
                     onClick={() => setAnalyticsTab('ai')}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
+                    className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
                       analyticsTab === 'ai' 
                         ? 'bg-blue-100 text-blue-700 shadow-sm' 
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
                     <NoraIcon size={20} className="text-purple-600" />
-                    <span>AI Hub</span>
+                    <span className="whitespace-nowrap">AI Hub</span>
                   </button>
                 </div>
               </div>
@@ -3203,8 +3203,8 @@ const handleNoraMessage = async (userInput) => {
                     </div>
                   )}
 
-                  {/* Executive KPI Cards */}
-                  <div className="flex flex-wrap gap-4 mb-8">
+                  {/* Mobile-Optimized Executive KPI Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:flex xl:flex-wrap gap-3 md:gap-4 mb-6 md:mb-8">
                     
                     {/* Community Health KPI */}
                     <div 
