@@ -4148,7 +4148,7 @@ const handleNoraMessage = async (userInput) => {
 
               {/* Floating Nora Chat Widget */}
               {showNoraChat && (
-                <div className="fixed bottom-4 right-4 w-80 h-[28rem] sm:w-80 sm:h-[30rem] md:w-96 md:h-[32rem] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)] bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col">
+                <div className="fixed bottom-20 md:bottom-4 right-2 md:right-4 w-[calc(100vw-1rem)] sm:w-80 md:w-96 h-[50vh] sm:h-[30rem] md:h-[32rem] max-w-[calc(100vw-1rem)] max-h-[calc(100vh-10rem)] bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col">
                   <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-xl">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -4284,7 +4284,7 @@ const handleNoraMessage = async (userInput) => {
               {!showNoraChat && (
                 <button
                   onClick={() => setShowNoraChat(true)}
-                  className="fixed bottom-4 right-4 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 z-40 flex items-center justify-center"
+                  className="fixed bottom-20 md:bottom-4 right-4 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 z-40 flex items-center justify-center"
                 >
                   <NoraIcon size={28} className="text-purple-600" />
                   {noraNotifications.filter(n => !n.seen).length > 0 && (
