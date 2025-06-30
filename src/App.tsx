@@ -5845,16 +5845,16 @@ const handleNoraMessage = async (userInput) => {
           {/* Safety Page */}
           {currentPage === 'safety' && (
             <>
-              {/* Safety Stats */}
-              <div className="flex flex-wrap gap-3 mb-6">
+              {/* Safety Stats - Mobile Optimized */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
                 <button
                   onClick={() => handleStatClick('all')}
-                  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
+                  className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">Total Incidents</p>
-                      <p className="text-2xl font-bold text-gray-900">{getSafetyStats().total}</p>
+                      <p className="text-xl md:text-2xl font-bold text-gray-900">{getSafetyStats().total}</p>
                     </div>
                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                       <Shield className="w-6 h-6 text-gray-600" />
@@ -5864,12 +5864,12 @@ const handleNoraMessage = async (userInput) => {
                 
                 <button
                   onClick={() => handleStatClick('open')}
-                  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-orange-50 hover:shadow-md transition-all cursor-pointer"
+                  className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-200 hover:bg-orange-50 hover:shadow-md transition-all cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">Open Cases</p>
-                      <p className="text-2xl font-bold text-orange-600">{getSafetyStats().open}</p>
+                      <p className="text-xl md:text-2xl font-bold text-orange-600">{getSafetyStats().open}</p>
                     </div>
                     <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                       <AlertTriangle className="w-6 h-6 text-orange-600" />
@@ -5879,12 +5879,12 @@ const handleNoraMessage = async (userInput) => {
                 
                 <button
                   onClick={() => handleStatClick('high-priority')}
-                  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-red-50 hover:shadow-md transition-all cursor-pointer"
+                  className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-200 hover:bg-red-50 hover:shadow-md transition-all cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">High Priority</p>
-                      <p className="text-2xl font-bold text-red-600">{getSafetyStats().highPriority}</p>
+                      <p className="text-xl md:text-2xl font-bold text-red-600">{getSafetyStats().highPriority}</p>
                     </div>
                     <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                       <AlertCircle className="w-6 h-6 text-red-600" />
@@ -5894,12 +5894,12 @@ const handleNoraMessage = async (userInput) => {
                 
                 <button
                   onClick={() => handleStatClick('resolved')}
-                  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex-1 min-w-48 hover:bg-green-50 hover:shadow-md transition-all cursor-pointer"
+                  className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-200 hover:bg-green-50 hover:shadow-md transition-all cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-sm">Resolved</p>
-                      <p className="text-2xl font-bold text-green-600">{getSafetyStats().resolved}</p>
+                      <p className="text-xl md:text-2xl font-bold text-green-600">{getSafetyStats().resolved}</p>
                     </div>
                     <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                       <CheckCircle className="w-6 h-6 text-green-600" />
@@ -5911,10 +5911,10 @@ const handleNoraMessage = async (userInput) => {
               {/* Incident Filters */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
                 <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                  <div className="flex flex-wrap gap-3">
+                  <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 md:gap-3">
                     <button 
                       onClick={() => setSafetyFilter('all')}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors min-h-[44px] md:min-h-0 ${
                         safetyFilter === 'all' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -5922,7 +5922,7 @@ const handleNoraMessage = async (userInput) => {
                     </button>
                     <button 
                       onClick={() => setSafetyFilter('open')}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors min-h-[44px] md:min-h-0 ${
                         safetyFilter === 'open' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -5930,7 +5930,7 @@ const handleNoraMessage = async (userInput) => {
                     </button>
                     <button 
                       onClick={() => setSafetyFilter('high-priority')}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors min-h-[44px] md:min-h-0 ${
                         safetyFilter === 'high-priority' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -5938,7 +5938,7 @@ const handleNoraMessage = async (userInput) => {
                     </button>
                     <button 
                       onClick={() => setSafetyFilter('theft')}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors min-h-[44px] md:min-h-0 ${
                         safetyFilter === 'theft' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -5946,7 +5946,7 @@ const handleNoraMessage = async (userInput) => {
                     </button>
                     <button 
                       onClick={() => setSafetyFilter('security')}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors min-h-[44px] md:min-h-0 ${
                         safetyFilter === 'security' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -5954,7 +5954,7 @@ const handleNoraMessage = async (userInput) => {
                     </button>
                     <button 
                       onClick={() => setSafetyFilter('maintenance')}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors min-h-[44px] md:min-h-0 ${
                         safetyFilter === 'maintenance' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -5962,7 +5962,7 @@ const handleNoraMessage = async (userInput) => {
                     </button>
                     <button 
                       onClick={() => setSafetyFilter('resolved')}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors min-h-[44px] md:min-h-0 ${
                         safetyFilter === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -5972,7 +5972,7 @@ const handleNoraMessage = async (userInput) => {
                   
                   <button 
                     onClick={handleReportIncident}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 md:py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 min-h-[44px] md:min-h-0"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Report Incident</span>
