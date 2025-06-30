@@ -3208,7 +3208,7 @@ const handleNoraMessage = async (userInput) => {
                     
                     {/* Community Health KPI */}
                     <div 
-                      className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex-1 min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
+                      className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100 xl:flex-1 xl:min-w-56 hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] relative"
                       onClick={() => {
                         setSelectedKpi({
                           type: 'health',
@@ -3239,8 +3239,8 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-gray-500 text-sm font-medium">Community Health</p>
                             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Nora is monitoring"></div>
                           </div>
-                          <p className="text-3xl font-bold text-green-600 mt-1">91.7%</p>
-                          <div className="flex items-center justify-between mt-2">
+                          <p className="text-2xl md:text-3xl font-bold text-green-600 mt-1">91.7%</p>
+                          <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-2 space-y-1 md:space-y-0">
                             <p className="text-xs text-green-600 font-medium">↗ +5.2% this month</p>
                             <p className="text-xs text-purple-500 font-medium">Nora: Excellent!</p>
                           </div>
@@ -3259,7 +3259,7 @@ const handleNoraMessage = async (userInput) => {
                             <p className="text-xs text-gray-400 mt-1">30-day trend • Nora confidence: 96%</p>
                           </div>
                         </div>
-                        <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center ml-4">
+                        <div className="w-12 h-12 md:w-14 md:h-14 bg-green-100 rounded-xl flex items-center justify-center ml-3 md:ml-4">
                           <BarChart3 className="w-7 h-7 text-green-600" />
                         </div>
                       </div>
