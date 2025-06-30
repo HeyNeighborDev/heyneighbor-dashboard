@@ -2607,11 +2607,11 @@ const handleNoraMessage = async (userInput) => {
 
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Enhanced Recent Activity */}
+        {/* Enhanced Recent Activity - Mobile Optimized */}
         <div className="lg:col-span-3">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
+            <div className="p-3 md:p-4 border-b border-gray-200">
+              <div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
                 <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
                 <div className="flex items-center space-x-2">
                   <span className="text-xs text-gray-500">AI Prioritized</span>
@@ -2626,10 +2626,11 @@ const handleNoraMessage = async (userInput) => {
             </div>
             <div className="divide-y divide-gray-200">
               {recentActivity.map((activity) => (
-                <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
+                <div key={activity.id} className="p-3 md:p-4 hover:bg-gray-50 transition-colors">
+                  <div className="space-y-3 md:space-y-0 md:flex md:items-start md:justify-between">
+                    <div className="flex-1 min-w-0">
+                      {/* Mobile: Stack metadata vertically */}
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(activity.priority)}`}>
                           {activity.priority}
                         </span>
@@ -2638,10 +2639,11 @@ const handleNoraMessage = async (userInput) => {
                           3 social mentions
                         </span>
                       </div>
-                      <h4 className="text-gray-900 font-medium mb-1">{activity.title}</h4>
+                      <h4 className="text-gray-900 font-medium mb-1 leading-snug">{activity.title}</h4>
                       <p className="text-gray-600 text-sm">Reported by {activity.user}</p>
                     </div>
-                    <div className="flex items-center space-x-2 ml-4">
+                    {/* Mobile: Status below content, Desktop: Right side */}
+                    <div className="flex items-center justify-end md:justify-start space-x-2 md:ml-4 pt-2 md:pt-0">
                       <div className="flex items-center space-x-1 text-gray-500">
                         {getStatusIcon(activity.status)}
                         <span className="text-sm capitalize">{activity.status}</span>
