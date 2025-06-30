@@ -3904,7 +3904,7 @@ const handleNoraMessage = async (userInput) => {
                           <p className="text-xs text-blue-100">Confidence: 96.7% • Last updated 2h ago</p>
                           <button
                             onClick={() => setShowNoraChat(true)}
-                            className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded-full text-xs font-bold transition-colors"
+                            className="fixed bottom-4 right-4 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 z-40 flex items-center justify-center"
                           >
                             Chat with Nora
                           </button>
