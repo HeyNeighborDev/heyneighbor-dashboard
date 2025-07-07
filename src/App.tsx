@@ -1412,27 +1412,6 @@ const amenitySettings = [
     // Add filtering logic here later
   };
 
-  const getFilteredResidents = () => {
-    let filtered = residentsData;
-    
-    // Filter by status
-    if (residentFilter !== 'all') {
-      filtered = filtered.filter(resident => resident.status === residentFilter);
-    }
-    
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(resident => 
-        resident.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        resident.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        resident.building.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        resident.email.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    
-    return filtered;
-  };
-
   const getFilteredEvents = () => {
     let filtered = eventsData;
     
