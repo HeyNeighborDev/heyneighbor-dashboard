@@ -15,6 +15,7 @@ import {
   Bell,
   Search,
   Plus,
+  RefreshCw,
   MoreHorizontal,
   Home,
   Settings,
@@ -276,6 +277,8 @@ const CommunityHealthTrends = ({ analyticsTimeRange, setAnalyticsTimeRange }) =>
 const ManagementDashboard = () => {
   const [greeting, setGreeting] = useState('Good morning, Sarah! ☀️');
   const [currentPage, setCurrentPage] = useState('dashboard');
+  const [transferTab, setTransferTab] = useState('queue');
+  const [transferStats, setTransferStats] = useState({ active: 3, pending: 7, completed: 12, revenue: 8400 });
   const [activityFilter, setActivityFilter] = useState('all');
   const [showAddResident, setShowAddResident] = useState(false);
   const [residentFilter, setResidentFilter] = useState('all');
@@ -1401,6 +1404,15 @@ const amenitySettings = [
   };
 
   const getFilteredResidents = () => {
+    // ... existing code
+  };
+
+  const handleTransferStatClick = (type) => {
+    console.log('Transfer stat clicked:', type);
+    // Add filtering logic here later
+  };
+
+  const getFilteredResidents = () => {
     let filtered = residentsData;
     
     // Filter by status
@@ -2206,7 +2218,7 @@ const handleNoraMessage = async (userInput) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
+<nav className="flex-1 p-4 space-y-2">
         <button 
           onClick={() => setCurrentPage('dashboard')}
           className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
@@ -2229,10 +2241,19 @@ const handleNoraMessage = async (userInput) => {
           onClick={() => setCurrentPage('safety')}
           className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
             currentPage === 'safety' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-          }`}
+          }`}                       
         >
           <Shield className="w-5 h-5" />
           <span>Safety</span>
+        </button>
+        <button 
+          onClick={() => setCurrentPage('transfers')}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left ${
+            currentPage === 'transfers' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <RefreshCw className="w-5 h-5" />
+          <span>Transfers</span>
         </button>
         <button 
           onClick={() => setCurrentPage('communications')}
@@ -6055,6 +6076,428 @@ const handleNoraMessage = async (userInput) => {
               )}
             </>
           )}
+
+          {/* Portfolio Transfer Management Page */}
+{currentPage === 'transfers' && (
+  <>
+    {/* Transfer Stats - Mobile Optimized */}
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
+      <button
+        onClick={() => handleTransferStatClick('active')}
+        className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-blue-200 hover:bg-blue-50 hover:shadow-md transition-all cursor-pointer min-h-[44px] md:min-h-0"
+      >
+        <div className="flex items-center justify-between">
+          <div className="text-left">
+            <p className="text-gray-600 text-xs md:text-sm">Active Transfers</p>
+            <p className="text-xl md:text-2xl font-bold text-blue-600">3</p>
+            <p className="text-xs text-gray-500">In Progress</p>
+          </div>
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <span className="text-lg">🔄</span>
+          </div>
+        </div>
+      </button>
+
+      <button
+        onClick={() => handleTransferStatClick('pending')}
+        className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-orange-200 hover:bg-orange-50 hover:shadow-md transition-all cursor-pointer min-h-[44px] md:min-h-0"
+      >
+        <div className="flex items-center justify-between">
+          <div className="text-left">
+            <p className="text-gray-600 text-xs md:text-sm">Pending Requests</p>
+            <p className="text-xl md:text-2xl font-bold text-orange-600">7</p>
+            <p className="text-xs text-gray-500">Need Review</p>
+          </div>
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+            <span className="text-lg">⏳</span>
+          </div>
+        </div>
+      </button>
+
+      <button
+        onClick={() => handleTransferStatClick('completed')}
+        className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-green-200 hover:bg-green-50 hover:shadow-md transition-all cursor-pointer min-h-[44px] md:min-h-0"
+      >
+        <div className="flex items-center justify-between">
+          <div className="text-left">
+            <p className="text-gray-600 text-xs md:text-sm">This Month</p>
+            <p className="text-xl md:text-2xl font-bold text-green-600">12</p>
+            <p className="text-xs text-gray-500">Completed</p>
+          </div>
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <span className="text-lg">✅</span>
+          </div>
+        </div>
+      </button>
+
+      <button
+        onClick={() => handleTransferStatClick('revenue')}
+        className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-purple-200 hover:bg-purple-50 hover:shadow-md transition-all cursor-pointer min-h-[44px] md:min-h-0"
+      >
+        <div className="flex items-center justify-between">
+          <div className="text-left">
+            <p className="text-gray-600 text-xs md:text-sm">Transfer Revenue</p>
+            <p className="text-xl md:text-2xl font-bold text-purple-600">$8.4K</p>
+            <p className="text-xs text-gray-500">This Month</p>
+          </div>
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <span className="text-lg">💰</span>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    {/* Action Buttons */}
+    <div className="flex flex-col md:flex-row gap-3 mb-6">
+      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 md:py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 min-h-[44px] md:min-h-0">
+        <span className="text-lg">➕</span>
+        <span>New Transfer Request</span>
+      </button>
+      <button className="bg-white hover:bg-gray-50 text-gray-700 px-4 py-3 md:py-2 rounded-lg font-medium border border-gray-300 transition-colors flex items-center space-x-2 min-h-[44px] md:min-h-0">
+        <span className="text-lg">🎯</span>
+        <span>Smart Matching</span>
+      </button>
+      <button className="bg-white hover:bg-gray-50 text-gray-700 px-4 py-3 md:py-2 rounded-lg font-medium border border-gray-300 transition-colors flex items-center space-x-2 min-h-[44px] md:min-h-0">
+        <span className="text-lg">🏢</span>
+        <span>Property Network</span>
+      </button>
+    </div>
+
+    {/* Transfer Workflow Tabs */}
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 mb-4 md:mb-6 overflow-x-auto">
+      <div className="flex space-x-1 min-w-max md:min-w-0">
+        <button
+          onClick={() => setTransferTab('queue')}
+          className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
+            transferTab === 'queue'
+              ? 'bg-blue-100 text-blue-700 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          }`}
+        >
+          <span className="text-lg">📋</span>
+          <span className="whitespace-nowrap">Transfer Queue</span>
+        </button>
+        <button
+          onClick={() => setTransferTab('matching')}
+          className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
+            transferTab === 'matching'
+              ? 'bg-blue-100 text-blue-700 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          }`}
+        >
+          <span className="text-lg">🎯</span>
+          <span className="whitespace-nowrap">Smart Match</span>
+        </button>
+        <button
+          onClick={() => setTransferTab('network')}
+          className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
+            transferTab === 'network'
+              ? 'bg-blue-100 text-blue-700 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          }`}
+        >
+          <span className="text-lg">🏢</span>
+          <span className="whitespace-nowrap">Network</span>
+        </button>
+        <button
+          onClick={() => setTransferTab('analytics')}
+          className={`flex-shrink-0 md:flex-1 flex items-center justify-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm transition-colors min-h-[44px] md:min-h-0 ${
+            transferTab === 'analytics'
+              ? 'bg-blue-100 text-blue-700 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          }`}
+        >
+          <span className="text-lg">📊</span>
+          <span className="whitespace-nowrap">Analytics</span>
+        </button>
+      </div>
+    </div>
+
+    {/* Transfer Queue Tab */}
+    {transferTab === 'queue' && (
+      <div className="space-y-4">
+        {/* Pending Transfer Requests */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 space-y-3 md:space-y-0">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Transfer Request #TR-2025-001</h3>
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-2">
+                <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
+                  Pending Review
+                </span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                  High Priority
+                </span>
+                <span className="text-gray-500 text-xs md:text-sm">Submitted 2 hours ago</span>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row gap-2">
+              <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors min-h-[40px]">
+                Approve
+              </button>
+              <button className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors min-h-[40px]">
+                Review
+              </button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Resident</h4>
+              <p className="text-sm text-gray-600">Sarah Chen</p>
+              <p className="text-sm text-gray-600">Unit 4B - Building A</p>
+              <p className="text-sm text-gray-600">2-year tenant</p>
+            </div>
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Transfer Request</h4>
+              <p className="text-sm text-gray-600">From: Austin, TX</p>
+              <p className="text-sm text-gray-600">To: Dallas, TX</p>
+              <p className="text-sm text-gray-600">Timeline: 30 days</p>
+            </div>
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">AI Recommendations</h4>
+              <p className="text-sm text-green-600 font-medium">3 matching properties found</p>
+              <p className="text-sm text-gray-600">Estimated transfer fee: $650</p>
+              <p className="text-sm text-gray-600">Success probability: 85%</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Active Transfer */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 space-y-3 md:space-y-0">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Transfer #TR-2025-002</h3>
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-2">
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                  In Progress
+                </span>
+                <span className="text-gray-500 text-xs md:text-sm">Move date: Jan 15, 2025</span>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row gap-2">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors min-h-[40px]">
+                Coordinate
+              </button>
+              <button className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors min-h-[40px]">
+                View Details
+              </button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Resident</h4>
+              <p className="text-sm text-gray-600">Marcus Johnson</p>
+              <p className="text-sm text-gray-600">Austin → Houston</p>
+              <p className="text-sm text-gray-600">Corporate relocation</p>
+            </div>
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Progress</h4>
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                <div className="bg-blue-600 h-2 rounded-full" style={{width: '65%'}}></div>
+              </div>
+              <p className="text-sm text-gray-600">65% Complete</p>
+            </div>
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Next Steps</h4>
+              <p className="text-sm text-gray-600">• Lease signing scheduled</p>
+              <p className="text-sm text-gray-600">• Keys ready Jan 14</p>
+              <p className="text-sm text-gray-600">• Move-in inspection booked</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Smart Matching Tab */}
+    {transferTab === 'matching' && (
+      <div className="space-y-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">AI-Powered Property Matching</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-medium text-gray-900 mb-3">Resident Profile</h4>
+              <div className="space-y-3 p-4 bg-gray-50 rounded-lg">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Current Location:</span>
+                  <span className="text-sm font-medium">Austin, TX</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Target Market:</span>
+                  <span className="text-sm font-medium">Dallas, TX</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Budget Range:</span>
+                  <span className="text-sm font-medium">$1,800 - $2,200</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Unit Type:</span>
+                  <span className="text-sm font-medium">2BR/2BA</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Move Timeline:</span>
+                  <span className="text-sm font-medium">30 days</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-gray-900 mb-3">Matching Results</h4>
+              <div className="space-y-3">
+                <div className="p-3 border border-green-200 bg-green-50 rounded-lg">
+                  <div className="flex justify-between items-start mb-2">
+                    <h5 className="font-medium text-green-800">The Residences at CityLine</h5>
+                    <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded">95% Match</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Richardson, TX • 2BR/2BA • $1,950/mo</p>
+                  <div className="flex gap-2">
+                    <button className="bg-green-600 text-white px-3 py-1 rounded text-sm">View Unit</button>
+                    <button className="bg-gray-600 text-white px-3 py-1 rounded text-sm">Schedule Tour</button>
+                  </div>
+                </div>
+                
+                <div className="p-3 border border-blue-200 bg-blue-50 rounded-lg">
+                  <div className="flex justify-between items-start mb-2">
+                    <h5 className="font-medium text-blue-800">Uptown Dallas Apartments</h5>
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">88% Match</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Dallas, TX • 2BR/2BA • $2,100/mo</p>
+                  <div className="flex gap-2">
+                    <button className="bg-blue-600 text-white px-3 py-1 rounded text-sm">View Unit</button>
+                    <button className="bg-gray-600 text-white px-3 py-1 rounded text-sm">Schedule Tour</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Property Network Tab */}
+    {transferTab === 'network' && (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <h4 className="font-medium text-gray-900 mb-3">Portfolio Overview</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Total Properties:</span>
+                <span className="text-sm font-medium">24</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Available Units:</span>
+                <span className="text-sm font-medium">127</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Transfer-Ready:</span>
+                <span className="text-sm font-medium">89</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <h4 className="font-medium text-gray-900 mb-3">Top Markets</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Dallas, TX:</span>
+                <span className="text-sm font-medium">45 units</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Austin, TX:</span>
+                <span className="text-sm font-medium">38 units</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Houston, TX:</span>
+                <span className="text-sm font-medium">31 units</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <h4 className="font-medium text-gray-900 mb-3">Transfer Trends</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">This Month:</span>
+                <span className="text-sm font-medium text-green-600">+12 transfers</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Success Rate:</span>
+                <span className="text-sm font-medium">87%</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Avg. Timeline:</span>
+                <span className="text-sm font-medium">18 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Transfer Analytics Tab */}
+    {transferTab === 'analytics' && (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Transfer Performance</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Success Rate</span>
+                <span className="text-sm font-medium">87%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-green-600 h-2 rounded-full" style={{width: '87%'}}></div>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Average Timeline</span>
+                <span className="text-sm font-medium">18 days</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full" style={{width: '60%'}}></div>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Resident Satisfaction</span>
+                <span className="text-sm font-medium">4.6/5</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-purple-600 h-2 rounded-full" style={{width: '92%'}}></div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Impact</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Transfer Fees (MTD):</span>
+                <span className="text-sm font-medium text-green-600">$8,400</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Retention Value:</span>
+                <span className="text-sm font-medium text-green-600">$124,000</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Avoided Vacancy:</span>
+                <span className="text-sm font-medium text-green-600">$18,500</span>
+              </div>
+              <div className="border-t pt-3 mt-3">
+                <div className="flex justify-between">
+                  <span className="text-sm font-medium text-gray-900">Total Impact:</span>
+                  <span className="text-sm font-bold text-green-600">$150,900</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
+)}
 
           {/* Residents Page */}
           {currentPage === 'residents' && (
